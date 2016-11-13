@@ -14,11 +14,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define _STRING(x) #x
-#define STRING(x) _STRING(x)
-#define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRING(__LINE__), #cond )
+#define _STRINGIFY(x) #x
+#define STRINGIFY(x) _STRINGIFY(x)
+#define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
 
-#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRING(__LINE__) "!(" #cond ")\n"); return (0); }
+#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) "!(" #cond ")\n"); return (0); }
 
 #ifndef HAVE_STRLCPY
 int isdigit(int c) {
@@ -508,7 +508,7 @@ int     test_ft_tolower(int c)
     return (1);
 }
 
-#define TESTONS(cond) ft_putstr("testons " STRING(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRING(cond) " .. OK\n"); 
+#define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 
 #define BIG (1024*1024*1024)
 
