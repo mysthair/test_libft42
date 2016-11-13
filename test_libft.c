@@ -431,7 +431,10 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 
 int		test_ft_strchr(const char *s, int c)
 {
-	TEST(strchr(s,c) == ft_strchr(s, c));
+	char *o, *m;
+	o = strchr(s,c);
+	m = ft_strchr(s, c);
+	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
 	return (1);
 }
 
@@ -663,161 +666,152 @@ int main()
 	}
 
 	{//strchr
-		char* text = "12345678901234567890";
-
-		TESTONS(ft_strcmp(ft_strchr(text, '6'), "678901234567890")==0);
-		char *tmp = ft_strchr(text, '6');
-		ft_putstr("ft_strchr(\"12345678901234567890\", '6') = \"");
-		ft_putstr(tmp);ft_putstr("\"  OK\n");
-
-		TESTONS(ft_strchr("12345678901234567890", 'X') == NULL);
-		ft_putstr("ft_strchr(\"12345678901234567890\", 'X') == NULL   OK\n\n");
+		TESTONS(test_ft_strchr("12345678901234567890", '6'));
+		TESTONS(test_ft_strchr("12345678901234567890", 'X'));
+		TESTONS(test_ft_strchr("", 'X'));
+		TESTONS(test_ft_strchr("12345678\0""901234567890", '0'));
+		TESTONS(test_ft_strchr("123456\t78901234567890", '\t'));
+/*failed !!	TESTONS(test_ft_strchr("12345678901234567890", '\0')); */
+		TESTONS(test_ft_strchr("12345678901234567890", '\0'));
 	}
 	{//strrchr
-		char* text = "123456789012345678901234567890";
-
-		char *tmp = ft_strrchr(text, '6');
-		ft_putstr("ft_strrchr(\"1234567890\", '6') = \"");
-		ft_putstr(tmp);ft_putstr("\"\n");
-		TESTONS(ft_strcmp(ft_strrchr(text, '6'), "67890")==0);
-		ft_putstr("..  OK\n");
-
-		TESTONS(ft_strchr("1234567890", 'X') == NULL);
-		ft_putstr("ft_strchr(\"1234567890\", 'X') == NULL   OK\n\n");
+		TESTONS(test_ft_strrchr("12345678901234567890", '6'));
+		TESTONS(test_ft_strrchr("12345678901234567890", 'X'));
+		TESTONS(test_ft_strrchr("", 'X'));
+		TESTONS(test_ft_strrchr("12345678\0""901234567890", '0'));
+		TESTONS(test_ft_strrchr("123456\t78901234567890", '\t'));
 	}
-
 	{//ft_strstr
-		char *l = "Foo Bar Baz";
-		char *s = "Bar";
-		//ptr = strstr(largestring, smallstring);
-		TESTONS(ft_strstr("Foo Bar Baz","Bar")!=NULL);
-		TESTONS(ft_memcmp(ft_strstr("Foo Bar Baz","Bar"), "Bar", 3)==0);
-		TESTONS(ft_strstr("Foo Bar Baz","Bat")==NULL);
-		TESTONS(ft_strcmp(ft_strstr(l, ""), l) == 0);
-		TESTONS(ft_strstr("", s) == NULL);
+		TESTONS(test_ft_strstr("Foo Bar Baz","Bar"));
+		TESTONS(test_ft_strstr("Foo Bar Bar Baz","Bar"));
+		TESTONS(test_ft_strstr("Foo Bar Baz","Bat"));
+		TESTONS(test_ft_strstr("Foo Bar Baz",""));
+		TESTONS(test_ft_strstr("","Bat"));
+		TESTONS(test_ft_strstr("",""));
 	}
 
 	{//ft_strnstr
-		char *l = "Foo Bar Baz";
-		char *s = "Bar";
-		//ptr = strstr(largestring, smallstring);
-		TESTONS(ft_strnstr("Foo Bar Baz","Bar", 7)==NULL);
-		TESTONS(ft_strnstr("Foo Bar Baz","Bar", 8)!=NULL);
-		TESTONS(ft_memcmp(ft_strnstr("Foo Bar Baz","Bar",8), "Bar", 3)==0);
-		TESTONS(ft_strnstr("Foo Bar Baz","Bat",8)==NULL);
-		TESTONS(ft_strnstr("Foo Bar Baz","Bar", 6)==NULL);
-		TESTONS(ft_strcmp(ft_strnstr(l, "", 6), l) == 0);
-		TESTONS(ft_strnstr("", s, 6) == NULL);
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bar", 7));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bar", 8));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bar", 30));
+		TESTONS(test_ft_strnstr("Foo Bar Bar Baz","Bar", 15));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bat", 8));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bat", 30));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bar", 6));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","", 6));
+		TESTONS(test_ft_strnstr("","Bar", 6));
+		TESTONS(test_ft_strnstr("","", 6));
+		TESTONS(test_ft_strnstr("Foo Bar Baz","Bar", 0));
 	}
 	{//ft_strcmp
 
-		TESTONS(ft_strcmp("1234", "1234") == 0);
-		TESTONS(ft_strcmp("12345", "12335") > 0);
-		TESTONS(ft_strcmp("12345", "12355") < 0);
-		TESTONS(ft_strcmp("12345", "1234") > 0);
-		TESTONS(ft_strcmp("1234", "12345") < 0);
-		TESTONS(ft_strcmp("1234", "") > 0);
-		TESTONS(ft_strcmp("", "12345") < 0);
-		TESTONS(ft_strcmp("", "") == 0);
+		TESTONS(test_ft_strcmp("1234", "1234"));
+		TESTONS(test_ft_strcmp("12345", "12335"));
+		TESTONS(test_ft_strcmp("12345", "12355"));
+		TESTONS(test_ft_strcmp("12345", "1234"));
+		TESTONS(test_ft_strcmp("1234", "12345"));
+		TESTONS(test_ft_strcmp("1234", ""));
+		TESTONS(test_ft_strcmp("", "12345"));
+		TESTONS(test_ft_strcmp("", ""));
 	}
 	{//ft_strncmp
-		TESTONS(ft_strncmp("1234", "1234", 10) == 0);
-		TESTONS(ft_strncmp("12345", "12335", 10) > 0);
-		TESTONS(ft_strncmp("12345", "12355", 10) < 0);
-		TESTONS(ft_strncmp("12345", "1234", 10) > 0);
-		TESTONS(ft_strncmp("1234", "12345", 10) < 0);
-		TESTONS(ft_strncmp("1234", "", 10) > 0);
-		TESTONS(ft_strncmp("", "12345", 10) < 0);
-		TESTONS(ft_strncmp("", "", 10) == 0);
-		TESTONS(ft_strncmp("1234", "1234", 2) == 0);
-		TESTONS(ft_strncmp("12345", "12335",2) == 0);
-		TESTONS(ft_strncmp("12345", "12355", 2) == 0);
-		TESTONS(ft_strncmp("12345", "1234", 2) == 0);
-		TESTONS(ft_strncmp("1234", "12345", 2) == 0);
-		TESTONS(ft_strncmp("1234", "", 2) > 0);
-		TESTONS(ft_strncmp("", "12345", 2) < 0);
-		TESTONS(ft_strncmp("", "", 2) == 0);
+		TESTONS(test_ft_strncmp("1234", "1234", 10));
+		TESTONS(test_ft_strncmp("12345", "12335", 10));
+		TESTONS(test_ft_strncmp("12345", "12355", 10));
+		TESTONS(test_ft_strncmp("12345", "1234", 10));
+		TESTONS(test_ft_strncmp("1234", "12345", 10));
+		TESTONS(test_ft_strncmp("1234", "", 10));
+		TESTONS(test_ft_strncmp("", "12345", 10));
+		TESTONS(test_ft_strncmp("", "", 10));
+		TESTONS(test_ft_strncmp("1234", "1234", 2));
+		TESTONS(test_ft_strncmp("12345", "12335",2));
+		TESTONS(test_ft_strncmp("12345", "12355", 2));
+		TESTONS(test_ft_strncmp("12345", "1234", 2));
+		TESTONS(test_ft_strncmp("1234", "12345", 2));
+		TESTONS(test_ft_strncmp("1234", "", 2));
+		TESTONS(test_ft_strncmp("", "12345", 2));
+		TESTONS(test_ft_strncmp("", "", 2));
 	}
 	
 	{//ft_atoi
-		TESTONS(ft_atoi("0") == 0);
-		TESTONS(ft_atoi("12") == 12);
-		TESTONS(ft_atoi(" 	12   ") == 12);
-		TESTONS(ft_atoi("+12") == 12);
-		TESTONS(ft_atoi("+12,35") == 12);
-		TESTONS(ft_atoi("-83") == -83);
-		TESTONS(ft_atoi("-320,5") == -320);
-		TESTONS(ft_atoi("") == 0);
-		TESTONS(ft_atoi(" A") == 0);
-		TESTONS(ft_atoi("A12") == 0);
-		TESTONS(ft_atoi("12FS0") == 12);
-		TESTONS(ft_atoi(" - 4 2") == 0);
-		TESTONS(ft_atoi("0xFF") == 0);
-		TESTONS(ft_atoi("&x0A") == 0);
-		TESTONS(ft_atoi("2147483647") == 2147483647);
-		TESTONS(ft_atoi("2147483648") == -2147483648);
-		TESTONS(ft_atoi("2147483649") == -2147483647);
-		TESTONS(ft_atoi("-2147483647") == -2147483647);
-		TESTONS(ft_atoi("-2147483648") == -2147483648);
-		TESTONS(ft_atoi("-2147483649") == 2147483647);
-		TESTONS(ft_atoi("9223372036854775805") == -3);
-		TESTONS(ft_atoi("9223372036854775806") == -2);
-		TESTONS(ft_atoi("9223372036854775807") == -1);
-		TESTONS(ft_atoi("9223372036854775808") == -1);
-		TESTONS(ft_atoi("9223372036854775809") == -1);
-		TESTONS(ft_atoi("9223372036854775810") == -1);
-		TESTONS(ft_atoi("1000000000000000000000000") == -1);
-		TESTONS(ft_atoi("-9223372036854775805") == 3);
-		TESTONS(ft_atoi("-9223372036854775806") == 2);
-		TESTONS(ft_atoi("-9223372036854775807") == 1);
-		TESTONS(ft_atoi("-9223372036854775808") == 0);
-		TESTONS(ft_atoi("-9223372036854775809") == 0);
-		TESTONS(ft_atoi("-9223372036854775810") == 0);
-		TESTONS(ft_atoi("-1000000000000000000000000") == 0);
-		TESTONS(ft_atoi("") == 0);
+		TESTONS(test_ft_atoi("0"));// == 0);
+		TESTONS(test_ft_atoi("12"));//  == 12);
+		TESTONS(test_ft_atoi(" 	12   "));//  == 12);
+		TESTONS(test_ft_atoi("+12"));//   == 12);
+		TESTONS(test_ft_atoi("+12,35"));//   == 12);
+		TESTONS(test_ft_atoi("-83"));//   == -83);
+		TESTONS(test_ft_atoi("-320,5"));//   == -320);
+		TESTONS(test_ft_atoi(""));//   == 0));
+		TESTONS(test_ft_atoi(" A"));//   == 0);
+		TESTONS(test_ft_atoi("A12"));//   == 0);
+		TESTONS(test_ft_atoi("12FS0"));//   == 12);
+		TESTONS(test_ft_atoi(" - 4 2"));//   == 0);
+		TESTONS(test_ft_atoi("0xFF"));//   == 0);
+		TESTONS(test_ft_atoi("&x0A"));//   == 0);
+		TESTONS(test_ft_atoi("2147483647"));//  == 2147483647);
+		TESTONS(test_ft_atoi("2147483648"));//  == -2147483648);
+		TESTONS(test_ft_atoi("2147483649"));//  == -2147483647);
+		TESTONS(test_ft_atoi("-2147483647"));//  == -2147483647);
+		TESTONS(test_ft_atoi("-2147483648"));//  == -2147483648);
+		TESTONS(test_ft_atoi("-2147483649"));//  == 2147483647);
+		TESTONS(test_ft_atoi("9223372036854775805"));//  == -3);
+		TESTONS(test_ft_atoi("9223372036854775806"));//  == -2);
+		TESTONS(test_ft_atoi("9223372036854775807"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775808"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775809"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775810"));//  == -1);
+		TESTONS(test_ft_atoi("1000000000000000000000000"));//   == -1);
+		TESTONS(test_ft_atoi("-9223372036854775805"));// == 3);
+		TESTONS(test_ft_atoi("-9223372036854775806"));// == 2);
+		TESTONS(test_ft_atoi("-9223372036854775807"));// == 1);
+		TESTONS(test_ft_atoi("-9223372036854775808"));// == 0);
+		TESTONS(test_ft_atoi("-9223372036854775809"));// == 0);
+		TESTONS(test_ft_atoi("-9223372036854775810"));// == 0);
+		TESTONS(test_ft_atoi("-1000000000000000000000000"));//  == 0);
+		TESTONS(test_ft_atoi(""));//  == 0);
 	}
 
 	{//isalpha
-		TESTONS(ft_isalpha('a'));
-		TESTONS(ft_isalpha('b'));
-		TESTONS(ft_isalpha('z'));
-		TESTONS(ft_isalpha('A'));
-		TESTONS(ft_isalpha('F'));
-		TESTONS(ft_isalpha('Z'));
-		TESTONS(!ft_isalpha(';'));
-		TESTONS(!ft_isalpha('0'));
-		TESTONS(!ft_isalpha('9'));
-		TESTONS(!ft_isalpha('&'));
-		TESTONS(!ft_isalpha('\n'));
-		TESTONS(!ft_isalpha('\0'));
+		TESTONS(test_ft_isalpha('a'));
+		TESTONS(test_ft_isalpha('b'));
+		TESTONS(test_ft_isalpha('z'));
+		TESTONS(test_ft_isalpha('A'));
+		TESTONS(test_ft_isalpha('F'));
+		TESTONS(test_ft_isalpha('Z'));
+		TESTONS(test_ft_isalpha(';'));
+		TESTONS(test_ft_isalpha('0'));
+		TESTONS(test_ft_isalpha('9'));
+		TESTONS(test_ft_isalpha('&'));
+		TESTONS(test_ft_isalpha('\n'));
+		TESTONS(test_ft_isalpha('\0'));
 	}
 	{//ft_isdigit
-		TESTONS(!ft_isdigit('a'));
-		TESTONS(!ft_isdigit('A'));
-		TESTONS(!ft_isdigit('Z'));
-		TESTONS(!ft_isdigit('&'));
-		TESTONS(!ft_isdigit('\0'));
-		TESTONS(!ft_isdigit('\n'));
-		TESTONS(ft_isdigit('0'));
-		TESTONS(ft_isdigit('3'));
-		TESTONS(ft_isdigit('9'));
+		TESTONS(test_ft_isdigit('a'));
+		TESTONS(test_ft_isdigit('A'));
+		TESTONS(test_ft_isdigit('Z'));
+		TESTONS(test_ft_isdigit('&'));
+		TESTONS(test_ft_isdigit('\0'));
+		TESTONS(test_ft_isdigit('\n'));
+		TESTONS(test_ft_isdigit('0'));
+		TESTONS(test_ft_isdigit('3'));
+		TESTONS(test_ft_isdigit('9'));
 	}
 
 	{
-		TESTONS(ft_isalnum('0'));
-		TESTONS(ft_isalnum('9'));
-		TESTONS(ft_isalnum('a'));
-		TESTONS(ft_isalnum('z'));
-		TESTONS(ft_isalnum('A'));
-		TESTONS(ft_isalnum('Z'));
-		TESTONS(ft_isalnum('f'));
-		TESTONS(ft_isalnum('F'));
-		TESTONS(!ft_isalnum('%'));
-		TESTONS(!ft_isalnum('!'));
-		TESTONS(!ft_isalnum('{'));
-		TESTONS(!ft_isalnum('\n'));
-		TESTONS(!ft_isalnum('\t'));
-		TESTONS(!ft_isalnum('\0'));
+		TESTONS(test_ft_isalnum('0'));
+		TESTONS(test_ft_isalnum('9'));
+		TESTONS(test_ft_isalnum('a'));
+		TESTONS(test_ft_isalnum('z'));
+		TESTONS(test_ft_isalnum('A'));
+		TESTONS(test_ft_isalnum('Z'));
+		TESTONS(test_ft_isalnum('f'));
+		TESTONS(test_ft_isalnum('F'));
+		TESTONS(test_ft_isalnum('%'));
+		TESTONS(test_ft_isalnum('!'));
+		TESTONS(test_ft_isalnum('{'));
+		TESTONS(test_ft_isalnum('\n'));
+		TESTONS(test_ft_isalnum('\t'));
+		TESTONS(test_ft_isalnum('\0'));
 	}
 	
 	{//isprint
@@ -832,36 +826,36 @@ int main()
 			}
 		printf("}; n=%i\n", n);*/
 
-		TESTONS(ft_isprint('0'));
-		TESTONS(ft_isprint('5'));
-		TESTONS(!ft_isprint(0));
-		TESTONS(ft_isprint(127));
-		TESTONS(!ft_isprint(-1));
-		TESTONS(ft_isprint('a'));
-		TESTONS(ft_isprint('w'));
-		TESTONS(ft_isprint('z'));
-		TESTONS(ft_isprint('A'));
-		TESTONS(ft_isprint('W'));
-		TESTONS(ft_isprint('Z'));
-		TESTONS(ft_isprint('%'));
-		TESTONS(ft_isprint('\n'));
-		TESTONS(ft_isprint('\t'));
-		TESTONS(ft_isprint('\r'));
-		TESTONS(ft_isprint('^'));
-		TESTONS(!ft_isprint(128));
+		TESTONS(test_ft_isprint('0'));
+		TESTONS(test_ft_isprint('5'));
+		TESTONS(test_ft_isprint(0));
+		TESTONS(test_ft_isprint(127));
+		TESTONS(test_ft_isprint(-1));
+		TESTONS(test_ft_isprint('a'));
+		TESTONS(test_ft_isprint('w'));
+		TESTONS(test_ft_isprint('z'));
+		TESTONS(test_ft_isprint('A'));
+		TESTONS(test_ft_isprint('W'));
+		TESTONS(test_ft_isprint('Z'));
+		TESTONS(test_ft_isprint('%'));
+		TESTONS(test_ft_isprint('\n'));
+		TESTONS(test_ft_isprint('\t'));
+		TESTONS(test_ft_isprint('\r'));
+		TESTONS(test_ft_isprint('^'));
+		TESTONS(test_ft_isprint(128));
 	}
 
 	{//toupper
-		TESTONS(ft_toupper('a')=='A');
-		TESTONS(ft_toupper('j')=='J');
-		TESTONS(ft_toupper('z')=='Z');
-		TESTONS(ft_toupper('A')=='A');
-		TESTONS(ft_toupper('E')=='E');
-		TESTONS(ft_toupper('Z')=='Z');
-		TESTONS(ft_toupper('0')=='0');
-		TESTONS(ft_toupper('\t')=='\t');
-		TESTONS(ft_toupper('\n')=='\n');
-		TESTONS(ft_toupper('\0')=='\0');
+		TESTONS(test_ft_toupper('a'));
+		TESTONS(test_ft_toupper('j'));
+		TESTONS(test_ft_toupper('z'));
+		TESTONS(test_ft_toupper('A'));
+		TESTONS(test_ft_toupper('E'));
+		TESTONS(test_ft_toupper('Z'));
+		TESTONS(test_ft_toupper('0'));
+		TESTONS(test_ft_toupper('\t'));
+		TESTONS(test_ft_toupper('\n'));
+		TESTONS(test_ft_toupper('\0'));
 	}
 
 	ft_free(buffer);
