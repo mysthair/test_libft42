@@ -454,17 +454,32 @@ int		test_ft_strstr(const char *big, const char *little)
 {
 	char	*o;
 	char	*m;
+	size_t	l;
 
 	o = strstr(big, little);
 	m = ft_strstr(big, little);
-	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
+	l = strlen(little);
+	TEST(((o==NULL) && (m==NULL)) 
+		|| ((o!=NULL) && (m!=NULL) 
+				&& strncmp(o, little, l) == 0 
+				&& ft_strncmp(m, little, l) == 0));
     return (1);
 }
 
 int		test_ft_strnstr(const char *big, const char *little, size_t size)
 {
-	TEST(strnstr(big, little, size) == ft_strnstr(big, little, size));
-	return (1);
+	char	*o;
+	char	*m;
+	size_t	l;
+
+	o = strnstr(big, little, size);
+	m = ft_strnstr(big, little, size);
+	l = strlen(little);
+	TEST(((o==NULL) && (m==NULL)) 
+		|| ((o!=NULL) && (m!=NULL) 
+				&& strncmp(o, little, l) == 0 
+				&& ft_strncmp(m, little, l) == 0));
+    return (1);
 }
 
 int     test_ft_strcmp(char *s1, char *s2)
@@ -854,6 +869,10 @@ int main()
 		TESTONS(test_ft_isprint('\r'));
 		TESTONS(test_ft_isprint('^'));
 		TESTONS(test_ft_isprint(128));
+/*		TESTONS(test_ft_isprint('é')); error: multi-character character constant
+		TESTONS(test_ft_isprint('ç')); error: multi-character character constant
+		TESTONS(test_ft_isprint('€')); error: multi-character character constant
+*/
 	}
 
 	{//toupper
@@ -867,6 +886,18 @@ int main()
 		TESTONS(test_ft_toupper('\t'));
 		TESTONS(test_ft_toupper('\n'));
 		TESTONS(test_ft_toupper('\0'));
+	}
+	{//tolower
+		TESTONS(test_ft_tolower('a'));
+		TESTONS(test_ft_tolower('j'));
+		TESTONS(test_ft_tolower('z'));
+		TESTONS(test_ft_tolower('A'));
+		TESTONS(test_ft_tolower('E'));
+		TESTONS(test_ft_tolower('Z'));
+		TESTONS(test_ft_tolower('0'));
+		TESTONS(test_ft_tolower('\t'));
+		TESTONS(test_ft_tolower('\n'));
+		TESTONS(test_ft_tolower('\0'));
 	}
 
 	ft_free(buffer);
