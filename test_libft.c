@@ -394,7 +394,10 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 
 	s = ft_strdup((char*)src);
 	d = (char*)ft_malloc(size+1);
-	ft_bzero(d, size+1);
+
+	//ft_bzero(d, size+1);
+	ft_strcpy(d, dst);
+
 	r1 = strlcat(d, s, size);
 	r2 = ft_strlcat(dst, src, size);
 
