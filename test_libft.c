@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/10 12:29:45 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/10 18:47:28 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,149 @@
 #define STRING(x) _STRING(x)
 #define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRING(__LINE__), #cond )
 
-#define TEST(cond) if(!(cond)) return (0)
+#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRING(__LINE__) "!(" #cond ")\n"); return (0); }
+
+#ifndef HAVE_STRLCPY
+int isdigit(int c) {
+    if(c >= '0' && c <= '9') {
+        return 1;
+    }
+    return 0;
+}
+
+int islower(int c) {
+    if(c >= 'a' && c <= 'z') {
+        return 1;
+    }
+    return 0;
+}
+
+int isupper(int c) {
+    if(c >= 'A' && c <= 'Z') {
+        return 1;
+    }
+    return 0;
+}
+
+int isalpha(int c) {
+    if(islower(c) || isupper(c)) {
+        return 1;
+    }
+    return 0;
+}
+
+int isalnum(int c) {
+    if(isalpha(c) || isdigit(c)) {
+        return 1;
+    }
+    return 0;
+}
+
+int isascii(int i) {
+    if(0 <= i && i <= 127) {
+        return 1;
+    }
+    return 0;
+}
+
+int isprint(int c) {
+    if(c > 0x1F && c != 0x7F) {
+        return 1;
+    }
+    return 0;
+}
+
+int tolower(int c) {
+    if(isupper(c)) {
+        c += 0x20;
+    }
+    return c;
+}
+
+int toupper(int c) {
+    if(islower(c)) {
+        c -= 0x20;
+    }
+    return c;
+}
+/*size_t	strlcpy(char *dst, const char *src, size_t size)
+{
+	const char *s = src;
+    size_t n = size;
+
+    if (n != 0 && --n != 0) {
+        do {
+            if ((*dst++ = *s++) == 0)
+                break;
+        } while (--n != 0);
+    }
+    
+    if (n == 0) {
+        if (size != 0)
+            *dst = 0;
+        while (*s++);
+    }
+    
+	return(s - src - 1);
+}*/ 
+/*int strlcat(char *dest, char *src, size_t size)
+{
+  size_t	i;
+  size_t	dest_len;
+
+  i = 0;
+  dest_len = strlen(dest);
+  if (size == 0)
+	return dest_len;
+  while (dest_len < size)
+  {
+    dest[dest_len] = src[i];
+    dest_len++;
+    i++;
+  }
+  dest[dest_len] = '\0';
+  return (strlen(dest));
+}*/
+size_t	strlcat(char *dest, char *src, size_t size)
+{
+  size_t    i;  
+  size_t    dest_len;
+
+  i = 0;
+  dest_len = strlen(dest);
+  if (size == 0)
+    return dest_len;
+  while (dest_len < size)
+  {
+    dest[dest_len] = src[i];
+    dest_len++;
+    i++;
+  }
+  dest[dest_len] = '\0';
+  return (strlen(dest));
+}
+
+char *strnstr(const char *haystack, const char *needle, size_t len)
+{
+        int i;
+        size_t needle_len;
+
+        /* segfault here if needle is not NULL terminated */
+        if (0 == (needle_len = strlen(needle)))
+                return (char *)haystack;
+
+        for (i=0; i<=(int)(len-needle_len); i++)
+        {
+                if ((haystack[0] == needle[0]) &&
+                        (0 == strncmp(haystack, needle, needle_len)))
+                        return (char *)haystack;
+
+                haystack++;
+        }
+        return NULL;
+}
+#endif
+
 
 int test_ft_memset(void* buffer, int value, size_t size)
 {
@@ -60,12 +202,22 @@ int    test_ft_memcpy(void *dest, const void *src, size_t n)
 
 	s = ft_malloc(n);
 	memcpy(s, src, n);
-	d = dest;
+	d = (char*)dest;
 	ret = ft_memcpy(dest, src, n);
+	if(ret != dest)
+		ft_putstr("ret != dest");
 	TEST(ret == dest);
 	i = 0;
 	while(i < n)
 	{
+		if(d[i] != s[i])
+		{
+			ft_putstr("d["); ft_putnbr(i); ft_putstr("] != s["); ft_putnbr(i);ft_putstr("]\n");
+			ft_putstr("s:\n");
+			ft_print_memory(s, n);
+			ft_putstr("d:\n");
+			ft_print_memory(d, n);
+		}
 		TEST(d[i] == s[i]);
 		i++;
 	}
@@ -83,16 +235,24 @@ int    test_ft_memccpy(void *dest, const void *src, int c, size_t n)
 	s = ft_malloc(n);
 	ft_memcpy(s, src, n);
 	r = ft_memccpy(dest, src, c, n);
-	d = dest;
+	d = (char*)dest;
 	i = 0;
 	while(i < n)
 	{
+		if(d[i] != s[i])
+		{
+			ft_putstr("d["); ft_putnbr(i); ft_putstr("] != s["); ft_putnbr(i);ft_putstr("]\n");
+			ft_putstr("s:\n");
+			ft_print_memory(s, i);
+			ft_putstr("d:\n");
+			ft_print_memory(d, i);
+		}
 		TEST(d[i] == s[i]);
 		if(s[i] == (char)c)
 			break;
 		i++;
 	}
-	TEST((size_t)(r - src) == (i));
+	TEST((size_t)(r - dest) == (i + 1));
 	ft_free(s);
 	return (1);
 }
@@ -124,9 +284,9 @@ int	test_ft_memchr(const void *src, int c, size_t n)
 	
 	s = (char*)src;
 	r = ft_memchr(src, c, n);
-	if (r == NULL)
+	if (r != NULL)
 	{
-		l = (r - src) - 1;
+		l = (r - src);
 		i = 0;
 		while(i < l)
 		{
@@ -165,7 +325,7 @@ int		test_ft_strdup(char *str)
 	t = ft_strdup(str);
 	r = ft_strcmp(t, str);
 	ft_free(t);
-	return (r);
+	return (r==0);
 }
 
 int test_ft_strcpy(char *dest, char *src)
@@ -173,15 +333,24 @@ int test_ft_strcpy(char *dest, char *src)
 	char	*t;
 	t = ft_strcpy(dest, src);
 	TEST(t == dest);
-	return (ft_strcmp(dest, src));
+	return (ft_strcmp(dest, src)==0);
 }
 
 int	test_ft_strncpy(char *dest, char *src, size_t n)
 {
 	char	*t;
 	t = ft_strncpy(dest, src, n);
+	
 	TEST(t == dest);
-	return (ft_strncmp(dest, src, n));
+	TEST(strncmp(dest, src, n) == ft_strncmp(dest, src, n));
+	if (ft_strncmp(dest, src, n) != 0)
+	{
+		ft_putstr("src:\n");
+		ft_print_memory(src, n);
+		ft_putstr("dest:\n");
+		ft_print_memory(dest, n);
+	}
+	return (ft_strncmp(dest, src, n)==0);
 }
 
 int		test_ft_strcat(char *dest, char *src)
@@ -191,7 +360,7 @@ int		test_ft_strcat(char *dest, char *src)
 	int		t;
 
 	buff = ft_malloc(ft_strlen(dest) + strlen(src) + 1);
-	ft_strcpy(buff, src);
+	ft_strcpy(buff, dest);
 	ret = ft_strcat(dest, src);
 	TEST(ret == dest);
 	strcat(buff, src);
@@ -207,86 +376,134 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 	int		t;
 
 	buff = ft_malloc(ft_strlen(dest) + strlen(src) + 1);
-	ft_strncpy(buff, src, n);
+	ft_strncpy(buff, dest, n);
 	ret = ft_strncat(dest, src, n);
 	TEST(ret == dest);
 	strncat(buff, src, n);
 	t = ft_strncmp(buff, dest, n);
 	ft_free(buff);
 	return (t == 0);
-
 }
 
-int	nest_ft_strlcat(char *dst, const char *src, size_t size)
+int		test_ft_strlcat(char *dst, const char *src, size_t size)
 {
+	char	*s = ft_strdup((char*)src);
+	char	*d = (char*)ft_malloc(size+1);
+	
+	size_t 	r1 = strlcat(d, s, size);
+	size_t	r2 = ft_strlcat(dst, src, size);
+
+	TEST(ft_strncmp(d, dst, size)==0);
+	TEST(r1 == r2);
+
+	ft_free(s);
+	ft_free(d);
 	return (0);
 }
-size_t  test_ft_strlcpy(char *dst, const char *src, size_t dsize)
+
+/*int		test_ft_strlcpy(char *dst, const char *src, size_t dsize)
 {
-	    return (0);
-}
-size_t  test_ft_strlcat(char *dst, const char *src, size_t size)
+	char	*dst2;
+	char	*src2;
+
+	dst2 = ft_malloc(dsize + 1);
+	ft_memcpy(dst2, dst, dsize + 1);	
+	if (src < dst + dsize) // overlap case
+		src2 = dst2 + (src - dst); 
+	else
+		src2 = (char*)src;
+	size_t	li = strlcpy(dst2, src2, dsize);
+	size_t	lo = ft_strlcpy(dst, src, dsize);
+
+	TEST(li == lo);
+	TEST(ft_strcmp(dst, dst2));
+
+	return (1);
+}*/
+
+int		test_ft_strchr(const char *s, int c)
 {
-	    return (0);
+	TEST(strchr(s,c) == ft_strchr(s, c));
+	return (1);
 }
-char    *test_ft_strchr(const char *s, int c)
+
+int 	test_ft_strrchr(const char *s, int c)
 {
-	    return (0);
+	TEST(strrchr(s,c) == ft_strrchr(s, c));
+    return (1);
 }
-char    *test_ft_strrchr(const char *s, int c)
+
+int		test_ft_strstr(const char *big, const char *little)
 {
-	    return (0);
+	TEST(strstr(big, little) == ft_strstr(big, little));
+    return (1);
 }
-char    *test_ft_strstr(const char *big, const char *little)
+
+int		test_ft_strnstr(const char *big, const char *little, size_t size)
 {
-	    return (0);
+	TEST(strnstr(big, little, size) == ft_strnstr(big, little, size));
+	return (1);
 }
-char    *test_ft_strnstr(const char *big, const char *little, size_t size)
-{
-	    return (0);
-}
+
 int     test_ft_strcmp(char *s1, char *s2)
 {
-	    return (0);
+	TEST(strcmp(s1, s2) == ft_strcmp(s1, s2));
+	return (1);
 }
+
 int     test_ft_strncmp(char *s1, char *s2, size_t size)
 {
-	    return (0);
+	TEST(strncmp(s1, s2, size) == ft_strncmp(s1, s2, size));
+	return (1);
 }
+
 int     test_ft_atoi(char *str)
 {
-	    return (0);
+	TEST(atoi(str) == ft_atoi(str));
+	return (1);
 }
+
 int     test_ft_isalpha(int c)
 {
-	    return (0);
+	TEST(isalpha(c) == ft_isalpha(c));
+	return (1);
 }
+
 int     test_ft_isdigit(int c)
 {
-	    return (0);
+	TEST(isdigit(c) == ft_isdigit(c));
+	return (1);
 }
+
 int     test_ft_isalnum(int c)
 {
-	    return (0);
+	TEST(isalnum(c) == ft_isalnum(c));
+    return (1);
 }
+
 int     test_ft_isascii(int c)
 {
-	    return (0);
+	TEST(isascii(c) == ft_isascii(c));
+	return (1);
 }
+
 int     test_ft_isprint(int c)
 {
-	    return (0);
+	TEST(isprint(c) == ft_isprint(c));
+    return (1);
 }
 int     test_ft_toupper(int c)
 {
-	    return (0);
+	TEST(toupper(c) == ft_toupper(c));
+    return (1);
 }
 int     test_ft_tolower(int c)
 {
-	    return (0);
+	TEST(tolower(c) == ft_tolower(c));
+    return (1);
 }
 
-#define TESTONS(cond) FT_ASSERT(cond); ft_putstr(STRING(cond) " .. OK\n"); 
+#define TESTONS(cond) ft_putstr("testons " STRING(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRING(cond) " .. OK\n"); 
 
 #define BIG (1024*1024*1024)
 
@@ -321,8 +538,9 @@ int main()
     //ft_memcpy
 	{
 		int i;
-		char buffer2[255];
-		ft_memset(buffer, 'X', 59);
+		char buffer2[256];
+		ft_memset(buffer, 'X', 255);
+		buffer[255] = '\0';
 		for (i=0; i<10; i++)
 			buffer[i] = '0' + i;
 		for (i=0; i<26; i++)
@@ -429,11 +647,11 @@ int main()
 		TESTONS(test_ft_strcat(dst, "X"));
 	}
 	{//strlcat
-		char dst[31];
-		ft_bzero(dst, 31);
-		TESTONS(test_ft_strlcat(dst, "12345", 10));
-		TESTONS(test_ft_strlcat(dst, "", 10));
-		TESTONS(test_ft_strlcat(dst, "abcdef", 10));
+		char vide31[31];
+		ft_bzero(vide31, 31);
+		TESTONS(test_ft_strlcat(vide31, "12345", 10));
+		TESTONS(test_ft_strlcat(vide31, "", 10));
+		TESTONS(test_ft_strlcat(vide31, "abcdef", 10));
 	}
 
 	{//strchr

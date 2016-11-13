@@ -20,7 +20,7 @@ LIBHEADER=$(DIRH)libft.h
 
 GWW=gcc -O0 -g -Wall -Wextra -Werror -I$(DIRH)
 
-LOCALFUNCS = malloc free exit assert putchar putstr
+LOCALFUNCS = malloc free exit assert putchar putstr putnbr print_memory
 FUNCS = memset bzero memcpy memccpy memmove memchr memcmp \
 strlen strdup strcpy strncpy strcat strncat strlcat strchr strrchr strstr \
 strnstr strcmp strncmp atoi isalpha isdigit \
