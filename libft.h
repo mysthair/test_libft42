@@ -13,9 +13,9 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# define _STRING(x) #x
-# define STRING(x) _STRING(x)
-# define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRING(__LINE__), #cond )
+# define _STRINGIFY(x) #x
+# define STRINGIFY(x) _STRINGIFY(x)
+# define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
 #define NULL 0
 typedef unsigned long size_t;
 
