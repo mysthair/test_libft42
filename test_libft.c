@@ -387,18 +387,23 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 
 int		test_ft_strlcat(char *dst, const char *src, size_t size)
 {
-	char	*s = ft_strdup((char*)src);
-	char	*d = (char*)ft_malloc(size+1);
-	
-	size_t 	r1 = strlcat(d, s, size);
-	size_t	r2 = ft_strlcat(dst, src, size);
+	char	*s;
+	char	*d;
+	size_t 	r1;
+	size_t	r2;
+
+	s = ft_strdup((char*)src);
+	d = (char*)ft_malloc(size+1);
+	ft_bzero(d, size+1);
+	r1 = strlcat(d, s, size);
+	r2 = ft_strlcat(dst, src, size);
 
 	TEST(ft_strncmp(d, dst, size)==0);
 	TEST(r1 == r2);
 
 	ft_free(s);
 	ft_free(d);
-	return (0);
+	return (1);
 }
 
 /*int		test_ft_strlcpy(char *dst, const char *src, size_t dsize)
