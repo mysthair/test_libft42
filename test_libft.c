@@ -440,13 +440,24 @@ int		test_ft_strchr(const char *s, int c)
 
 int 	test_ft_strrchr(const char *s, int c)
 {
-	TEST(strrchr(s,c) == ft_strrchr(s, c));
-    return (1);
+   	char	*o;
+	char	*m;
+
+	o = strrchr(s, c);
+	m = ft_strrchr(s, c);
+	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
+	TEST(strrchr(s,c) == ft_strrchr(s, c)); //?
+	return (1);
 }
 
 int		test_ft_strstr(const char *big, const char *little)
 {
-	TEST(strstr(big, little) == ft_strstr(big, little));
+	char	*o;
+	char	*m;
+
+	o = strstr(big, little);
+	m = ft_strstr(big, little);
+	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
     return (1);
 }
 
