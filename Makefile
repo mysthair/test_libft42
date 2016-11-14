@@ -72,11 +72,25 @@ re:
 	make fclean
 	make all
 
+OS:=$(shell uname)
+ifeq ($(OS),Linux)
+  HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
+else
+  HAVE_STRLCPY:=-DHAVE_STRLCPY
+endif
+testos:
+	echo "$(OS) -> GWW $(HAVE_STRLCPY)"
 test_libft: test_libft.c $(LIB)
-	$(GWW) -o test_libft test_libft.c $(LIB)
+ifeq ($(OS), Linux)
+	@echo "Linux OS detected :P"
+endif
+	$(GWW) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIB)
 
 test: test_libft
 	./test_libft	
 
 testnorm:
 	norminette $(DIRC)*.c $(DIRH)*.h
+
+
+

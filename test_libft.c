@@ -20,7 +20,7 @@
 
 #define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) "!(" #cond ")\n"); return (0); }
 
-#ifndef HAVE_STRLCPY
+#ifdef DONT_HAVE_STRLCPY
 int isdigit(int c) {
     if(c >= '0' && c <= '9') {
         return 1;
