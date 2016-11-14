@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/10 18:47:28 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/14 17:16:12 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,24 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <ctype.h>
+
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
 #define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
 
-#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) "!(" #cond ")\n"); return (0); }
+#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") failed :(\n"); return (0); }
 
-#ifdef DONT_HAVE_STRLCPY
+#ifdef GLIBC
+int isascii(int i) {
+    if(0 <= i && i <= 127) {
+        return 1;
+    }
+    return 0;
+}
+#endif
+
+#if(0)
 int isdigit(int c) {
     if(c >= '0' && c <= '9') {
         return 1;
@@ -56,13 +67,6 @@ int isalnum(int c) {
     return 0;
 }
 
-int isascii(int i) {
-    if(0 <= i && i <= 127) {
-        return 1;
-    }
-    return 0;
-}
-
 int isprint(int c) {
     if(c > 0x1F && c != 0x7F) {
         return 1;
@@ -83,44 +87,9 @@ int toupper(int c) {
     }
     return c;
 }
-/*size_t	strlcpy(char *dst, const char *src, size_t size)
-{
-	const char *s = src;
-    size_t n = size;
+#endif
 
-    if (n != 0 && --n != 0) {
-        do {
-            if ((*dst++ = *s++) == 0)
-                break;
-        } while (--n != 0);
-    }
-    
-    if (n == 0) {
-        if (size != 0)
-            *dst = 0;
-        while (*s++);
-    }
-    
-	return(s - src - 1);
-}*/ 
-/*int strlcat(char *dest, char *src, size_t size)
-{
-  size_t	i;
-  size_t	dest_len;
-
-  i = 0;
-  dest_len = strlen(dest);
-  if (size == 0)
-	return dest_len;
-  while (dest_len < size)
-  {
-    dest[dest_len] = src[i];
-    dest_len++;
-    i++;
-  }
-  dest[dest_len] = '\0';
-  return (strlen(dest));
-}*/
+#ifdef DONT_HAVE_STRLCPY
 size_t	strlcat(char *dest, char *src, size_t size)
 {
   size_t    i;  
@@ -387,47 +356,35 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 
 int		test_ft_strlcat(char *dst, const char *src, size_t size)
 {
-	char	*s;
 	char	*d;
 	size_t 	r1;
 	size_t	r2;
 
-	s = ft_strdup((char*)src);
 	d = (char*)ft_malloc(size+1);
-
-	//ft_bzero(d, size+1);
+	ft_bzero(d, size+1);
 	ft_strcpy(d, dst);
 
-	r1 = strlcat(d, s, size);
+	r1 = strlcat(d, src, size);
 	r2 = ft_strlcat(dst, src, size);
+
+	if (ft_strncmp(d, dst, size) != 0 || r1!= r2)
+	{
+		ft_putstr("ft_strncmp(d, dst, size) != 0\n");
+		ft_putstr("size = \""); ft_putnbr(size); ft_putstr("\"\n");
+		ft_putstr("src  = \""); ft_putstr((char*)src); ft_putstr("\"\n");
+		ft_putstr("d    = \""); ft_putstr(d); ft_putstr("\"\n");
+		ft_putstr("dest = \""); ft_putstr(dst); ft_putstr("\"\n");
+		
+		ft_putstr("r1 = \""); ft_putnbr(r1); ft_putstr("\"\n");
+		ft_putstr("r2 = \""); ft_putnbr(r2); ft_putstr("\"\n");
+	}
 
 	TEST(ft_strncmp(d, dst, size)==0);
 	TEST(r1 == r2);
 
-	ft_free(s);
 	ft_free(d);
 	return (1);
 }
-
-/*int		test_ft_strlcpy(char *dst, const char *src, size_t dsize)
-{
-	char	*dst2;
-	char	*src2;
-
-	dst2 = ft_malloc(dsize + 1);
-	ft_memcpy(dst2, dst, dsize + 1);	
-	if (src < dst + dsize) // overlap case
-		src2 = dst2 + (src - dst); 
-	else
-		src2 = (char*)src;
-	size_t	li = strlcpy(dst2, src2, dsize);
-	size_t	lo = ft_strlcpy(dst, src, dsize);
-
-	TEST(li == lo);
-	TEST(ft_strcmp(dst, dst2));
-
-	return (1);
-}*/
 
 int		test_ft_strchr(const char *s, int c)
 {
@@ -685,10 +642,39 @@ int main()
 	}
 	{//strlcat
 		char vide31[31];
-		ft_bzero(vide31, 31);
+		char abcde31[31];
+		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "12345", 10));
+		
+		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "", 10));
-		TESTONS(test_ft_strlcat(vide31, "abcdef", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "1", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "123", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "1234", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "123456", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "1234567890", 10));
+		
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "123456789012", 10));
 	}
 
 	{//strchr

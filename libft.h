@@ -6,18 +6,19 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:21:56 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/10 18:40:53 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/14 17:45:36 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# define _STRINGIFY(x) #x
-# define STRINGIFY(x) _STRINGIFY(x)
-# define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
-#define NULL 0
-typedef unsigned long size_t;
+# ifndef NULL
+#  define NULL 0
+# endif
+# define TRUC typedef unsigned long size_t
+
+TRUC;
 
 void	*ft_malloc(size_t n);
 void	ft_free(void *p);
@@ -25,6 +26,7 @@ void	ft_putchar(char c);
 void	ft_putstr(char *s);
 void	ft_putnbr(int n);
 void	ft_exit(int n);
+void	ft_print_memory(const void *addr, size_t size);
 void	ft_assert(int cond, char *file, char *line, char *msg);
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);
@@ -44,10 +46,10 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
-char    *ft_strstr(const char *big, const char *little);
-char    *ft_strnstr(const char *big, const char *little, size_t size);
+char	*ft_strstr(const char *big, const char *little);
+char	*ft_strnstr(const char *big, const char *little, size_t size);
 int		ft_strcmp(const char *s1, const char *s2);
-int     ft_strncmp(const char *s1, const char *s2, size_t size);
+int		ft_strncmp(const char *s1, const char *s2, size_t size);
 int		ft_atoi(const char *str);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -58,7 +60,5 @@ int		ft_isalnum(int c);
 int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
-
-void    ft_print_memory(const void *addr, size_t size);
 
 #endif
