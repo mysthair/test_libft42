@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:21:56 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/14 17:45:36 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/14 18:13:18 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		ft_isalnum(int c);
 int		ft_isascii(int c);
 int		ft_isalnum(int c);
 int		ft_isprint(int c);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
+char	ft_toupper(int c);
+char	ft_tolower(int c);
 
 #endif

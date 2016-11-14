@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/14 17:16:12 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/14 18:21:09 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -486,19 +486,40 @@ int     test_ft_isprint(int c)
 	TEST(isprint(c) == ft_isprint(c));
     return (1);
 }
+
 int     test_ft_toupper(int c)
 {
-	TEST(toupper(c) == ft_toupper(c));
+	char o, m;
+	o = toupper(c);
+	m = ft_toupper(c);
+	if (o != m)
+	{
+		ft_putstr("   toupper("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(o); ft_putstr("'\n");
+		ft_putstr("ft_toupper("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(m); ft_putstr("'\n");
+	}
+	TEST(o == m);
     return (1);
 }
 int     test_ft_tolower(int c)
 {
-	TEST(tolower(c) == ft_tolower(c));
+	char o, m;
+	o = tolower(c);
+	m = ft_tolower(c);
+	if (o != m)
+	{
+		ft_putstr("   tolower("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(o); ft_putstr("'\n");
+		ft_putstr("ft_tolower("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(m); ft_putstr("'\n");
+	}
+	TEST(o == m);
     return (1);
 }
 
-#define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
-
+//#define DEBUG
+#ifdef DEBUG
+# define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+#else
+# define TESTONS(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+#endif
 #define BIG (1024*1024*1024)
 
 int main()
@@ -855,10 +876,20 @@ int main()
 		TESTONS(test_ft_isprint('\r'));
 		TESTONS(test_ft_isprint('^'));
 		TESTONS(test_ft_isprint(128));
-/*		TESTONS(test_ft_isprint('é')); error: multi-character character constant
-		TESTONS(test_ft_isprint('ç')); error: multi-character character constant
-		TESTONS(test_ft_isprint('€')); error: multi-character character constant
-*/
+		TESTONS(test_ft_isprint(129));
+		TESTONS(test_ft_isprint(130));
+		TESTONS(test_ft_isprint(131));
+		TESTONS(test_ft_isprint(255));
+		TESTONS(test_ft_isprint(-1));
+		TESTONS(test_ft_isprint(-255));
+		TESTONS(test_ft_isprint(256));
+		TESTONS(test_ft_isprint(512));
+#ifdef DEBUG
+		for(int c=-256; c<=512; c++)
+		{
+			TESTONS(test_ft_isprint(c));
+		}
+#endif
 	}
 
 	{//toupper
@@ -872,6 +903,12 @@ int main()
 		TESTONS(test_ft_toupper('\t'));
 		TESTONS(test_ft_toupper('\n'));
 		TESTONS(test_ft_toupper('\0'));
+#ifdef DEBUG
+		for(int c=-256; c<=512; c++)
+		{
+			TESTONS(test_ft_toupper(c));
+		}	
+#endif
 	}
 	{//tolower
 		TESTONS(test_ft_tolower('a'));
@@ -884,6 +921,12 @@ int main()
 		TESTONS(test_ft_tolower('\t'));
 		TESTONS(test_ft_tolower('\n'));
 		TESTONS(test_ft_tolower('\0'));
+#ifdef DEBUG
+		for(int c=-256; c<512; c++)
+		{
+			TESTONS(test_ft_tolower(c));
+		}
+#endif
 	}
 
 	ft_free(buffer);
