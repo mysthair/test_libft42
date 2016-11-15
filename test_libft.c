@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/15 12:08:34 by ajouanna         ###   ########.fr       */
+/*   Updated: 2016/11/15 18:16:12 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,6 +473,66 @@ int    test_ft_memalloc(size_t size)
 	return (1);
 }
 
+int		test_ft_memdel(size_t size)
+{
+	void *ft_memdel_parameter_after_call;
+   
+	ft_memdel_parameter_after_call = ft_memalloc(size);
+	if (ft_memdel_parameter_after_call)
+	{
+		ft_memdel(&ft_memdel_parameter_after_call);
+		TEST(ft_memdel_parameter_after_call == NULL);
+	}
+	return (1);
+}
+
+//int		test_ft_striter(char *s, void (*f)(char *))
+//{
+void strtter_func_upper(char *c)
+{
+	*c = ft_toupper(*c);
+}
+void strtter_func_lower(char *c)
+{
+	*c = ft_tolower(*c);
+}
+//}
+
+//int		test_ft_striteri(char *s, void (*f)(unsigned int, char *))
+//{
+void strtteri_func_upper(unsigned int i, char *s)
+{
+	s[i] = ft_toupper(s[i]);
+}
+void strtteri_func_lower(unsigned int i, char *s)
+{
+	s[i] = ft_tolower(s[i]);
+}
+//}
+
+char strmap_func_upper(char c)
+{
+	return ((char)toupper((int)c));
+}
+char strmap_func_lower(char c)
+{
+	return ((char)tolower((int)c));
+}
+
+char	strmapi_func_upper(unsigned i, char c)
+{
+	if (i < 512)
+		return (ft_toupper(c));
+	return (c);
+}
+
+char	strmapi_func_lower(unsigned i, char c)
+{
+	if (i < 512)
+		return (ft_tolower(c));
+	return (c);
+}
+
 //#define DEBUG
 #ifdef DEBUG
 # define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
@@ -623,21 +683,14 @@ int main()
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
-
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "12345", 10));
-
-		ft_bzero(vide31, 31); 
-		TESTONS(test_ft_strlcat(vide31, "12345", 0));
 		
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "", 10));
 		
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "", 10));
-
-		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
-		TESTONS(test_ft_strlcat(abcde31, "", 0));
 		
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "1", 10));
@@ -653,9 +706,6 @@ int main()
 		
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "12345", 10));
-
-		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
-		TESTONS(test_ft_strlcat(abcde31, "12345", 0));
 		
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "123456", 10));
@@ -673,6 +723,7 @@ int main()
 		TESTONS(test_ft_strchr("", 'X'));
 		TESTONS(test_ft_strchr("12345678\0""901234567890", '0'));
 		TESTONS(test_ft_strchr("123456\t78901234567890", '\t'));
+/*failed !!	TESTONS(test_ft_strchr("12345678901234567890", '\0')); */
 		TESTONS(test_ft_strchr("12345678901234567890", '\0'));
 	}
 	{//strrchr
@@ -755,7 +806,6 @@ int main()
 		TESTONS(test_ft_atoi("-2147483647"));//  == -2147483647);
 		TESTONS(test_ft_atoi("-2147483648"));//  == -2147483648);
 		TESTONS(test_ft_atoi("-2147483649"));//  == 2147483647);
-		/* cas a priori pas testes pae la moulinette
 		TESTONS(test_ft_atoi("9223372036854775805"));//  == -3);
 		TESTONS(test_ft_atoi("9223372036854775806"));//  == -2);
 		TESTONS(test_ft_atoi("9223372036854775807"));//  == -1);
@@ -770,7 +820,6 @@ int main()
 		TESTONS(test_ft_atoi("-9223372036854775809"));// == 0);
 		TESTONS(test_ft_atoi("-9223372036854775810"));// == 0);
 		TESTONS(test_ft_atoi("-1000000000000000000000000"));//  == 0);
-		*/
 		TESTONS(test_ft_atoi(""));//  == 0);
 	}
 
@@ -905,6 +954,86 @@ int main()
 		TESTONS(test_ft_memalloc(1024 * BIG));
 	}
 	
+	{ //ft_memdel
+		TESTONS(test_ft_memdel(1024));
+		TESTONS(test_ft_memdel(0));
+	}	
+	
+#define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
+	ft_putstr(T); ft_putstr("\"\n");
+	
+	{//ft_striter
+		char	*t = "txtaz123HAHZ";
+
+		char	*ft_stirter_upper_txtaz123HAHZ = ft_strdup(t);
+		char	*ft_stirter_lower_txtaz123HAHZ = ft_strdup(t);
+
+		SHOW_STRING("before ", ft_stirter_upper_txtaz123HAHZ);
+		ft_striter(ft_stirter_upper_txtaz123HAHZ, &strtter_func_upper);
+		SHOW_STRING("after  ", ft_stirter_upper_txtaz123HAHZ);
+		TESTONS(ft_strcmp(ft_stirter_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
+		
+		SHOW_STRING("before ", ft_stirter_lower_txtaz123HAHZ);
+		ft_striter(ft_stirter_lower_txtaz123HAHZ, &strtter_func_lower);
+		SHOW_STRING("after  ", ft_stirter_lower_txtaz123HAHZ);
+		TESTONS(ft_strcmp(ft_stirter_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
+		
+		ft_strdel(&ft_stirter_upper_txtaz123HAHZ);
+		ft_strdel(&ft_stirter_lower_txtaz123HAHZ);
+	}
+
+	{//ft_striteri
+		char	*t = "txtaz123HAHZ";
+
+		char	*ft_stirteri_upper_txtaz123HAHZ = ft_strdup(t);
+		char	*ft_stirteri_lower_txtaz123HAHZ = ft_strdup(t);
+
+		SHOW_STRING("before ", ft_stirteri_upper_txtaz123HAHZ);
+		ft_striteri(ft_stirteri_upper_txtaz123HAHZ, &strtteri_func_upper);
+		SHOW_STRING("after  ", ft_stirteri_upper_txtaz123HAHZ);
+		TESTONS(ft_strcmp(ft_stirteri_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
+		
+		SHOW_STRING("before ", ft_stirteri_lower_txtaz123HAHZ);
+		ft_striteri(ft_stirteri_lower_txtaz123HAHZ, &strtteri_func_lower);
+		SHOW_STRING("after  ", ft_stirteri_lower_txtaz123HAHZ);
+		TESTONS(ft_strcmp(ft_stirteri_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
+		
+		ft_strdel(&ft_stirteri_upper_txtaz123HAHZ);
+		ft_strdel(&ft_stirteri_lower_txtaz123HAHZ);
+	}
+
+	{//ft_strmap
+		char	*ft_strmap_upper_txtaz123HAHZ;
+		char	*ft_strmap_lower_txtaz123HAHZ;
+
+		ft_strmap_upper_txtaz123HAHZ = ft_strmap("txtaz123HAHZ", &strmap_func_upper);
+		SHOW_STRING("after  ", ft_strmap_upper_txtaz123HAHZ);
+		ft_strmap_lower_txtaz123HAHZ = ft_strmap("txtaz123HAHZ", &strmap_func_lower);
+		SHOW_STRING("after  ", ft_strmap_lower_txtaz123HAHZ);
+
+		TESTONS(ft_strcmp(ft_strmap_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
+		TESTONS(ft_strcmp(ft_strmap_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
+
+		ft_strdel(&ft_strmap_upper_txtaz123HAHZ);
+		ft_strdel(&ft_strmap_lower_txtaz123HAHZ);
+	}
+
+	{//ft_strmapi
+		char	*ft_strmapi_upper_txtaz123HAHZ;
+		char	*ft_strmapi_lower_txtaz123HAHZ;
+
+		ft_strmapi_upper_txtaz123HAHZ = ft_strmapi("txtaz123HAHZ", &strmapi_func_upper);
+		SHOW_STRING("after  ", ft_strmapi_upper_txtaz123HAHZ);
+		ft_strmapi_lower_txtaz123HAHZ = ft_strmapi("txtaz123HAHZ", &strmapi_func_lower);
+		SHOW_STRING("after  ", ft_strmapi_lower_txtaz123HAHZ);
+
+		TESTONS(ft_strcmp(ft_strmapi_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
+		TESTONS(ft_strcmp(ft_strmapi_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
+
+		ft_strdel(&ft_strmapi_upper_txtaz123HAHZ);
+		ft_strdel(&ft_strmapi_lower_txtaz123HAHZ);
+	}
+
 	ft_free(buffer);
 	return (0);
 }
