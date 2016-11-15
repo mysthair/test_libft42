@@ -23,23 +23,22 @@
 #define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") failed :(\n"); return (0); }
 
 #ifdef DONT_HAVE_STRLCPY
-size_t	strlcat(char *dest, char *src, size_t size)
+size_t	strlcat(char *dst, const char *src, size_t size)
 {
-  size_t    i;  
-  size_t    dest_len;
+	size_t	i;
 
-  i = 0;
-  dest_len = strlen(dest);
-  if (size == 0)
-    return dest_len;
-  while (dest_len < size)
-  {
-    dest[dest_len] = src[i];
-    dest_len++;
-    i++;
-  }
-  dest[dest_len] = '\0';
-  return (strlen(dest));
+	i = 0;
+	while (i < size && dst[i])
+		i++;
+	while (i < size && (dst[i] = *src))
+	{
+		i++;
+		src++;
+	}
+	dst[i < size ? i : size - 1] = '\0';
+	while (*(src++))
+		i++;
+	return (i);
 }
 
 char *strnstr(const char *haystack, const char *needle, size_t len)
@@ -951,12 +950,13 @@ int main()
 	{//ft_memalloc
 		TESTONS(test_ft_memalloc(10));
 		TESTONS(test_ft_memalloc(0));
-		TESTONS(test_ft_memalloc(1024 * BIG));
+		TESTONS(test_ft_memalloc(BIG));
 	}
 	
 	{ //ft_memdel
 		TESTONS(test_ft_memdel(1024));
 		TESTONS(test_ft_memdel(0));
+		TESTONS(test_ft_memdel(BIG));
 	}	
 	
 #define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
