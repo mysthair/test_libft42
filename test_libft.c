@@ -391,31 +391,37 @@ int     test_ft_atoi(char *str)
 
 int     test_ft_isalpha(int c)
 {
-	TEST(isalpha(c) == ft_isalpha(c));
+	int b1 = isalpha(c);
+	int b2 = ft_isalpha(c);
+	TEST((b1 && b1) || (!b1 && !b2));
+	TEST(!!isalpha(c) == !!ft_isalpha(c));
 	return (1);
 }
 
 int     test_ft_isdigit(int c)
 {
-	TEST(isdigit(c) == ft_isdigit(c));
+	int b1 = isdigit(c);
+	int b2 = ft_isdigit(c);
+	TEST((b1 && b1) || (!b1 && !b2));
+	TEST(!!isdigit(c) == !!ft_isdigit(c));
 	return (1);
 }
 
 int     test_ft_isalnum(int c)
 {
-	TEST(isalnum(c) == ft_isalnum(c));
+	TEST(!!isalnum(c) == !!ft_isalnum(c));
     return (1);
 }
 
 int     test_ft_isascii(int c)
 {
-	TEST(isascii(c) == ft_isascii(c));
+	TEST(!!isascii(c) == !!ft_isascii(c));
 	return (1);
 }
 
 int     test_ft_isprint(int c)
 {
-	TEST(isprint(c) == ft_isprint(c));
+	TEST(!!isprint(c) == !!ft_isprint(c));
     return (1);
 }
 
