@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/14 18:21:09 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/15 10:47:49 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,73 +21,6 @@
 #define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
 
 #define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") failed :(\n"); return (0); }
-
-#ifdef GLIBC
-int isascii(int i) {
-    if(0 <= i && i <= 127) {
-        return 1;
-    }
-    return 0;
-}
-#endif
-
-#if(0)
-int isdigit(int c) {
-    if(c >= '0' && c <= '9') {
-        return 1;
-    }
-    return 0;
-}
-
-int islower(int c) {
-    if(c >= 'a' && c <= 'z') {
-        return 1;
-    }
-    return 0;
-}
-
-int isupper(int c) {
-    if(c >= 'A' && c <= 'Z') {
-        return 1;
-    }
-    return 0;
-}
-
-int isalpha(int c) {
-    if(islower(c) || isupper(c)) {
-        return 1;
-    }
-    return 0;
-}
-
-int isalnum(int c) {
-    if(isalpha(c) || isdigit(c)) {
-        return 1;
-    }
-    return 0;
-}
-
-int isprint(int c) {
-    if(c > 0x1F && c != 0x7F) {
-        return 1;
-    }
-    return 0;
-}
-
-int tolower(int c) {
-    if(isupper(c)) {
-        c += 0x20;
-    }
-    return c;
-}
-
-int toupper(int c) {
-    if(islower(c)) {
-        c -= 0x20;
-    }
-    return c;
-}
-#endif
 
 #ifdef DONT_HAVE_STRLCPY
 size_t	strlcat(char *dest, char *src, size_t size)
