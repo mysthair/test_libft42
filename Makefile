@@ -6,7 +6,7 @@
 #    By: jleblanc <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/15 11:24:31 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/11/15 12:27:47 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,7 @@ re:
 	@echo "$(TITLE)"
 	make fclean
 	make all
-
+	make test
 OS:=$(shell uname)
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
