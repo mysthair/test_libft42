@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:21:56 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/15 11:01:58 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/15 14:41:04 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,6 @@ int		ft_isprint(int c);
 char	ft_toupper(int c);
 char	ft_tolower(int c);
 void	*ft_memalloc(size_t size);
+void	ft_memdel(void **ap);
 
 #endif
