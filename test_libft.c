@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/15 10:47:49 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/15 11:26:53 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,6 +447,32 @@ int     test_ft_tolower(int c)
     return (1);
 }
 
+int    test_ft_memalloc(size_t size)
+{
+	void	*o;
+	void	*p;
+	char	*t;
+	size_t	i;
+
+	o = ft_malloc(size);
+	if (o)
+		ft_free(o);
+	p = ft_memalloc(size);
+	//TEST(sizeof(p) == size);
+	TEST((p && o) || (!p && !o));
+	if (p)
+	{
+		t = (char*)p;
+		i = 0;
+		while (i < size)
+		{
+			TEST(t[i] == 0);
+			i++;
+		}
+	}
+	return (1);
+}
+
 //#define DEBUG
 #ifdef DEBUG
 # define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
@@ -862,6 +888,12 @@ int main()
 #endif
 	}
 
+	{//ft_memalloc
+		TESTONS(test_ft_memalloc(10));
+		TESTONS(test_ft_memalloc(0));
+		TESTONS(test_ft_memalloc(1024 * BIG));
+	}
+	
 	ft_free(buffer);
 	return (0);
 }
