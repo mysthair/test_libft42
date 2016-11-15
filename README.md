@@ -8,8 +8,8 @@ Placer le rep du dépot de votre libft au même niveau que celui du testeur, car
 Soyons bref: tapez les lignes suivantes:
 
 	mkdir testonslalibft
-	cd testonslalibft
 	ln -s lechemindemalibft libft
+	cd testonslalibft
 	git clone https://github.com/mysthair/test_libft42 
 	cd test_libft42
 	make
