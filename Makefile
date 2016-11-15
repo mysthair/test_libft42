@@ -6,7 +6,7 @@
 #    By: jleblanc <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/08 16:07:30 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/11/15 11:24:31 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,9 @@ LOCALFUNCS = malloc free exit assert putchar putstr putnbr print_memory
 FUNCS = memset bzero memcpy memccpy memmove memchr memcmp \
 strlen strdup strcpy strncpy strcat strncat strlcat strchr strrchr strstr \
 strnstr strcmp strncmp atoi isalpha isdigit \
-isalnum isascii isprint toupper tolower
-#FUNCS+=memalloc memdel strnew strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin strtrim strsplit itoa putchar putstr putendl putnbr putchar_fd putstr_fd putendl_fd putnbr_fd
+isalnum isascii isprint toupper tolower \
+memalloc
+#memdel strnew strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin strtrim strsplit itoa putchar putstr putendl putnbr putchar_fd putstr_fd putendl_fd putnbr_fd
 #bonus s_list
 
 LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))

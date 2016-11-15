@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/15 11:56:00 by ajouanna         ###   ########.fr       */
+/*   Updated: 2016/11/15 12:08:34 by ajouanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,73 +21,6 @@
 #define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
 
 #define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") failed :(\n"); return (0); }
-
-#ifdef GLIBC
-int isascii(int i) {
-    if(0 <= i && i <= 127) {
-        return 1;
-    }
-    return 0;
-}
-#endif
-
-#if(0)
-int isdigit(int c) {
-    if(c >= '0' && c <= '9') {
-        return 1;
-    }
-    return 0;
-}
-
-int islower(int c) {
-    if(c >= 'a' && c <= 'z') {
-        return 1;
-    }
-    return 0;
-}
-
-int isupper(int c) {
-    if(c >= 'A' && c <= 'Z') {
-        return 1;
-    }
-    return 0;
-}
-
-int isalpha(int c) {
-    if(islower(c) || isupper(c)) {
-        return 1;
-    }
-    return 0;
-}
-
-int isalnum(int c) {
-    if(isalpha(c) || isdigit(c)) {
-        return 1;
-    }
-    return 0;
-}
-
-int isprint(int c) {
-    if(c > 0x1F && c != 0x7F) {
-        return 1;
-    }
-    return 0;
-}
-
-int tolower(int c) {
-    if(isupper(c)) {
-        c += 0x20;
-    }
-    return c;
-}
-
-int toupper(int c) {
-    if(islower(c)) {
-        c -= 0x20;
-    }
-    return c;
-}
-#endif
 
 #ifdef DONT_HAVE_STRLCPY
 size_t	strlcat(char *dest, char *src, size_t size)
@@ -514,6 +447,32 @@ int     test_ft_tolower(int c)
     return (1);
 }
 
+int    test_ft_memalloc(size_t size)
+{
+	void	*o;
+	void	*p;
+	char	*t;
+	size_t	i;
+
+	o = ft_malloc(size);
+	if (o)
+		ft_free(o);
+	p = ft_memalloc(size);
+	//TEST(sizeof(p) == size);
+	TEST((p && o) || (!p && !o));
+	if (p)
+	{
+		t = (char*)p;
+		i = 0;
+		while (i < size)
+		{
+			TEST(t[i] == 0);
+			i++;
+		}
+	}
+	return (1);
+}
+
 //#define DEBUG
 #ifdef DEBUG
 # define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
@@ -714,7 +673,6 @@ int main()
 		TESTONS(test_ft_strchr("", 'X'));
 		TESTONS(test_ft_strchr("12345678\0""901234567890", '0'));
 		TESTONS(test_ft_strchr("123456\t78901234567890", '\t'));
-/*failed !!	TESTONS(test_ft_strchr("12345678901234567890", '\0')); */
 		TESTONS(test_ft_strchr("12345678901234567890", '\0'));
 	}
 	{//strrchr
@@ -941,6 +899,12 @@ int main()
 #endif
 	}
 
+	{//ft_memalloc
+		TESTONS(test_ft_memalloc(10));
+		TESTONS(test_ft_memalloc(0));
+		TESTONS(test_ft_memalloc(1024 * BIG));
+	}
+	
 	ft_free(buffer);
 	return (0);
 }
