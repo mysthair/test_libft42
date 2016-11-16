@@ -527,6 +527,7 @@ char	strmapi_func_lower(unsigned i, char c)
 	return (c);
 }
 
+
 //#define DEBUG
 #ifdef DEBUG
 # define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
@@ -534,6 +535,32 @@ char	strmapi_func_lower(unsigned i, char c)
 # define TESTONS(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 #endif
 #define BIG (1024*1024*1024)
+
+
+
+typedef struct	s_elt 
+{
+	int			no;
+} 				t_elt;
+
+
+#include <stdio.h>
+void	lst_show_elt(t_list *l)
+{
+	t_elt	*elt;
+
+	elt = (t_elt*)(l->content);
+	printf("%p:[no:%i, next:%p]\n", l, elt->no, l->next);
+}
+
+void	lst_show_list(t_list *l)
+{
+	while(l)
+	{
+		lst_show_elt(l);
+		l = l->next;
+	}
+}
 
 int main()
 {
@@ -1042,6 +1069,16 @@ int main()
 		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
+
+
+	{
+		t_elt z = (t_elt){no:1};
+		t_list	*e = ft_lstnew(&z, sizeof(t_elt));
+		
+		lst_show_elt(e);
+		ft_memdel(&(e->content));
+		ft_memdel((void*)(&e));
+	}
 	ft_free(buffer);
 	return (0);
 }
