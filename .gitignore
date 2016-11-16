@@ -2,4 +2,5 @@
 *.swp
 *.o
 *.a
-test_libftest_libft
+test_libf
+libft.h
