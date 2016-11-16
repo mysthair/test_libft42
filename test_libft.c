@@ -391,18 +391,12 @@ int     test_ft_atoi(char *str)
 
 int     test_ft_isalpha(int c)
 {
-	int b1 = isalpha(c);
-	int b2 = ft_isalpha(c);
-	TEST((b1 && b1) || (!b1 && !b2));
 	TEST(!!isalpha(c) == !!ft_isalpha(c));
 	return (1);
 }
 
 int     test_ft_isdigit(int c)
 {
-	int b1 = isdigit(c);
-	int b2 = ft_isdigit(c);
-	TEST((b1 && b1) || (!b1 && !b2));
 	TEST(!!isdigit(c) == !!ft_isdigit(c));
 	return (1);
 }
@@ -1038,6 +1032,19 @@ int main()
 
 		ft_strdel(&ft_strmapi_upper_txtaz123HAHZ);
 		ft_strdel(&ft_strmapi_lower_txtaz123HAHZ);
+	}
+
+	{ // ftrsplit
+		char	*__Ha_Ho_123______erf_ = "__Ha_Ho_123______erf_";
+		char	**ftsplitresultof__Ha_Ho_123______erf_ =  ft_strsplit(__Ha_Ho_123______erf_, '_');
+		TESTONS(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[0], "Ha"));
+		TESTONS(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[1], "Ho"));
+		TESTONS(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[2], "123"));
+		TESTONS(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
+		TESTONS(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
+		for (int i=0; i<4; i++)
+			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
+		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
 	ft_free(buffer);
