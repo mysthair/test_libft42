@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "test_libft.h"
 #include "libft.h"
 
 static void	aff_hexa(unsigned char h)

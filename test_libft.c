@@ -11,16 +11,11 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "test_libft.h"
 #include <string.h>
 #include <stdlib.h>
 
 #include <ctype.h>
-
-#define _STRINGIFY(x) #x
-#define STRINGIFY(x) _STRINGIFY(x)
-#define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )
-
-#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") failed :(\n"); return (0); }
 
 #ifdef DONT_HAVE_STRLCPY
 size_t	strlcat(char *dst, const char *src, size_t size)

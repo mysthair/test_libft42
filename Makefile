@@ -10,52 +10,44 @@
 #                                                                              #
 # **************************************************************************** #
 
+NAME=test_libft
+
 DIRH=./
 DIRC=
 DIRLIBFT=../libft/
 DIRO=objs/
 
-LIB=libft.a
-LIBHEADER=$(DIRH)libft.h
+LIBFT=libft.a
+LIBFTH=libft.h
+HEADERS=$(LIBFTH) test_libft.h
 
 GWW=gcc -std=gnu11 -O3 -Wall -Wextra -Werror -I$(DIRH)
 #GWW=gcc -O0 -g -Wall -Wextra -Werror -I$(DIRH)
 
 LOCALFUNCS = malloc free exit assert print_memory
-FUNCS = memset bzero memcpy memccpy memmove memchr memcmp \
-strlen strdup strcpy strncpy strcat strncat strlcat strchr strrchr strstr \
-strnstr strcmp strncmp atoi isalpha isdigit \
-isalnum isascii isprint toupper tolower \
-memalloc memdel strnew strdel strclr striter striteri strmap strmapi \
-strequ strnequ strsub strjoin strtrim strsplit itoa putchar putstr \
-putendl putnbr putchar_fd putstr_fd putendl_fd putnbr_fd
-#bonus s_list
 
 LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))
-LIBFILES=$(addprefix $(DIRLIBFT)ft_, $(addsuffix .c, $(FUNCS)))
-LIBOBJ=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(FUNCS) $(LOCALFUNCS)))
+OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
 
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
-all: test $(LIB)
+all: test $(LIBFT)
 	@echo "$(TITLE)"
 	@echo "################################################################################"
-	@echo "##                          $(LIB) testeur                                    ##"
-	@echo "$(FUNCS)"
+	@echo "##                          $(LIBFT) testeur                                    ##"
 	@echo "################################################################################"
 
-$(LIB): $(LIBOBJ) $(LIBHEADER)
-	@echo "$(TITLE)"
-	ar rc $(LIB) $(LIBOBJ)
-	ranlib $(LIB)
+#$(LIBFT): $(OBJS) $(HEADERS)
+$(LIBFTH):$(DIRLIBFT)$(LIBFTH)
+	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
 
-$(LIBOBJ): $(LIBHEADER)
+$(LIBFT): $(DIRLIBFT) $(LIBFTH)
+	@echo "$(TITLE)"
+	make -C $(DIRLIBFT) && cp $(DIRLIBFT)$(LIBFT) $(LIBFT)
+
+$(OBJS): $(HEADERS)
 
 $(DIRO)%.o: %.c
-	@echo "$(TITLE)"
-	@mkdir -p objs
-	$(GWW) -o $@ -c $< 
-$(DIRO)%.o: $(DIRLIBFT)%.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(GWW) -o $@ -c $< 
@@ -66,8 +58,8 @@ clean:
 
 fclean: clean
 	@echo "$(TITLE)"
-	rm -f $(LIB)
-	rm -f *.e test_libft
+	rm -f $(LIBFT) $(LIBFTH)
+	rm -f *.e $(NAME)
 	@rm -rf *.dSYM
 
 re:
@@ -83,14 +75,14 @@ else
 endif
 testos:
 	echo "$(OS) -> GWW $(HAVE_STRLCPY)"
-test_libft: test_libft.c $(LIB)
+$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(GWW) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIB)
+	$(GWW) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIBFT) $(OBJS) 
 
-test: test_libft
-	./test_libft	
+test: $(NAME)
+	./$(NAME)	
 
 testnorm:
 	norminette $(DIRC)*.c $(DIRH)*.h

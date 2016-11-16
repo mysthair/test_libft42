@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "test_libft.h"
 #include <stdlib.h>
 
 void	*ft_malloc(size_t n)

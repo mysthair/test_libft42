@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "test_libft.h"
 
 void	ft_assert(int cond, char *file, char *line, char *msg)
 {
