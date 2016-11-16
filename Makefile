@@ -85,7 +85,8 @@ test: $(NAME)
 	./$(NAME)	
 
 testnorm:
-	norminette $(DIRC)*.c $(DIRH)*.h
+	norminette $(DIRLIBFT)
+	norminette $(DIRC)ft_*.c $(DIRH)*.h
 
 
 

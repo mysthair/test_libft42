@@ -561,7 +561,11 @@ void	lst_show_list(t_list *l)
 		l = l->next;
 	}
 }
-
+void lst_free_elt(void* data, size_t size)
+{
+	size = 0 + size;
+	ft_free(data);
+}
 int main()
 {
         char    *buffer;
@@ -1076,8 +1080,8 @@ int main()
 		t_list	*e = ft_lstnew(&z, sizeof(t_elt));
 		
 		lst_show_elt(e);
-		ft_memdel(&(e->content));
-		ft_memdel((void*)(&e));
+
+		ft_lstdelone(&e, &lst_free_elt);
 	}
 	ft_free(buffer);
 	return (0);
