@@ -588,7 +588,7 @@ void	lst_show_elt(t_list *l)
 	t_elt	elt;
 
 	elt = (t_elt)(l->content);
-	printf("%p:[content:%p(\"%8s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
+	printf("%p:[content:%p(\"%s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
 }
 
 void	lst_show_lst(t_list *l)
@@ -605,7 +605,7 @@ void lst_free_elt(void* data, size_t size)
 
 	elt = (t_elt)data;
 	size = 0 + size;
-	printf("freeing elt %p(\"%8s\")\n", elt, elt); 
+	printf("freeing elt %p(\"%s\")\n", elt, elt); 
 	ft_free(data);
 }
 int main()
@@ -1118,7 +1118,7 @@ int main()
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
 		t_elt z1 = "hello";
 		t_elt z2 = "beautifull";
-		t_elt z3 = "wonderfull";
+		t_elt z3 = "wonderfully super";
 		t_elt z4 = "world !";
 
 		t_list	*l;
@@ -1156,9 +1156,71 @@ int main()
 		ft_putendl("ft_lstiter(l, &lst_show_elt);");
 		ft_lstiter(l, &lst_show_elt);
 
+		t_list *f(t_list *elem){
+			static char	buffer[13];
+			static t_list	tmp;
+			char	*s;
+			size_t	l;
+
+			s = (char*)(elem->content);
+			l = (ft_strlen(s) % 10);
+			if(l == 0)
+				return (NULL);
+			tmp.content_size = l+1;
+			for (size_t i=0; i<l; i++)
+				buffer[i] = s[l-1-i];
+			buffer[l] = '\0';
+			tmp.content = (void*)buffer;
+			tmp.next = NULL;
+			return (&tmp); 
+		}
+
+		ft_putendl("m0 = ft_lstmap(&l, &f)");
+		t_list	*m0 = ft_lstmap(l, &f);
+		lst_show_lst(m0); 
+		
 		ft_putendl("ft_lstdel(&l, ..");
 		ft_lstdel(&l, &lst_free_elt);
+
+
+		t_list	*m1=m0->next;
+		t_list	*m2=m1->next;
+		t_list	*m3=m2->next;
+
+		if(ft_memcmp(m0->content, "olleh", 6) != 0)
+		{		
+			ft_putendl("m0->content \"olleh\" ?");
+			ft_print_memory(m0->content, 6);
+			ft_print_memory("olleh", 6);
+		}
+		TESTONS(ft_memcmp(m0->content, "olleh", 6)==0);
+		if(ft_memcmp(m1->content, "frednow", 8) != 0)
+		{		
+			ft_putendl("m0->content \"frednow\" ?");
+			ft_print_memory(m0->content, 8);
+			ft_print_memory("frednow", 6);
+		}
+		TESTONS(ft_memcmp(m1->content, "frednow", 8)==0);
+		if(ft_memcmp(m2->content, "! dlrow", 8) != 0)
+		{		
+			ft_putendl("m0->content \"! dlrow\" ?");
+			ft_print_memory(m0->content, 8);
+			ft_print_memory("! dlrow", 8);
+		}
+		TESTONS(ft_memcmp(m2->content, "! dlrow", 8)==0);
+		if(ft_memcmp(m0->content, "olleh", 6) != 0)
+		{		
+			ft_putendl("m0->content \"olleh\" ?");
+			ft_print_memory(m0->content, 6);
+			ft_print_memory("olleh", 6);
+		}
+		TESTONS(m3 == NULL);
+
+		ft_putendl("ft_lstdel(&m, ..");
+		ft_lstdel(&m0, &lst_free_elt);
 	}
+	
+		
 	ft_free(buffer);
 	return (0);
 }
