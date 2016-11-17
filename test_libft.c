@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/17 16:03:50 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/17 17:25:26 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1123,19 +1123,40 @@ int main()
 
 		t_list	*l;
 		t_list	*e = ft_lstnew(z1, ft_strlen(z1)+1);
-		
 		lst_show_elt(e);
 
 		ft_lstdelone(&e, &lst_free_elt);
 		TESTONS(e == NULL);
 
 		l = ft_lstnew(z1, ft_strlen(z1)+1);
-		ft_lstadd(&l, ft_lstnew(z2, ft_strlen(z2)+1));
-		ft_lstadd(&l, ft_lstnew(z3, ft_strlen(z3)+1));
-		ft_lstadd(&l, ft_lstnew(z4, ft_strlen(z4)+1));
-	
+		ft_putendl("contenu de la liste z1:");
 		lst_show_lst(l);
 
+		e = ft_lstnew(z2, ft_strlen(z2)+1);
+		ft_putstr("z2:");
+		lst_show_elt(e);
+		ft_lstadd(&l, e);//ft_lstnew(z2, ft_strlen(z2)+1));
+		ft_putendl("contenu de la liste z1,z2:");
+		lst_show_lst(l);
+
+		e = ft_lstnew(z3, ft_strlen(z3)+1);
+		ft_putstr("z3:");
+		lst_show_elt(e);
+		ft_lstadd(&l, e);//ft_lstnew(z3, ft_strlen(z3)+1));
+		ft_putendl("contenu de la liste z1-z3:");
+		lst_show_lst(l);
+
+		e = ft_lstnew(z4, ft_strlen(z4)+1);
+		lst_show_elt(e);
+		ft_putstr("z4:");
+		ft_lstadd(&l, e);//ft_lstnew(z4, ft_strlen(z4)+1));
+		ft_putendl("contenu de la liste z1-z4:");
+		lst_show_lst(l);
+
+		ft_putendl("ft_lstiter(l, &lst_show_elt);");
+		ft_lstiter(l, &lst_show_elt);
+
+		ft_putendl("ft_lstdel(&l, ..");
 		ft_lstdel(&l, &lst_free_elt);
 	}
 	ft_free(buffer);

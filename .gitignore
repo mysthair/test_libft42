@@ -4,3 +4,5 @@
 *.a
 test_libf
 libft.h
+test_libft.dSYM
+test_libft
