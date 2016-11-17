@@ -4,9 +4,15 @@
 #define _STRINGIFY(x) #x                                                        
 #define STRINGIFY(x) _STRINGIFY(x)                                              
 
-#define FT_ASSERT(cond) ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )  
+#define FT_ASSERT(cond) \
+	ft_putstr("testons " #cond "\n"); \
+	ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )  
 
-#define TEST(cond) if(!(cond)) { ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": test (" #cond ") f     ailed :(\n"); return (0); }
+#define TEST(cond) \
+	if(!(cond)) { \
+		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond ") FAILED! :(    KO\n"); \
+		return (0); \
+	}
 
 # ifndef NULL
 #  define NULL 0

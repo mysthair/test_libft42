@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/15 18:16:12 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/17 16:03:50 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <stdlib.h>
 
 #include <ctype.h>
+
+#define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
+	ft_putstr(T); ft_putstr("\"\n");
 
 #ifdef DONT_HAVE_STRLCPY
 size_t	strlcat(char *dst, const char *src, size_t size)
@@ -366,14 +369,52 @@ int		test_ft_strnstr(const char *big, const char *little, size_t size)
     return (1);
 }
 
-int     test_ft_strcmp(char *s1, char *s2)
+int     test_ft_strcmp(char const *s1, char const *s2)
 {
+	{
+		char *os1, *os2;
+
+		os1 = ft_strdup(s1);
+		os2 = ft_strdup(s2);
+
+		ft_strcmp(s1, s2);
+		TEST(strcmp(s1, os1) == 0);
+		TEST(strcmp(s2, os2) == 0);
+		ft_free(os1); 
+		ft_free(os2);
+	}
+	if (strcmp(s1, s2) != ft_strcmp(s1, s2))
+	{
+		SHOW_STRING(" ", s1);
+		SHOW_STRING(" ", s2);
+		ft_putstr("strcmp(s1, s2) = "); ft_putnbr(strcmp(s1, s2)); ft_putstr("\n");
+		ft_putstr("ft_strcmp(s1, s2) = "); ft_putnbr(ft_strcmp(s1, s2)); ft_putstr("\n");
+	}
 	TEST(strcmp(s1, s2) == ft_strcmp(s1, s2));
 	return (1);
 }
 
 int     test_ft_strncmp(char *s1, char *s2, size_t size)
 {
+	{
+		char *os1, *os2;
+
+		os1 = ft_strdup(s1);
+		os2 = ft_strdup(s2);
+
+		ft_strncmp(s1, s2, size);
+		TEST(strncmp(s1, os1, size) == 0);
+		TEST(strncmp(s2, os2, size) == 0);
+		ft_free(os1); 
+		ft_free(os2);
+	}
+	if (strncmp(s1, s2, size) != ft_strncmp(s1, s2, size))
+	{
+		SHOW_STRING(" ", s1);
+		SHOW_STRING(" ", s2);
+		ft_putstr("strncmp(s1, s2, size) = "); ft_putnbr(strncmp(s1, s2, size)); ft_putstr("\n");
+		ft_putstr("ft_strncmp(s1, s2, size) = "); ft_putnbr(ft_strncmp(s1, s2, size)); ft_putstr("\n");
+	}
 	TEST(strncmp(s1, s2, size) == ft_strncmp(s1, s2, size));
 	return (1);
 }
@@ -786,7 +827,7 @@ int main()
 		TESTONS(test_ft_strcmp("1234", "1234"));
 		TESTONS(test_ft_strcmp("12345", "12335"));
 		TESTONS(test_ft_strcmp("12345", "12355"));
-		TESTONS(test_ft_strcmp("12345", "1234"));
+	TESTONS(test_ft_strcmp("12345", "1234"));
 		TESTONS(test_ft_strcmp("1234", "12345"));
 		TESTONS(test_ft_strcmp("1234", ""));
 		TESTONS(test_ft_strcmp("", "12345"));
@@ -986,8 +1027,6 @@ int main()
 		TESTONS(test_ft_memdel(BIG));
 	}	
 	
-#define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
-	ft_putstr(T); ft_putstr("\"\n");
 	
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
@@ -1077,10 +1116,10 @@ int main()
 
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
-		t_elt z1 = "(t_elt){no:1}";
-		t_elt z2 = "(t_elt){no:2}";
-		t_elt z3 = "(t_elt){no:3}";
-		t_elt z4 = "(t_elt){no:4}";
+		t_elt z1 = "hello";
+		t_elt z2 = "beautifull";
+		t_elt z3 = "wonderfull";
+		t_elt z4 = "world !";
 
 		t_list	*l;
 		t_list	*e = ft_lstnew(z1, ft_strlen(z1)+1);

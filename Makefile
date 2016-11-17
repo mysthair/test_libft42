@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/15 12:27:47 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/11/17 15:54:04 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIBFT=libft.a
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
-GWW=gcc -std=gnu11 -O3 -Wall -Wextra -Werror -I$(DIRH)
+GWW=gcc -std=gnu11 -O2 -Wall -Wextra -Werror -I$(DIRH)
 #GWW=gcc -O0 -g -Wall -Wextra -Werror -I$(DIRH)
 
 LOCALFUNCS = malloc free exit assert print_memory
