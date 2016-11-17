@@ -538,22 +538,19 @@ char	strmapi_func_lower(unsigned i, char c)
 
 
 
-typedef struct	s_elt 
-{
-	int			no;
-} 				t_elt;
+typedef char*	t_elt;
 
 
 #include <stdio.h>
 void	lst_show_elt(t_list *l)
 {
-	t_elt	*elt;
+	t_elt	elt;
 
-	elt = (t_elt*)(l->content);
-	printf("%p:[no:%i, next:%p]\n", l, elt->no, l->next);
+	elt = (t_elt)(l->content);
+	printf("%p:[content:%p(\"%8s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
 }
 
-void	lst_show_list(t_list *l)
+void	lst_show_lst(t_list *l)
 {
 	while(l)
 	{
@@ -563,7 +560,11 @@ void	lst_show_list(t_list *l)
 }
 void lst_free_elt(void* data, size_t size)
 {
+	t_elt   elt;
+
+	elt = (t_elt)data;
 	size = 0 + size;
+	printf("freeing elt %p(\"%8s\")\n", elt, elt); 
 	ft_free(data);
 }
 int main()
@@ -1075,13 +1076,28 @@ int main()
 
 
 
-	{
-		t_elt z = (t_elt){no:1};
-		t_list	*e = ft_lstnew(&z, sizeof(t_elt));
+	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
+		t_elt z1 = "(t_elt){no:1}";
+		t_elt z2 = "(t_elt){no:2}";
+		t_elt z3 = "(t_elt){no:3}";
+		t_elt z4 = "(t_elt){no:4}";
+
+		t_list	*l;
+		t_list	*e = ft_lstnew(z1, ft_strlen(z1)+1);
 		
 		lst_show_elt(e);
 
 		ft_lstdelone(&e, &lst_free_elt);
+		TESTONS(e == NULL);
+
+		l = ft_lstnew(z1, ft_strlen(z1)+1);
+		ft_lstadd(&l, ft_lstnew(z2, ft_strlen(z2)+1));
+		ft_lstadd(&l, ft_lstnew(z3, ft_strlen(z3)+1));
+		ft_lstadd(&l, ft_lstnew(z4, ft_strlen(z4)+1));
+	
+		lst_show_lst(l);
+
+		ft_lstdel(&l, &lst_free_elt);
 	}
 	ft_free(buffer);
 	return (0);
