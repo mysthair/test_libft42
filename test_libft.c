@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/17 17:25:26 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/18 15:15:13 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -579,15 +579,12 @@ char	strmapi_func_lower(unsigned i, char c)
 
 
 
-typedef char*	t_elt;
-
-
 #include <stdio.h>
 void	lst_show_elt(t_list *l)
 {
-	t_elt	elt;
+	char *	elt;
 
-	elt = (t_elt)(l->content);
+	elt = (char *)(l->content);
 	printf("%p:[content:%p(\"%s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
 }
 
@@ -601,31 +598,56 @@ void	lst_show_lst(t_list *l)
 }
 void lst_free_elt(void* data, size_t size)
 {
-	t_elt   elt;
+	char *   elt;
 
-	elt = (t_elt)data;
+	elt = (char *)data;
 	size = 0 + size;
 	printf("freeing elt %p(\"%s\")\n", elt, elt); 
 	ft_free(data);
 }
+
+t_list *func_for_ft_lstmap(t_list *elem)
+{
+	static char* buffer = NULL;
+	static t_list	*tmp = NULL;
+	char	*s;
+	size_t	l;
+	if(buffer==NULL)
+	{
+		buffer = ft_malloc(13*sizeof(char));
+		tmp = (t_list*)ft_malloc(sizeof(t_list));
+	}
+	s = (char*)(elem->content);
+	l = (ft_strlen(s) % 10);
+	if(l == 0)
+		return (NULL);
+	tmp->content_size = l+1;
+	for (size_t i=0; i<l; i++)
+		buffer[i] = s[l-1-i];
+	buffer[l] = '\0';
+	tmp->content = (void*)buffer;
+	tmp->next = NULL;
+	return (tmp); 
+}
+
 int main()
 {
         char    *buffer;
 		int		i;
 
-        //ft_malloc
-		buffer = NULL;
-		TESTONS((buffer = ft_malloc(0)) != NULL);
-		ft_free(buffer);
-        buffer = ft_malloc(BIG);
-        TESTONS(buffer != NULL);
-		for (i = 0; i < BIG; i++)
-			buffer[i] = (char)(i+1);
-		ft_free(buffer);
-		buffer = ft_malloc(255);
-        TESTONS(buffer != NULL);
-		for (i = 0; i < 255; i++)
-			buffer[i] = (char)(i+1);
+    //ft_malloc
+	buffer = NULL;
+	TESTONS((buffer = ft_malloc(0)) != NULL);
+	ft_free(buffer);
+    buffer = ft_malloc(BIG);
+    TESTONS(buffer != NULL);
+	for (i = 0; i < BIG; i++)
+		buffer[i] = (char)(i+1);
+	ft_free(buffer);
+	buffer = ft_malloc(255);
+    TESTONS(buffer != NULL);
+	for (i = 0; i < 255; i++)
+		buffer[i] = (char)(i+1);
 
 	//ft_memset
 	TESTONS(test_ft_memset(buffer, 0, 61));
@@ -1116,29 +1138,48 @@ int main()
 
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
-		t_elt z1 = "hello";
-		t_elt z2 = "beautifull";
-		t_elt z3 = "wonderfully super";
-		t_elt z4 = "world !";
+		char *z1 = "hello";
+		char *z2 = "beautiful!";
+		char *z3 = "wonderfully super";
+		char *z4 = "world !";
 
 		t_list	*l;
-		t_list	*e = ft_lstnew(z1, ft_strlen(z1)+1);
-		lst_show_elt(e);
+		t_list	*e;
+		{
+			size_t 	s;
 
+			s = ft_strlen(z1);
+			e = ft_lstnew(z1, s + 1);
+			ft_putendl("e = ft_lstnew(z1, ft_strlen(z1)+1);");
+			lst_show_elt(e);
+			ft_print_memory(e, sizeof(t_list));
+		}
+
+		ft_putendl("ft_lstdelone");
 		ft_lstdelone(&e, &lst_free_elt);
 		TESTONS(e == NULL);
 
-		l = ft_lstnew(z1, ft_strlen(z1)+1);
-		ft_putendl("contenu de la liste z1:");
-		lst_show_lst(l);
+		{
+			size_t  s;
 
-		e = ft_lstnew(z2, ft_strlen(z2)+1);
-		ft_putstr("z2:");
-		lst_show_elt(e);
-		ft_lstadd(&l, e);//ft_lstnew(z2, ft_strlen(z2)+1));
-		ft_putendl("contenu de la liste z1,z2:");
-		lst_show_lst(l);
+			s = ft_strlen(z1);
+			l = ft_lstnew(z1, s + 1);
+			ft_putendl("contenu de la liste z1:");
+			lst_show_lst(l);
+			ft_print_memory(l, sizeof(t_list));
+		}
+		{
+			size_t  s;
 
+			s = ft_strlen(z2);
+			e = ft_lstnew(z2, s + 1);
+			ft_putstr("z2:");
+			lst_show_elt(e);
+			ft_print_memory(e, sizeof(t_list));
+			ft_lstadd(&l, e);//ft_lstnew(z2, ft_strlen(z2)+1));
+			ft_putendl("contenu de la liste z1,z2:");
+			lst_show_lst(l);
+		}
 		e = ft_lstnew(z3, ft_strlen(z3)+1);
 		ft_putstr("z3:");
 		lst_show_elt(e);
@@ -1156,27 +1197,8 @@ int main()
 		ft_putendl("ft_lstiter(l, &lst_show_elt);");
 		ft_lstiter(l, &lst_show_elt);
 
-		t_list *f(t_list *elem){
-			static char	buffer[13];
-			static t_list	tmp;
-			char	*s;
-			size_t	l;
-
-			s = (char*)(elem->content);
-			l = (ft_strlen(s) % 10);
-			if(l == 0)
-				return (NULL);
-			tmp.content_size = l+1;
-			for (size_t i=0; i<l; i++)
-				buffer[i] = s[l-1-i];
-			buffer[l] = '\0';
-			tmp.content = (void*)buffer;
-			tmp.next = NULL;
-			return (&tmp); 
-		}
-
 		ft_putendl("m0 = ft_lstmap(&l, &f)");
-		t_list	*m0 = ft_lstmap(l, &f);
+		t_list	*m0 = ft_lstmap(l, &func_for_ft_lstmap);
 		lst_show_lst(m0); 
 		
 		ft_putendl("ft_lstdel(&l, ..");
