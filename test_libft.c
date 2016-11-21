@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/18 15:15:13 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/21 20:33:36 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,18 +160,86 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 	size_t	i;
 	char	*s;
 	char	*d;
-	
-	s = ft_malloc(n);
-	ft_memcpy(s, src, n);
-	d = dest;
-	TEST(ft_memmove(dest, src, n) == dest);;
-	i = 0;
-	while(i < n)
+
+char	*origin;
+
+	origin = ft_malloc(n);
+	memcpy(origin, src, n);
+
+	ft_putendl("\nft_memmove(dest, src, n)");
+	ft_putendl("src :");
+	ft_print_memory(src, n);
+	ft_putendl("dest :");
+	ft_print_memory(dest, n);
+	ft_putstr("n="); ft_putnbr(n); ft_putendl("\n");
+
+	if(dest <= src && src <= dest + n)
 	{
-		TEST(d[i] == s[i]);
-		i++;
+//		ft_putendl("\ncas 1\n");
+		ft_memcpy(dest, src, n);
 	}
-	ft_free(s);
+	else if (src <= dest && dest < src + n)
+	{
+		size_t	k = dest - src;
+
+//		ft_putendl("\ncas 2\n");
+		s = ft_malloc(n + k);
+		ft_memcpy(s, src, n + k);
+		d = s + k;
+		TEST(ft_strnequ(s, src, n));
+
+/*		ft_putendl("before ft_memmove(dest, src, n)");
+		ft_putendl("d :");
+		ft_print_memory(d, n + k);
+		ft_putendl("s :");
+		ft_print_memory(s, n); */
+	
+		memmove(d, s, n);
+		ft_memmove(dest, src, n);
+	
+		if(memcmp(d, dest, n) != 0)
+		{
+			ft_putendl("after  ft_memmove(dest, src, n)");
+			ft_putendl("d :");
+			ft_print_memory(d, n + k);
+			ft_putendl("dest :");
+			ft_print_memory(dest, n + k);
+		}	
+		TEST(memcmp(d, dest, n) == 0);
+
+		i = 0;
+		while(i < n)
+		{
+			TEST(d[i] == origin[i]);
+			i++;
+		}
+
+		ft_free(s);
+	}
+	else 
+	{
+//		ft_putendl("\ncas 3\n");
+		d = ft_malloc(n);
+		s = ft_malloc(n);
+		ft_memcpy(s, src, n);
+		ft_memcpy(d, dest, n);
+
+		memmove(d, s, n);
+		ft_memmove(dest, src, n);
+		
+		TEST(memcmp(d, dest, n) == 0);
+
+		i = 0;
+		while(i < n)
+		{
+			TEST(d[i] == s[i]);
+			i++;
+		}
+		ft_free(d);
+		ft_free(s);
+	}		
+
+
 	return (1);
 }
 int	test_ft_memchr(const void *src, int c, size_t n)
@@ -693,13 +761,23 @@ int main()
 	//ft_memmove
 	{
 		int i;
+		char	O123456789abcdefghijklmnopqrstuvwxyz[60];
 
-		ft_memset(buffer, 'X', 59);
+		ft_memset(O123456789abcdefghijklmnopqrstuvwxyz, 'X', 59);
+		O123456789abcdefghijklmnopqrstuvwxyz[59]='\0';
 		for (i=0; i<10; i++)
-			buffer[i] = '0' + i;
+			O123456789abcdefghijklmnopqrstuvwxyz[i] = '0' + i;
 		for (i=0; i<26; i++)
-			buffer[10+i] = 'a' + i;
-		TESTONS(test_ft_memmove(buffer + 10, buffer + 5, 10));
+			O123456789abcdefghijklmnopqrstuvwxyz[10+i] = 'a' + i;
+		// 01234abcdefghiefghijklmnopqrst		
+		TESTONS(test_ft_memmove(O123456789abcdefghijklmnopqrstuvwxyz + 10, O123456789abcdefghijklmnopqrstuvwxyz + 5, 10));
+
+		ft_memset(O123456789abcdefghijklmnopqrstuvwxyz, 'X', 59);
+		O123456789abcdefghijklmnopqrstuvwxyz[36]='\0';
+		char	*abcdef___ = O123456789abcdefghijklmnopqrstuvwxyz;
+		ft_strcpy(abcdef___, "abcdef");
+		test_ft_memmove(abcdef___ + 1 , abcdef___, 6);
+		TESTONS(ft_strequ(ft_memmove(abcdef___ + 1 , abcdef___, 6), "aabcdef"));
 	}		
 
 	{//memchr
