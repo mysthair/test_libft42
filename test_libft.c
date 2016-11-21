@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/21 20:33:36 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/21 20:40:08 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,24 +175,24 @@ char	*origin;
 
 	if(dest <= src && src <= dest + n)
 	{
-//		ft_putendl("\ncas 1\n");
+		ft_putendl("\ncas 1\n");
 		ft_memcpy(dest, src, n);
 	}
 	else if (src <= dest && dest < src + n)
 	{
 		size_t	k = dest - src;
 
-//		ft_putendl("\ncas 2\n");
+		ft_putendl("\ncas 2\n");
 		s = ft_malloc(n + k);
 		ft_memcpy(s, src, n + k);
 		d = s + k;
 		TEST(ft_strnequ(s, src, n));
 
-/*		ft_putendl("before ft_memmove(dest, src, n)");
+		ft_putendl("before ft_memmove(dest, src, n)");
 		ft_putendl("d :");
 		ft_print_memory(d, n + k);
 		ft_putendl("s :");
-		ft_print_memory(s, n); */
+		ft_print_memory(s, n); 
 	
 		memmove(d, s, n);
 		ft_memmove(dest, src, n);
@@ -218,7 +218,7 @@ char	*origin;
 	}
 	else 
 	{
-//		ft_putendl("\ncas 3\n");
+		ft_putendl("\ncas 3\n");
 		d = ft_malloc(n);
 		s = ft_malloc(n);
 		ft_memcpy(s, src, n);
