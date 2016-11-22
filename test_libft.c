@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 16:18:29 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 16:31:29 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -636,11 +636,13 @@ void strtter_func_lower(char *c)
 //{
 void strtteri_func_upper(unsigned int i, char *s)
 {
-	s[i] = ft_toupper(s[i]);
+	i = 0+i;
+	*s = ft_toupper(*s);
 }
 void strtteri_func_lower(unsigned int i, char *s)
 {
-	s[i] = ft_tolower(s[i]);
+	i = 0+i;
+	*s = ft_tolower(*s);
 }
 //}
 
