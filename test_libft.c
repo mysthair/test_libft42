@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 12:11:42 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 15:01:00 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,8 +348,18 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 	TEST(ret == dest);
 	strncat(buff, src, n);
 	t = ft_strncmp(buff, dest, n);
+	if (t !=0)
+	{
+		ft_putstr("ft_strncmp(buff, dest, n) = ");	ft_putnbr(t); 
+		ft_putstr("\nn = ");	ft_putnbr(n); 
+		ft_putendl("\nbuff:");
+		ft_print_memory(buff, n);
+		ft_putendl("\ndest:");
+		ft_print_memory(dest, n);
+	}
 	ft_free(buff);
-	return (t == 0);
+	TEST(t==0);
+	return (1);
 }
 
 int		test_ft_strlcat(char *dst, const char *src, size_t size)
@@ -471,8 +481,8 @@ int     test_ft_strncmp(char *s1, char *s2, size_t size)
 		os2 = ft_strdup(s2);
 
 		ft_strncmp(s1, s2, size);
-		TEST(strncmp(s1, os1, size) == 0);
-		TEST(strncmp(s2, os2, size) == 0);
+		TEST(ft_strncmp(s1, os1, size) == 0);
+		TEST(ft_strncmp(s2, os2, size) == 0);
 		ft_free(os1); 
 		ft_free(os2);
 	}
@@ -846,10 +856,35 @@ int main()
 	{//strcat
 		char dst[31];
 		ft_bzero(dst, 31);
+		ft_memset(dst+1, 'y', 29);
+		TESTONS(test_ft_strcat(dst, ""));
 		TESTONS(test_ft_strcat(dst, "12345"));
 		TESTONS(test_ft_strcat(dst, "abcd"));
 		TESTONS(test_ft_strcat(dst, ""));
 		TESTONS(test_ft_strcat(dst, "X"));
+		TESTONS(ft_strequ(dst, "12345abcdX"));
+	}
+	{//strncat
+		char dst[31];
+		ft_bzero(dst, 31);
+		TESTONS(test_ft_strncat(dst, "xxx", 0));
+			TESTONS(ft_strequ(dst, ""));
+		TESTONS(test_ft_strncat(dst, "1xx", 1));
+			TESTONS(ft_strequ(dst, "1"));
+		TESTONS(test_ft_strncat(dst, "23x", 2));
+			TESTONS(ft_strequ(dst, "123"));
+		TESTONS(test_ft_strncat(dst, "456", 3));
+			TESTONS(ft_strequ(dst, "123456"));
+		TESTONS(test_ft_strncat(dst, "789", 4));
+			TESTONS(ft_strequ(dst, "123456789"));
+		TESTONS(test_ft_strncat(dst, "abc", 5));
+			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(test_ft_strncat(dst, "", 	0));
+			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(test_ft_strncat(dst, "",	5));
+			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(test_ft_strncat(dst, "X", 1));
+			TESTONS(ft_strequ(dst, "123456789abcX"));
 	}
 	{//strlcat
 		char vide31[31];
@@ -936,6 +971,9 @@ int main()
 		TESTONS(test_ft_strcmp("1234", ""));
 		TESTONS(test_ft_strcmp("", "12345"));
 		TESTONS(test_ft_strcmp("", ""));
+
+		TESTONS(test_ft_strcmp("\200", "\0"));
+
 	}
 	{//ft_strncmp
 		TESTONS(test_ft_strncmp("1234", "1234", 10));
@@ -954,6 +992,8 @@ int main()
 		TESTONS(test_ft_strncmp("1234", "", 2));
 		TESTONS(test_ft_strncmp("", "12345", 2));
 		TESTONS(test_ft_strncmp("", "", 2));
+
+		TESTONS(test_ft_strncmp("\200", "\0", 1));
 	}
 	
 	{//ft_atoi
