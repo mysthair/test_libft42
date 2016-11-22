@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 16:31:29 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 17:18:09 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,22 @@ size_t	strlcat(char *dst, const char *src, size_t size)
 
 char *strnstr(const char *haystack, const char *needle, size_t len)
 {
-        int i;
-        size_t needle_len;
+	int i;
+	size_t needle_len;
 
-        /* segfault here if needle is not NULL terminated */
-        if (0 == (needle_len = strlen(needle)))
-                return (char *)haystack;
+	/* segfault here if needle is not NULL terminated */
+	if (0 == (needle_len = strlen(needle)))
+		return (char *)haystack;
 
-        for (i=0; i<=(int)(len-needle_len); i++)
-        {
-                if ((haystack[0] == needle[0]) &&
-                        (0 == strncmp(haystack, needle, needle_len)))
-                        return (char *)haystack;
+	for (i=0; i<=(int)(len-needle_len); i++)
+	{
+		if ((haystack[0] == needle[0]) &&
+				(0 == strncmp(haystack, needle, needle_len)))
+			return (char *)haystack;
 
-                haystack++;
-        }
-        return NULL;
+		haystack++;
+	}
+	return NULL;
 }
 #endif
 
@@ -163,7 +163,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 	char	*s;
 	char	*d;
 
-char	*origin;
+	char	*origin;
 
 	origin = ft_malloc(n);
 	memcpy(origin, src, n);
@@ -195,10 +195,10 @@ char	*origin;
 		ft_print_memory(d, n + k);
 		ft_putendl("s :");
 		ft_print_memory(s, n); 
-	
+
 		memmove(d, s, n);
 		ft_memmove(dest, src, n);
-	
+
 		if(memcmp(d, dest, n) != 0)
 		{
 			ft_putendl("after  ft_memmove(dest, src, n)");
@@ -228,7 +228,7 @@ char	*origin;
 
 		memmove(d, s, n);
 		ft_memmove(dest, src, n);
-		
+
 		TEST(memcmp(d, dest, n) == 0);
 
 		i = 0;
@@ -250,7 +250,7 @@ int	test_ft_memchr(const void *src, int c, size_t n)
 	char	*s;
 	void	*r;
 	size_t	l;
-	
+
 	s = (char*)src;
 	r = ft_memchr(src, c, n);
 	if (r != NULL)
@@ -319,7 +319,7 @@ int	test_ft_strncpy(char *dest, char *src, size_t n)
 {
 	char	*t;
 	t = ft_strncpy(dest, src, n);
-	
+
 	TEST(t == dest);
 	TEST(strncmp(dest, src, n) == ft_strncmp(dest, src, n));
 	if (ft_strncmp(dest, src, n) != 0)
@@ -394,7 +394,7 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 		ft_putstr("src  = \""); ft_putstr((char*)src); ft_putstr("\"\n");
 		ft_putstr("d    = \""); ft_putstr(d); ft_putstr("\"\n");
 		ft_putstr("dest = \""); ft_putstr(dst); ft_putstr("\"\n");
-		
+
 		ft_putstr("r1 = \""); ft_putnbr(r1); ft_putstr("\"\n");
 		ft_putstr("r2 = \""); ft_putnbr(r2); ft_putstr("\"\n");
 	}
@@ -417,7 +417,7 @@ int		test_ft_strchr(const char *s, int c)
 
 int 	test_ft_strrchr(const char *s, int c)
 {
-   	char	*o;
+	char	*o;
 	char	*m;
 
 	o = strrchr(s, c);
@@ -444,10 +444,10 @@ int		test_ft_strstr(const char *big, const char *little)
 	m = ft_strstr(big, little);
 	l = strlen(little);
 	TEST(((o==NULL) && (m==NULL)) 
-		|| ((o!=NULL) && (m!=NULL) 
+			|| ((o!=NULL) && (m!=NULL) 
 				&& strncmp(o, little, l) == 0 
 				&& ft_strncmp(m, little, l) == 0));
-    return (1);
+	return (1);
 }
 
 int		test_ft_strnstr(const char *big, const char *little, size_t size)
@@ -460,10 +460,10 @@ int		test_ft_strnstr(const char *big, const char *little, size_t size)
 	m = ft_strnstr(big, little, size);
 	l = strlen(little);
 	TEST(((o==NULL) && (m==NULL)) 
-		|| ((o!=NULL) && (m!=NULL) 
+			|| ((o!=NULL) && (m!=NULL) 
 				&& strncmp(o, little, l) == 0 
 				&& ft_strncmp(m, little, l) == 0));
-    return (1);
+	return (1);
 }
 
 int     test_ft_strcmp(char const *s1, char const *s2)
@@ -537,7 +537,7 @@ int     test_ft_isdigit(int c)
 int     test_ft_isalnum(int c)
 {
 	TEST(!!isalnum(c) == !!ft_isalnum(c));
-    return (1);
+	return (1);
 }
 
 int     test_ft_isascii(int c)
@@ -549,7 +549,7 @@ int     test_ft_isascii(int c)
 int     test_ft_isprint(int c)
 {
 	TEST(!!isprint(c) == !!ft_isprint(c));
-    return (1);
+	return (1);
 }
 
 int     test_ft_toupper(int c)
@@ -564,7 +564,7 @@ int     test_ft_toupper(int c)
 		ft_putstr("ft_toupper("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(m); ft_putstr("'\n");
 	}
 	TEST(o == m);
-    return (1);
+	return (1);
 }
 
 int     test_ft_tolower(int c)
@@ -578,7 +578,7 @@ int     test_ft_tolower(int c)
 		ft_putstr("ft_tolower("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(m); ft_putstr("'\n");
 	}
 	TEST(o == m);
-    return (1);
+	return (1);
 }
 
 int    test_ft_memalloc(size_t size)
@@ -610,7 +610,7 @@ int    test_ft_memalloc(size_t size)
 int		test_ft_memdel(size_t size)
 {
 	void *ft_memdel_parameter_after_call;
-   
+
 	ft_memdel_parameter_after_call = ft_memalloc(size);
 	if (ft_memdel_parameter_after_call)
 	{
@@ -672,7 +672,7 @@ char	strmapi_func_lower(unsigned i, char c)
 
 //#define DEBUG
 #ifdef DEBUG
-# define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) "\n"); FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+# define TESTONS(cond) ft_putstr("testons " STRINGIFY(cond) " .. \n"); FT_ASSERT(cond); ft_putstr("        " STRINGIFY(cond) " .. OK\n"); 
 #else
 # define TESTONS(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 #endif
@@ -731,35 +731,47 @@ t_list *func_for_ft_lstmap(t_list *elem)
 	return (tmp); 
 }
 
+
+t_list  *lstmap_test_fn(t_list *list)
+{ //copiryght moolitest
+	t_list  *l2;
+
+	l2 = malloc(sizeof(t_list));
+	bzero(l2, sizeof(t_list));
+	l2->content = malloc(list->content_size * 2);
+	l2->content_size = list->content_size * 2;
+	return (l2);
+}
+
 int main()
 {
-        char    *buffer;
-		int		i;
+	char    *buffer;
+	int		i;
 
-    //ft_malloc
+	//ft_malloc
 	buffer = NULL;
 	TESTONS((buffer = ft_malloc(0)) != NULL);
 	ft_free(buffer);
-    buffer = ft_malloc(BIG);
-    TESTONS(buffer != NULL);
+	buffer = ft_malloc(BIG);
+	TESTONS(buffer != NULL);
 	for (i = 0; i < BIG; i++)
 		buffer[i] = (char)(i+1);
 	ft_free(buffer);
 	buffer = ft_malloc(255);
-    TESTONS(buffer != NULL);
+	TESTONS(buffer != NULL);
 	for (i = 0; i < 255; i++)
 		buffer[i] = (char)(i+1);
 
 	//ft_memset
 	TESTONS(test_ft_memset(buffer, 0, 61));
-   	TESTONS(test_ft_memset(buffer, 'Z', 40));
+	TESTONS(test_ft_memset(buffer, 'Z', 40));
 	TESTONS(test_ft_memset(buffer, 'Y', 20));
 	TESTONS(test_ft_memset(buffer, 'X', 10));
 
 	//ft_bzero
 	TESTONS(test_ft_bzero(buffer+2, 20));
 
-    //ft_memcpy
+	//ft_memcpy
 	{
 		int i;
 		char buffer2[256];
@@ -809,7 +821,7 @@ int main()
 
 
 		char	*abcdef___ = O123456789abcdefghijklmnopqrstuvwxyz;
-	
+
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
 		TESTONS(ft_memcmp(ft_memmove(abcdef___ + 2 , abcdef___, 6), "abcdef", 6)==0);
 		TESTONS(ft_memcmp(abcdef___, "ababcdef", 8)==0);
@@ -891,57 +903,57 @@ int main()
 		char dst[31];
 		ft_bzero(dst, 31);
 		TESTONS(test_ft_strncat(dst, "xxx", 0));
-			TESTONS(ft_strequ(dst, ""));
+		TESTONS(ft_strequ(dst, ""));
 		TESTONS(test_ft_strncat(dst, "1xx", 1));
-			TESTONS(ft_strequ(dst, "1"));
+		TESTONS(ft_strequ(dst, "1"));
 		TESTONS(test_ft_strncat(dst, "23x", 2));
-			TESTONS(ft_strequ(dst, "123"));
+		TESTONS(ft_strequ(dst, "123"));
 		TESTONS(test_ft_strncat(dst, "456", 3));
-			TESTONS(ft_strequ(dst, "123456"));
+		TESTONS(ft_strequ(dst, "123456"));
 		TESTONS(test_ft_strncat(dst, "789", 4));
-			TESTONS(ft_strequ(dst, "123456789"));
+		TESTONS(ft_strequ(dst, "123456789"));
 		TESTONS(test_ft_strncat(dst, "abc", 5));
-			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(ft_strequ(dst, "123456789abc"));
 		TESTONS(test_ft_strncat(dst, "", 	0));
-			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(ft_strequ(dst, "123456789abc"));
 		TESTONS(test_ft_strncat(dst, "",	5));
-			TESTONS(ft_strequ(dst, "123456789abc"));
+		TESTONS(ft_strequ(dst, "123456789abc"));
 		TESTONS(test_ft_strncat(dst, "X", 1));
-			TESTONS(ft_strequ(dst, "123456789abcX"));
+		TESTONS(ft_strequ(dst, "123456789abcX"));
 	}
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "12345", 10));
-		
+
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "1", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "12", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "123", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "1234", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "12345", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "123456", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "1234567890", 10));
-		
+
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "123456789012", 10));
 	}
@@ -952,7 +964,7 @@ int main()
 		TESTONS(test_ft_strchr("", 'X'));
 		TESTONS(test_ft_strchr("12345678\0""901234567890", '0'));
 		TESTONS(test_ft_strchr("123456\t78901234567890", '\t'));
-/*failed !!	TESTONS(test_ft_strchr("12345678901234567890", '\0')); */
+		/*failed !!	TESTONS(test_ft_strchr("12345678901234567890", '\0')); */
 		TESTONS(test_ft_strchr("12345678901234567890", '\0'));
 	}
 	{//strrchr
@@ -994,7 +1006,7 @@ int main()
 		TESTONS(test_ft_strcmp("1234", "1234"));
 		TESTONS(test_ft_strcmp("12345", "12335"));
 		TESTONS(test_ft_strcmp("12345", "12355"));
-	TESTONS(test_ft_strcmp("12345", "1234"));
+		TESTONS(test_ft_strcmp("12345", "1234"));
 		TESTONS(test_ft_strcmp("1234", "12345"));
 		TESTONS(test_ft_strcmp("1234", ""));
 		TESTONS(test_ft_strcmp("", "12345"));
@@ -1023,7 +1035,7 @@ int main()
 
 		TESTONS(test_ft_strncmp("\200", "\0", 1));
 	}
-	
+
 	{//ft_atoi
 		TESTONS(test_ft_atoi("0"));// == 0);
 		TESTONS(test_ft_atoi("12"));//  == 12);
@@ -1104,18 +1116,18 @@ int main()
 		TESTONS(test_ft_isalnum('\t'));
 		TESTONS(test_ft_isalnum('\0'));
 	}
-	
+
 	{//isprint
-/*		char i;
-		printf("tab = { ");
-		int n=0;
-		for (i=0; i<127; i++)
-			if(isprint(i))
-			{
+		/*		char i;
+				printf("tab = { ");
+				int n=0;
+				for (i=0; i<127; i++)
+				if(isprint(i))
+				{
 				printf("'%c', ", i);
 				n++;
-			}
-		printf("}; n=%i\n", n);*/
+				}
+				printf("}; n=%i\n", n);*/
 
 		TESTONS(test_ft_isprint('0'));
 		TESTONS(test_ft_isprint('5'));
@@ -1193,7 +1205,7 @@ int main()
 		TESTONS(test_ft_memalloc(0));
 		TESTONS(test_ft_memalloc(BIG));
 	}
-	
+
 	{ //ft_memdel
 		TESTONS(test_ft_memdel(1024));
 		TESTONS(test_ft_memdel(0));
@@ -1206,7 +1218,7 @@ int main()
 		TESTONS(test_ft_strdel(0));
 	}
 
-	
+
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
 
@@ -1217,12 +1229,12 @@ int main()
 		ft_striter(ft_stirter_upper_txtaz123HAHZ, &strtter_func_upper);
 		SHOW_STRING("after  ", ft_stirter_upper_txtaz123HAHZ);
 		TESTONS(ft_strcmp(ft_stirter_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
-		
+
 		SHOW_STRING("before ", ft_stirter_lower_txtaz123HAHZ);
 		ft_striter(ft_stirter_lower_txtaz123HAHZ, &strtter_func_lower);
 		SHOW_STRING("after  ", ft_stirter_lower_txtaz123HAHZ);
 		TESTONS(ft_strcmp(ft_stirter_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
-		
+
 		ft_strdel(&ft_stirter_upper_txtaz123HAHZ);
 		ft_strdel(&ft_stirter_lower_txtaz123HAHZ);
 	}
@@ -1237,12 +1249,12 @@ int main()
 		ft_striteri(ft_stirteri_upper_txtaz123HAHZ, &strtteri_func_upper);
 		SHOW_STRING("after  ", ft_stirteri_upper_txtaz123HAHZ);
 		TESTONS(ft_strcmp(ft_stirteri_upper_txtaz123HAHZ, "TXTAZ123HAHZ") == 0);
-		
+
 		SHOW_STRING("before ", ft_stirteri_lower_txtaz123HAHZ);
 		ft_striteri(ft_stirteri_lower_txtaz123HAHZ, &strtteri_func_lower);
 		SHOW_STRING("after  ", ft_stirteri_lower_txtaz123HAHZ);
 		TESTONS(ft_strcmp(ft_stirteri_lower_txtaz123HAHZ, "txtaz123hahz") == 0);
-		
+
 		ft_strdel(&ft_stirteri_upper_txtaz123HAHZ);
 		ft_strdel(&ft_stirteri_lower_txtaz123HAHZ);
 	}
@@ -1293,7 +1305,6 @@ int main()
 	}
 
 
-
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
 		{
 			t_list	*tst[4];
@@ -1303,7 +1314,7 @@ int main()
 			tst[2] = ft_lstnew("123", 4);
 			tst[3] = ft_lstnew("1234", 5);
 
-			
+
 			lst_show_elt(tst[0]);
 			lst_show_elt(tst[1]);
 			lst_show_elt(tst[2]);
@@ -1322,19 +1333,19 @@ int main()
 
 		t_list	*lst;
 		t_list	*elt;
-/*		{
-			size_t 	l;
+		/*		{
+				size_t 	l;
 
-			l = ft_strlen(z1);
-			elt = ft_lstnew(z1, l + 1);
-			ft_putendl("elt = ft_lstnew(z1, ft_strlen(z1)+1);");
-			lst_show_elt(elt);
-			ft_print_memory(elt, sizeof(t_list));
-		}
+				l = ft_strlen(z1);
+				elt = ft_lstnew(z1, l + 1);
+				ft_putendl("elt = ft_lstnew(z1, ft_strlen(z1)+1);");
+				lst_show_elt(elt);
+				ft_print_memory(elt, sizeof(t_list));
+				}
 
-		ft_putendl("ft_lstdelone");
-		ft_lstdelone(&elt, &lst_free_elt);
-		TESTONS(elt == NULL); */
+				ft_putendl("ft_lstdelone");
+				ft_lstdelone(&elt, &lst_free_elt);
+				TESTONS(elt == NULL); */
 
 		{
 			size_t  l;
@@ -1375,54 +1386,76 @@ int main()
 		ft_lstiter(lst, &lst_show_elt);
 
 		ft_putendl("m0 = ft_lstmap(&l, &f)");
-		t_list	*m0 = ft_lstmap(lst, &func_for_ft_lstmap);
-		lst_show_lst(m0); 
-		
+		t_list	*elt0 = ft_lstmap(lst, &func_for_ft_lstmap);
+		lst_show_lst(elt0); 
+
 		ft_putendl("ft_lstdel(&l, ..");
 		ft_lstdel(&lst, &lst_free_elt);
 
 
-		t_list	*m1 = m0->next;
-		t_list	*m2 = m1->next;
-		t_list	*m3 = m2->next;
+		t_list	*elt1 = elt0->next;
+		t_list	*elt2 = elt1->next;
+		t_list	*elt3 = elt2->next;
 
-		if(ft_memcmp(m0->content, "olleh", 5) != 0)
+		if(ft_memcmp(elt0->content, "! dlrow", 7) != 0)
 		{		
-			ft_putendl("m0->content \"olleh\" ?");
-			ft_print_memory(m0->content, 5);
-			ft_print_memory("olleh", 5);
-			ft_putstr("ft_memcmp(m0->content, \"olleh\", 5) = ");
-			ft_putnbr(ft_memcmp(m0->content, "olleh", 5));
-			ft_putendl("");
-		}
-		TESTONS(ft_memcmp(m0->content, "olleh", 5)==0);
-		if(ft_memcmp(m1->content, "frednow", 7) != 0)
-		{		
-			ft_putendl("m0->content \"frednow\" ?");
-			ft_print_memory(m0->content, 7);
-			ft_print_memory("frednow", 7);
-		}
-		TESTONS(ft_memcmp(m1->content, "frednow", 7)==0);
-		if(ft_memcmp(m2->content, "! dlrow", 7) != 0)
-		{		
-			ft_putendl("m0->content \"! dlrow\" ?");
-			ft_print_memory(m0->content, 7);
+			ft_putendl("elt0->content \"! dlrow\" ?");
+			ft_print_memory(elt0->content, 7);
 			ft_print_memory("! dlrow", 7);
 		}
-		TESTONS(ft_memcmp(m2->content, "! dlrow", 7)==0);
-		if(ft_memcmp(m0->content, "olleh", 5) != 0)
+		TESTONS(ft_memcmp(elt0->content, "! dlrow", 7)==0);
+
+		if(ft_memcmp(elt1->content, "frednow", 7) != 0)
+		{		
+			ft_putendl("elt1->content \"frednow\" ?");
+			ft_print_memory(elt1->content, 7);
+			ft_print_memory("frednow", 7);
+		}
+		TESTONS(ft_memcmp(elt1->content, "frednow", 7)==0);
+
+		if(ft_memcmp(elt2->content, "olleh", 5) != 0)
+		{		
+			ft_putendl("elt2->content \"olleh\" ?");
+			ft_print_memory(elt2->content, 5);
+			ft_print_memory("olleh", 5);
+			ft_putstr("ft_memcmp(elt2->content, \"olleh\", 5) = ");
+			ft_putnbr(ft_memcmp(elt2->content, "olleh", 5));
+			ft_putendl("");
+		}
+		TESTONS(ft_memcmp(elt2->content, "olleh", 5)==0);
+
+/*		if(ft_memcmp(m0->content, "olleh", 5) != 0)
 		{		
 			ft_putendl("m0->content \"olleh\" ?");
 			ft_print_memory(m0->content, 5);
 			ft_print_memory("olleh", 5);
-		}
-		TESTONS(m3 == NULL);
+		}*/
+		TESTONS(elt3 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
-		ft_lstdel(&m0, &lst_free_elt);
+		ft_lstdel(&elt0, &lst_free_elt);
 	}
-	
-		
+
+
+	{ // copiright moulytest :P
+		t_list  *list;
+		t_list  *map;
+
+		bzero((list = malloc(sizeof(t_list))), sizeof(t_list));
+		bzero((list->next = malloc(sizeof(t_list))), sizeof(t_list));
+		list->content_size = 21;
+		list->content = strdup("abc");
+		list->next->content_size = 100;
+		list->next->content = strdup("abc");
+		map = ft_lstmap(list, lstmap_test_fn);
+		TESTONS(list->content_size == 21);
+		TESTONS(list->next->content_size == 100);
+		TESTONS(!!map);
+  		TESTONS(map->content_size == 42);
+		TESTONS(!!map);
+	   TESTONS(map->next->content_size == 200);
+	} 
+
 	ft_free(buffer);
 	return (0);
 }
