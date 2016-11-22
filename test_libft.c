@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 15:28:19 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 15:44:26 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,6 +410,13 @@ int 	test_ft_strrchr(const char *s, int c)
 
 	o = strrchr(s, c);
 	m = ft_strrchr(s, c);
+	if (!(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0)))
+	{
+		ft_putstr(o?"o != NULL\n":"o == NULL\n");
+		if(o) { SHOW_STRING(" ", o); }
+		ft_putstr(m?"m != NULL\n":"m == NULL\n");
+		if(m) { SHOW_STRING(" ", m); }
+	}
 	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
 	TEST(strrchr(s,c) == ft_strrchr(s, c)); //?
 	return (1);
@@ -937,6 +944,7 @@ int main()
 		TESTONS(test_ft_strrchr("12345678901234567890", 'X'));
 		TESTONS(test_ft_strrchr("", 'X'));
 		TESTONS(test_ft_strrchr("12345678\0""901234567890", '0'));
+		TESTONS(test_ft_strrchr("12345678\0""901234567890", '\0'));
 		TESTONS(test_ft_strrchr("123456\t78901234567890", '\t'));
 		char *abcd = "abcd";
 		TESTONS(ft_strrchr(abcd, 'a') == abcd);
