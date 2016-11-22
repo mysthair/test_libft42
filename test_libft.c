@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 16:06:25 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 16:18:29 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,16 @@ int	test_ft_memchr(const void *src, int c, size_t n)
 int     test_ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	return (ft_memcmp(s1, s2, n) == memcmp(s1,s2,n));
+}
+
+
+int	test_ft_strdel(size_t size)
+{
+	char	*t = ft_malloc(size);
+
+	ft_strdel(&t);
+	TEST(t == NULL);
+	return (1);
 }
 
 int     test_ft_strlen(char *str)
@@ -1187,7 +1197,13 @@ int main()
 		TESTONS(test_ft_memdel(0));
 		TESTONS(test_ft_memdel(BIG));
 	}	
-	
+
+	{// strdel
+		TESTONS(test_ft_strdel(10));
+		TESTONS(test_ft_strdel(1));
+		TESTONS(test_ft_strdel(0));
+	}
+
 	
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
