@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 15:44:26 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 16:06:25 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <stdlib.h>
 
 #include <ctype.h>
+
+#define DEBUG
 
 #define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
 	ft_putstr(T); ft_putstr("\"\n");
@@ -542,7 +544,8 @@ int     test_ft_isprint(int c)
 
 int     test_ft_toupper(int c)
 {
-	char o, m;
+	int	 o, m;
+
 	o = toupper(c);
 	m = ft_toupper(c);
 	if (o != m)
@@ -553,9 +556,10 @@ int     test_ft_toupper(int c)
 	TEST(o == m);
     return (1);
 }
+
 int     test_ft_tolower(int c)
 {
-	char o, m;
+	int o, m;
 	o = tolower(c);
 	m = ft_tolower(c);
 	if (o != m)
@@ -1163,8 +1167,9 @@ int main()
 		TESTONS(test_ft_tolower('\t'));
 		TESTONS(test_ft_tolower('\n'));
 		TESTONS(test_ft_tolower('\0'));
+		TESTONS(test_ft_tolower('a' + 0x100 ));
 #ifdef DEBUG
-		for(int c=-256; c<512; c++)
+		for(int c=-1256; c<1512; c++)
 		{
 			TESTONS(test_ft_tolower(c));
 		}
