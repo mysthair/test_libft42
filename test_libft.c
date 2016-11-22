@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 15:01:00 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 15:28:19 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -938,6 +938,10 @@ int main()
 		TESTONS(test_ft_strrchr("", 'X'));
 		TESTONS(test_ft_strrchr("12345678\0""901234567890", '0'));
 		TESTONS(test_ft_strrchr("123456\t78901234567890", '\t'));
+		char *abcd = "abcd";
+		TESTONS(ft_strrchr(abcd, 'a') == abcd);
+		TESTONS(ft_strrchr(abcd, 'b') == abcd + 1);
+		TESTONS(ft_strrchr(abcd, 'X') == NULL);
 	}
 	{//ft_strstr
 		TESTONS(test_ft_strstr("Foo Bar Baz","Bar"));
@@ -1260,8 +1264,6 @@ int main()
 
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
-
-
 		{
 			t_list	*tst[4];
 
@@ -1280,10 +1282,7 @@ int main()
 			ft_memdel((void*)(tst + 1));
 			ft_memdel((void*)(tst + 2));
 			ft_memdel((void*)(tst + 3));
-
 		}
-
-
 
 		const char *z1 = "hello";
 		const char *z2 = "beautiful!";
