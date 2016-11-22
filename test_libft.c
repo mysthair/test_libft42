@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 10:25:46 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 10:30:24 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -769,7 +769,6 @@ int main()
 			O123456789abcdefghijklmnopqrstuvwxyz[i] = '0' + i;
 		for (i=0; i<26; i++)
 			O123456789abcdefghijklmnopqrstuvwxyz[10+i] = 'a' + i;
-		// 01234abcdefghiefghijklmnopqrst		
 		TESTONS(test_ft_memmove(O123456789abcdefghijklmnopqrstuvwxyz + 10, O123456789abcdefghijklmnopqrstuvwxyz + 5, 10));
 
 		ft_memset(O123456789abcdefghijklmnopqrstuvwxyz, 'X', 59);
@@ -777,15 +776,10 @@ int main()
 
 
 		char	*abcdef___ = O123456789abcdefghijklmnopqrstuvwxyz;
-		ft_strcpy(abcdef___, "abcdef\0\0\0");
-		ft_putstr("ft_memmove(abcdef___ + 2 , abcdef___, 6) = \"");
-		ft_putstr(ft_memmove(abcdef___ + 2 , abcdef___, 6));
-		ft_putstr("\"\n");
 	
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
-	//	test_ft_memmove(abcdef___ + 2 , abcdef___, 6);
-
 		TESTONS(ft_memcmp(ft_memmove(abcdef___ + 2 , abcdef___, 6), "abcdef", 6)==0);
+		TESTONS(ft_memcmp(abcdef___, "ababcdef", 8)==0);
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
 		TESTONS(test_ft_memmove(abcdef___ + 2 , abcdef___, 6));
 	}		
