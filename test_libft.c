@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 10:30:24 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 12:11:42 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1220,103 +1220,131 @@ int main()
 
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
-		char *z1 = "hello";
-		char *z2 = "beautiful!";
-		char *z3 = "wonderfully super";
-		char *z4 = "world !";
 
-		t_list	*l;
-		t_list	*e;
+
 		{
-			size_t 	s;
+			t_list	*tst[4];
 
-			s = ft_strlen(z1);
-			e = ft_lstnew(z1, s + 1);
-			ft_putendl("e = ft_lstnew(z1, ft_strlen(z1)+1);");
-			lst_show_elt(e);
-			ft_print_memory(e, sizeof(t_list));
+			tst[0] = ft_lstnew("1", 2);
+			tst[1] = ft_lstnew("12", 3);
+			tst[2] = ft_lstnew("123", 4);
+			tst[3] = ft_lstnew("1234", 5);
+
+			
+			lst_show_elt(tst[0]);
+			lst_show_elt(tst[1]);
+			lst_show_elt(tst[2]);
+			lst_show_elt(tst[3]);
+
+			ft_memdel((void*)(tst + 0));
+			ft_memdel((void*)(tst + 1));
+			ft_memdel((void*)(tst + 2));
+			ft_memdel((void*)(tst + 3));
+
+		}
+
+
+
+		const char *z1 = "hello";
+		const char *z2 = "beautiful!";
+		const char *z3 = "wonderfully super";
+		const char *z4 = "world !";
+
+		t_list	*lst;
+		t_list	*elt;
+/*		{
+			size_t 	l;
+
+			l = ft_strlen(z1);
+			elt = ft_lstnew(z1, l + 1);
+			ft_putendl("elt = ft_lstnew(z1, ft_strlen(z1)+1);");
+			lst_show_elt(elt);
+			ft_print_memory(elt, sizeof(t_list));
 		}
 
 		ft_putendl("ft_lstdelone");
-		ft_lstdelone(&e, &lst_free_elt);
-		TESTONS(e == NULL);
+		ft_lstdelone(&elt, &lst_free_elt);
+		TESTONS(elt == NULL); */
 
 		{
-			size_t  s;
+			size_t  l;
 
-			s = ft_strlen(z1);
-			l = ft_lstnew(z1, s + 1);
+			l = ft_strlen(z1);
+			lst = ft_lstnew(z1, l + 1);
 			ft_putendl("contenu de la liste z1:");
-			lst_show_lst(l);
-			ft_print_memory(l, sizeof(t_list));
+			lst_show_lst(lst);
+			ft_print_memory(lst, sizeof(t_list));
 		}
 		{
-			size_t  s;
+			size_t  l;
 
-			s = ft_strlen(z2);
-			e = ft_lstnew(z2, s + 1);
+			l = ft_strlen(z2);
+			elt = ft_lstnew(z2, l + 1);
 			ft_putstr("z2:");
-			lst_show_elt(e);
-			ft_print_memory(e, sizeof(t_list));
-			ft_lstadd(&l, e);//ft_lstnew(z2, ft_strlen(z2)+1));
+			lst_show_elt(elt);
+			ft_print_memory(elt, sizeof(t_list));
+			ft_lstadd(&lst, elt);//ft_lstnew(z2, ft_strlen(z2)+1));
 			ft_putendl("contenu de la liste z1,z2:");
-			lst_show_lst(l);
+			lst_show_lst(lst);
 		}
-		e = ft_lstnew(z3, ft_strlen(z3)+1);
+		elt = ft_lstnew(z3, ft_strlen(z3)+1);
 		ft_putstr("z3:");
-		lst_show_elt(e);
-		ft_lstadd(&l, e);//ft_lstnew(z3, ft_strlen(z3)+1));
+		lst_show_elt(elt);
+		ft_lstadd(&lst, elt);//ft_lstnew(z3, ft_strlen(z3)+1));
 		ft_putendl("contenu de la liste z1-z3:");
-		lst_show_lst(l);
+		lst_show_lst(lst);
 
-		e = ft_lstnew(z4, ft_strlen(z4)+1);
-		lst_show_elt(e);
+		elt = ft_lstnew(z4, ft_strlen(z4)+1);
+		lst_show_elt(elt);
 		ft_putstr("z4:");
-		ft_lstadd(&l, e);//ft_lstnew(z4, ft_strlen(z4)+1));
+		ft_lstadd(&lst, elt);//ft_lstnew(z4, ft_strlen(z4)+1));
 		ft_putendl("contenu de la liste z1-z4:");
-		lst_show_lst(l);
+		lst_show_lst(lst);
 
 		ft_putendl("ft_lstiter(l, &lst_show_elt);");
-		ft_lstiter(l, &lst_show_elt);
+		ft_lstiter(lst, &lst_show_elt);
 
 		ft_putendl("m0 = ft_lstmap(&l, &f)");
-		t_list	*m0 = ft_lstmap(l, &func_for_ft_lstmap);
+		t_list	*m0 = ft_lstmap(lst, &func_for_ft_lstmap);
 		lst_show_lst(m0); 
 		
 		ft_putendl("ft_lstdel(&l, ..");
-		ft_lstdel(&l, &lst_free_elt);
+		ft_lstdel(&lst, &lst_free_elt);
 
 
-		t_list	*m1=m0->next;
-		t_list	*m2=m1->next;
-		t_list	*m3=m2->next;
+		t_list	*m1 = m0->next;
+		t_list	*m2 = m1->next;
+		t_list	*m3 = m2->next;
 
-		if(ft_memcmp(m0->content, "olleh", 6) != 0)
+		if(ft_memcmp(m0->content, "olleh", 5) != 0)
 		{		
 			ft_putendl("m0->content \"olleh\" ?");
-			ft_print_memory(m0->content, 6);
-			ft_print_memory("olleh", 6);
+			ft_print_memory(m0->content, 5);
+			ft_print_memory("olleh", 5);
+			ft_putstr("ft_memcmp(m0->content, \"olleh\", 5) = ");
+			ft_putnbr(ft_memcmp(m0->content, "olleh", 5));
+			ft_putendl("");
 		}
-		TESTONS(ft_memcmp(m0->content, "olleh", 6)==0);
-		if(ft_memcmp(m1->content, "frednow", 8) != 0)
+		TESTONS(ft_memcmp(m0->content, "olleh", 5)==0);
+		if(ft_memcmp(m1->content, "frednow", 7) != 0)
 		{		
 			ft_putendl("m0->content \"frednow\" ?");
-			ft_print_memory(m0->content, 8);
-			ft_print_memory("frednow", 6);
+			ft_print_memory(m0->content, 7);
+			ft_print_memory("frednow", 7);
 		}
-		TESTONS(ft_memcmp(m1->content, "frednow", 8)==0);
-		if(ft_memcmp(m2->content, "! dlrow", 8) != 0)
+		TESTONS(ft_memcmp(m1->content, "frednow", 7)==0);
+		if(ft_memcmp(m2->content, "! dlrow", 7) != 0)
 		{		
 			ft_putendl("m0->content \"! dlrow\" ?");
-			ft_print_memory(m0->content, 8);
-			ft_print_memory("! dlrow", 8);
+			ft_print_memory(m0->content, 7);
+			ft_print_memory("! dlrow", 7);
 		}
-		TESTONS(ft_memcmp(m2->content, "! dlrow", 8)==0);
-		if(ft_memcmp(m0->content, "olleh", 6) != 0)
+		TESTONS(ft_memcmp(m2->content, "! dlrow", 7)==0);
+		if(ft_memcmp(m0->content, "olleh", 5) != 0)
 		{		
 			ft_putendl("m0->content \"olleh\" ?");
-			ft_print_memory(m0->content, 6);
-			ft_print_memory("olleh", 6);
+			ft_print_memory(m0->content, 5);
+			ft_print_memory("olleh", 5);
 		}
 		TESTONS(m3 == NULL);
 

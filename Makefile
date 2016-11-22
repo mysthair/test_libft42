@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/18 14:49:36 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/11/22 12:04:11 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ LIBFT=libft.a
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
-GWW=gcc -std=gnu11 -O0 -g -Wall -Wextra -Werror -I$(DIRH)
-#GWW=gcc -O0 -g -Wall -Wextra -Werror -I$(DIRH)
+CC=gcc
+CFLAGS=-g -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
 LOCALFUNCS = malloc free exit assert print_memory
 
@@ -37,7 +37,6 @@ all: test $(LIBFT)
 	@echo "##                          $(LIBFT) testeur                                    ##"
 	@echo "################################################################################"
 
-#$(LIBFT): $(OBJS) $(HEADERS)
 $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
 
@@ -50,7 +49,7 @@ $(OBJS): $(HEADERS)
 $(DIRO)%.o: %.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(GWW) -o $@ -c $< 
+	$(CC) $(CFLAGS) -o $@ -c $< 
 
 clean:
 	@echo "$(TITLE)"
@@ -79,7 +78,7 @@ $(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(GWW) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIBFT) $(OBJS) 
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIBFT) $(OBJS) 
 
 test: $(NAME)
 	./$(NAME)	
