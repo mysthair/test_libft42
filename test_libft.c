@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 17:18:09 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/22 18:15:16 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1455,6 +1455,22 @@ int main()
 		TESTONS(!!map);
 	   TESTONS(map->next->content_size == 200);
 	} 
+
+
+	{
+		//strsub
+		
+		char *str = "Un jour je serai, le meilleur dresseur !";
+		 
+		char	* r = ft_strsub(str, 0, (size_t)-10);
+		if (r == NULL)
+			ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
+		else
+		{
+			SHOW_STRING("ft_strsub(str, 0, (size_t)-10)", r);
+		}
+		TESTONS(r != NULL && ft_strlen(r) == 0);
+	}
 
 	ft_free(buffer);
 	return (0);
