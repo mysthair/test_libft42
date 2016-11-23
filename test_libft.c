@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 18:42:03 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/23 19:00:43 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1383,6 +1383,18 @@ int main()
 		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
+	{
+		char *t;
+
+		TESTONS(ft_strequ((t = ft_itoa(0)),"0"));
+		ft_free(t);
+		TESTONS(ft_strequ((t = ft_itoa(123)),"123"));
+		ft_free(t);
+		TESTONS(ft_strequ((t = ft_itoa(-10)),"-10"));
+		ft_free(t);
+		TESTONS(ft_strequ((t = ft_itoa(12345)),"12345"));
+		ft_free(t);
+	}
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
 		{
