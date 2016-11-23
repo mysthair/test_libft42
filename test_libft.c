@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 18:12:29 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/23 18:42:03 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1081,6 +1081,11 @@ int main()
 		TESTONS(test_ft_strcmp("", ""));
 
 		TESTONS(test_ft_strcmp("\200", "\0"));
+		TESTONS(test_ft_strcmp("0", "\200"));
+		TESTONS(test_ft_strcmp("\200", "\177"));
+		TESTONS(test_ft_strcmp("\177", "\200"));
+		TESTONS(test_ft_strcmp("\x7F", "\x80"));
+		TESTONS(test_ft_strcmp("\x80", "\x7F"));
 
 	}
 	{//ft_strncmp
@@ -1102,6 +1107,12 @@ int main()
 		TESTONS(test_ft_strncmp("", "", 2));
 
 		TESTONS(test_ft_strncmp("\200", "\0", 1));
+		TESTONS(test_ft_strncmp("\200", "\0", 2));
+		TESTONS(test_ft_strncmp("0", "\200", 3));
+		TESTONS(test_ft_strncmp("\200", "\177", 4));
+		TESTONS(test_ft_strncmp("\177", "\200", 5));
+		TESTONS(test_ft_strncmp("\x7F", "\x80", 6));
+		TESTONS(test_ft_strncmp("\x80", "\x7F", 7));
 	}
 
 	{//ft_atoi
@@ -1594,6 +1605,12 @@ int main()
 			TESTONS(r != NULL && ft_strcmp(r, str) == 0); // crash?
 			ft_free(r);
 		}*/
+		{
+			char    *str = "i just want this part #############";
+			char	* r = ft_strsub(str, 5, 10);
+			//				      1234567890
+			TESTONS(ft_strequ(r, "t want thi"));
+		}
 	}
 
 	ft_free(buffer);
