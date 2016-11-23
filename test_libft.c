@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/22 18:15:16 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/23 16:45:32 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,8 +380,8 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 	size_t 	r1;
 	size_t	r2;
 
-	d = (char*)ft_malloc(size+1);
-	ft_bzero(d, size+1);
+	d = (char*)ft_malloc(size+strlen(dst)+1);
+	ft_bzero(d, size+strlen(dst)+1);
 	ft_strcpy(d, dst);
 
 	r1 = strlcat(d, src, size);
@@ -393,10 +393,10 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 		ft_putstr("size = \""); ft_putnbr(size); ft_putstr("\"\n");
 		ft_putstr("src  = \""); ft_putstr((char*)src); ft_putstr("\"\n");
 		ft_putstr("d    = \""); ft_putstr(d); ft_putstr("\"\n");
-		ft_putstr("dest = \""); ft_putstr(dst); ft_putstr("\"\n");
+		ft_putstr("dst = \""); ft_putstr(dst); ft_putstr("\"\n");
 
-		ft_putstr("r1 = \""); ft_putnbr(r1); ft_putstr("\"\n");
-		ft_putstr("r2 = \""); ft_putnbr(r2); ft_putstr("\"\n");
+		ft_putstr("strlcat(d, src, size) = "); ft_putnbr(r1); ft_putstr("\n");
+		ft_putstr("ft_strlcat(d, src, size) = "); ft_putnbr(r2); ft_putstr("\n");
 	}
 
 	TEST(ft_strncmp(d, dst, size)==0);
@@ -924,8 +924,76 @@ int main()
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
+//		ft_bzero(vide31, 31);  
+//		TESTONS(test_ft_strlcat(vide31, "12345", 10));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 1));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 2));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 3));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 4));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 5));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 6));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 7));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 8));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 9));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 10));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 11));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 12));
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", 0));
+
+		/*ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", -1));
+
+
+		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		TESTONS(test_ft_strlcat(abcde31, "12345", -10));
+*/
+
 		ft_bzero(vide31, 31); 
-		TESTONS(test_ft_strlcat(vide31, "12345", 10));
+		TESTONS(test_ft_strlcat(vide31, "12345", 0));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 1));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 2));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 4));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 5));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 6));
+
+		ft_bzero(vide31, 31); 
+		TESTONS(test_ft_strlcat(vide31, "12345", 7));
 
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "", 10));
