@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 16:45:32 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/23 18:12:29 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -924,8 +924,8 @@ int main()
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
-//		ft_bzero(vide31, 31);  
-//		TESTONS(test_ft_strlcat(vide31, "12345", 10));
+		//		ft_bzero(vide31, 31);  
+		//		TESTONS(test_ft_strlcat(vide31, "12345", 10));
 
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		TESTONS(test_ft_strlcat(abcde31, "12345", 1));
@@ -967,12 +967,12 @@ int main()
 		TESTONS(test_ft_strlcat(abcde31, "12345", 0));
 
 		/*ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
-		TESTONS(test_ft_strlcat(abcde31, "12345", -1));
+		  TESTONS(test_ft_strlcat(abcde31, "12345", -1));
 
 
-		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
-		TESTONS(test_ft_strlcat(abcde31, "12345", -10));
-*/
+		  ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
+		  TESTONS(test_ft_strlcat(abcde31, "12345", -10));
+		  */
 
 		ft_bzero(vide31, 31); 
 		TESTONS(test_ft_strlcat(vide31, "12345", 0));
@@ -1492,12 +1492,12 @@ int main()
 		}
 		TESTONS(ft_memcmp(elt2->content, "olleh", 5)==0);
 
-/*		if(ft_memcmp(m0->content, "olleh", 5) != 0)
-		{		
-			ft_putendl("m0->content \"olleh\" ?");
-			ft_print_memory(m0->content, 5);
-			ft_print_memory("olleh", 5);
-		}*/
+		/*		if(ft_memcmp(m0->content, "olleh", 5) != 0)
+				{		
+				ft_putendl("m0->content \"olleh\" ?");
+				ft_print_memory(m0->content, 5);
+				ft_print_memory("olleh", 5);
+				}*/
 		TESTONS(elt3 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
@@ -1519,25 +1519,81 @@ int main()
 		TESTONS(list->content_size == 21);
 		TESTONS(list->next->content_size == 100);
 		TESTONS(!!map);
-  		TESTONS(map->content_size == 42);
+		TESTONS(map->content_size == 42);
 		TESTONS(!!map);
-	   TESTONS(map->next->content_size == 200);
+		TESTONS(map->next->content_size == 200);
 	} 
 
 
 	{
 		//strsub
-		
-		char *str = "Un jour je serai, le meilleur dresseur !";
-		 
-		char	* r = ft_strsub(str, 0, (size_t)-10);
-		if (r == NULL)
-			ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
-		else
 		{
-			SHOW_STRING("ft_strsub(str, 0, (size_t)-10)", r);
+			char 	*abcde = "abcde";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"));
+			ft_free(r);
 		}
-		TESTONS(r != NULL && ft_strlen(r) == 0);
+		{
+			char 	*abcde = "abcde";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 3)), "cde"));
+			ft_free(r);
+		}
+		{
+			char 	*abcde = "abcde";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 10)), "cde"));
+			ft_free(r);
+		}
+
+		{
+			char 	*abcde = "abcde";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 0)), ""));
+			ft_free(r);
+		}
+
+		{
+			char 	*abcde = "abcde";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
+			ft_free(r);
+		}
+		{
+			char 	*abcde = "";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
+			ft_free(r);
+		}
+
+		{
+
+			char *str = "Un jour je serai, le meilleur codeur ! ^^";
+
+			char	* r = ft_strsub(str, 0, (size_t)-10);
+			if (r == NULL)
+				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
+			else
+			{
+				SHOW_STRING("ft_strsub(str, 0, (size_t)-10)", r);
+			}
+			TESTONS(r != NULL && ft_strcmp(r, str) == 0); // crash?
+			ft_free(r);
+		}
+		/*{  ***crash !! ***
+
+			char *str = "Un jour je serai, le meilleur codeur ! ^^";
+
+			char	* r = ft_strsub(str, 19, (size_t)-10);
+			if (r == NULL)
+				ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
+			else
+			{
+				SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
+			}
+			TESTONS(r != NULL && ft_strcmp(r, str) == 0); // crash?
+			ft_free(r);
+		}*/
 	}
 
 	ft_free(buffer);
