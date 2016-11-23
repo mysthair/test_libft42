@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 19:00:43 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/23 21:53:56 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1590,7 +1590,6 @@ int main()
 		}
 
 		{
-
 			char *str = "Un jour je serai, le meilleur codeur ! ^^";
 
 			char	* r = ft_strsub(str, 0, (size_t)-10);
@@ -1598,11 +1597,25 @@ int main()
 				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
 			else
 			{
-				SHOW_STRING("ft_strsub(str, 0, (size_t)-10)", r);
+				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r);
 			}
-			TESTONS(r != NULL && ft_strcmp(r, str) == 0); // crash?
+			TESTONS(r != NULL && ft_strequ(r, str)); // crash?
 			ft_free(r);
 		}
+		{
+			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
+			
+			char	*result = ft_strsub(str, 0, 0);
+			if (result == NULL)
+				ft_putstr("ft_strsub(str, 0, 0) == NULL)\n");
+			else
+			{
+				SHOW_STRING("ft_strsub(str, 0, 0) : ", result);
+			}
+			TESTONS(result != NULL && ft_strequ(result, ""));
+			ft_free(result);
+		}
+
 		/*{  ***crash !! ***
 
 			char *str = "Un jour je serai, le meilleur codeur ! ^^";
