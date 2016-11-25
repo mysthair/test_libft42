@@ -713,10 +713,15 @@ int main()
 	buffer = NULL;
 	TESTONS((buffer = ft_malloc(0)) != NULL);
 	ft_free(buffer);
-	buffer = ft_malloc(BIG);
-	TESTONS(buffer != NULL);
-	for (i = 0; i < BIG; i++)
-		buffer[i] = (char)(i+1);
+	buffer = malloc(BIG);
+	if(buffer)
+	{
+		ft_free(buffer);
+		buffer = ft_malloc(BIG);
+		TESTONS(buffer != NULL);
+		for (i = 0; i < BIG; i++)
+			buffer[i] = (char)(i+1);
+	}
 	ft_free(buffer);
 	buffer = ft_malloc(255);
 	TESTONS(buffer != NULL);
