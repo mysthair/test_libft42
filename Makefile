@@ -76,9 +76,10 @@ re:
 	make all
 	make test
 OS:=$(shell uname)
+CPU:=$(shell uname -m)
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-  MISSING_O=strlcat.o strnstr.o
+  MISSING_O=strlcat_$(CPU).o strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
   MISSING_O=
