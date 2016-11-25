@@ -23,43 +23,10 @@
 	ft_putstr(T); ft_putstr("\"\n");
 
 #ifdef DONT_HAVE_STRLCPY
-size_t	strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
 
-	i = 0;
-	while (i < size && dst[i])
-		i++;
-	while (i < size && (dst[i] = *src))
-	{
-		i++;
-		src++;
-	}
-	dst[i < size ? i : size - 1] = '\0';
-	while (*(src++))
-		i++;
-	return (i);
-}
+size_t	strlcat(char *dst, const char *src, size_t size);
+char	*strnstr(const char *haystack, const char *needle, size_t len);
 
-char *strnstr(const char *haystack, const char *needle, size_t len)
-{
-	int i;
-	size_t needle_len;
-
-	/* segfault here if needle is not NULL terminated */
-	if (0 == (needle_len = strlen(needle)))
-		return (char *)haystack;
-
-	for (i=0; i<=(int)(len-needle_len); i++)
-	{
-		if ((haystack[0] == needle[0]) &&
-				(0 == strncmp(haystack, needle, needle_len)))
-			return (char *)haystack;
-
-		haystack++;
-	}
-	return NULL;
-}
 #endif
 
 
@@ -620,8 +587,6 @@ int		test_ft_memdel(size_t size)
 	return (1);
 }
 
-//int		test_ft_striter(char *s, void (*f)(char *))
-//{
 void strtter_func_upper(char *c)
 {
 	*c = ft_toupper(*c);
@@ -630,10 +595,7 @@ void strtter_func_lower(char *c)
 {
 	*c = ft_tolower(*c);
 }
-//}
 
-//int		test_ft_striteri(char *s, void (*f)(unsigned int, char *))
-//{
 void strtteri_func_upper(unsigned int i, char *s)
 {
 	i = 0+i;
@@ -644,7 +606,6 @@ void strtteri_func_lower(unsigned int i, char *s)
 	i = 0+i;
 	*s = ft_tolower(*s);
 }
-//}
 
 char strmap_func_upper(char c)
 {
@@ -719,9 +680,9 @@ t_list *func_for_ft_lstmap(t_list *elem)
 		tmp = (t_list*)ft_malloc(sizeof(t_list));
 	}
 	s = (char*)(elem->content);
-	l = (ft_strlen(s) % 10);
-	if(l == 0)
-		return (NULL);
+	l = ft_strlen(s);//l = (ft_strlen(s) % 10);
+	//if(l == 0)
+	//	return (NULL);
 	tmp->content_size = l+1;
 	for (size_t i=0; i<l; i++)
 		buffer[i] = s[l-1-i];
@@ -1139,18 +1100,19 @@ int main()
 		TESTONS(test_ft_atoi("9223372036854775805"));//  == -3);
 		TESTONS(test_ft_atoi("9223372036854775806"));//  == -2);
 		TESTONS(test_ft_atoi("9223372036854775807"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775808"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775809"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775810"));//  == -1);
-		TESTONS(test_ft_atoi("1000000000000000000000000"));//   == -1);
 		TESTONS(test_ft_atoi("-9223372036854775805"));// == 3);
 		TESTONS(test_ft_atoi("-9223372036854775806"));// == 2);
 		TESTONS(test_ft_atoi("-9223372036854775807"));// == 1);
 		TESTONS(test_ft_atoi("-9223372036854775808"));// == 0);
+		/* uncomment for testing the same coportment than the real atoi :
+		TESTONS(test_ft_atoi("9223372036854775808"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775809"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775810"));//  == -1);
+		TESTONS(test_ft_atoi("1000000000000000000000000"));//   == -1);
 		TESTONS(test_ft_atoi("-9223372036854775809"));// == 0);
 		TESTONS(test_ft_atoi("-9223372036854775810"));// == 0);
 		TESTONS(test_ft_atoi("-1000000000000000000000000"));//  == 0);
-		TESTONS(test_ft_atoi(""));//  == 0);
+		*/
 	}
 
 	{//isalpha

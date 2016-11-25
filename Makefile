@@ -24,10 +24,19 @@ HEADERS=$(LIBFTH) test_libft.h
 CC=gcc
 CFLAGS=-g -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
-LOCALFUNCS = malloc free exit assert print_memory
+INCMD:=$(shell if [ ! -f $(DIRLIBFT)ft_malloc.c ]; then echo malloc ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_free.c ]; then echo free ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
+LOCALFUNCS:=$(INCMD)
 
-LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))
+#LOCALFUNCS = malloc free exit assert print_memory
+#LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))
 OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
+
+#testlocfunc:
+#	echo "LOCALFUNCS=$(LOCALFUNCS)"
+#	echo "OBJS=$(OBJS)"
 
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
@@ -42,9 +51,9 @@ $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 
 $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
-	make -C $(DIRLIBFT) && cp $(DIRLIBFT)$(LIBFT) $(LIBFT)
+	make -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
 
-$(OBJS): $(HEADERS)
+#$(NAME) $(OBJS):$(HEADERS)
 
 $(DIRO)%.o: %.c
 	@echo "$(TITLE)"
@@ -60,7 +69,7 @@ fclean: clean
 	rm -f $(LIBFT) $(LIBFTH)
 	rm -f *.e $(NAME)
 	@rm -rf *.dSYM
-
+	make -C $(DIRLIBFT) fclean 
 re:
 	@echo "$(TITLE)"
 	make fclean
@@ -69,16 +78,17 @@ re:
 OS:=$(shell uname)
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
+  MISSING_O=strlcat.o strnstr.o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
+  MISSING_O=
 endif
-testos:
-	echo "$(OS) -> GWW $(HAVE_STRLCPY)"
-$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)
+
+$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)  $(MISSING_O)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(LIBFT) $(OBJS) 
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(MISSING_O) $(LIBFT) $(OBJS) 
 
 test: $(NAME)
 	./$(NAME)	
@@ -86,6 +96,5 @@ test: $(NAME)
 testnorm:
 	norminette $(DIRLIBFT)
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
-
 
 
