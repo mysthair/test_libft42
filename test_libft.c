@@ -686,7 +686,7 @@ void	lst_show_elt(t_list *l)
 	char *	elt;
 
 	elt = (char *)(l->content);
-	printf("%p:[content:%p(\"%s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
+	printf("%p:[content:%p(\"%s\"), size:%iu, next:%p]\n", l, elt, elt, l->content_size, l->next);
 }
 
 void	lst_show_lst(t_list *l)
