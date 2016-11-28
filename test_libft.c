@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 19:00:43 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/28 14:43:46 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1451,44 +1451,47 @@ int main()
 		ft_lstdel(&lst, &lst_free_elt);
 
 
-		t_list	*elt1 = elt0->next;
-		t_list	*elt2 = elt1->next;
-		t_list	*elt3 = elt2->next;
+		t_list	*elt1 = (elt0 ? elt0->next : NULL);
+		t_list	*elt2 = (elt1 ? elt1->next : NULL);
+		t_list	*elt3 = (elt2 ? elt2->next : NULL);
+		t_list	*elt4 = (elt3 ? elt3->next : NULL);
 
-		if(ft_memcmp(elt0->content, "! dlrow", 7) != 0)
+		if(elt0 && ft_memcmp(elt0->content, "! dlrow", 7) != 0)
 		{		
 			ft_putendl("elt0->content \"! dlrow\" ?");
 			ft_print_memory(elt0->content, 7);
 			ft_print_memory("! dlrow", 7);
 		}
-		TESTONS(ft_memcmp(elt0->content, "! dlrow", 7)==0);
+		TESTONS(elt0 && ft_memcmp(elt0->content, "! dlrow", 7)==0);
 
-		if(ft_memcmp(elt1->content, "frednow", 7) != 0)
+		if(elt1 && ft_memcmp(elt1->content, "repus y", 7) != 0)
 		{		
-			ft_putendl("elt1->content \"frednow\" ?");
+			ft_putendl("elt1->content \"repus y\" ?");
 			ft_print_memory(elt1->content, 7);
-			ft_print_memory("frednow", 7);
+			ft_print_memory("repus y", 7);
 		}
-		TESTONS(ft_memcmp(elt1->content, "frednow", 7)==0);
+		TESTONS(elt1 && ft_memcmp(elt1->content, "repus y", 7)==0);
 
-		if(ft_memcmp(elt2->content, "olleh", 5) != 0)
+		if(elt2 && ft_memcmp(elt2->content, "!lufitu", 7) != 0)
 		{		
-			ft_putendl("elt2->content \"olleh\" ?");
-			ft_print_memory(elt2->content, 5);
+			ft_putendl("elt2->content \"!lufitu\" ?");
+			ft_print_memory(elt2->content, 7);
+			ft_print_memory("!lufitu", 7);
+		}
+		TESTONS(elt2 && ft_memcmp(elt2->content, "!lufitu", 7)==0);
+
+		if(elt3 && ft_memcmp(elt3->content, "olleh", 5) != 0)
+		{		
+			ft_putendl("elt3->content \"olleh\" ?");
+			ft_print_memory(elt3->content, 5);
 			ft_print_memory("olleh", 5);
-			ft_putstr("ft_memcmp(elt2->content, \"olleh\", 5) = ");
-			ft_putnbr(ft_memcmp(elt2->content, "olleh", 5));
+			ft_putstr("ft_memcmp(elt3->content, \"olleh\", 5) = ");
+			ft_putnbr(ft_memcmp(elt3->content, "olleh", 5));
 			ft_putendl("");
 		}
-		TESTONS(ft_memcmp(elt2->content, "olleh", 5)==0);
+		TESTONS(ft_memcmp(elt3->content, "olleh", 5)==0);
 
-		/*		if(ft_memcmp(m0->content, "olleh", 5) != 0)
-				{		
-				ft_putendl("m0->content \"olleh\" ?");
-				ft_print_memory(m0->content, 5);
-				ft_print_memory("olleh", 5);
-				}*/
-		TESTONS(elt3 == NULL);
+		TESTONS(elt4 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
 		ft_lstdel(&elt0, &lst_free_elt);
