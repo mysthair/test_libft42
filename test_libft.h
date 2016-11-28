@@ -14,12 +14,13 @@
 		return (0); \
 	}
 
-# ifndef NULL
+/*# ifndef NULL
 #  define NULL 0
 #  define TYPEDEF_SIZE_T typedef unsigned long size_t
 TYPEDEF_SIZE_T;
 # endif
-
+*/
+#include <string.h>
 
 void   *ft_malloc(size_t n);
 void   ft_free(void *p);

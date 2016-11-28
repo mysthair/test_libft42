@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/23 21:53:56 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/28 19:28:51 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,43 +23,10 @@
 	ft_putstr(T); ft_putstr("\"\n");
 
 #ifdef DONT_HAVE_STRLCPY
-size_t	strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
 
-	i = 0;
-	while (i < size && dst[i])
-		i++;
-	while (i < size && (dst[i] = *src))
-	{
-		i++;
-		src++;
-	}
-	dst[i < size ? i : size - 1] = '\0';
-	while (*(src++))
-		i++;
-	return (i);
-}
+size_t	strlcat(char *dst, const char *src, size_t size);
+char	*strnstr(const char *haystack, const char *needle, size_t len);
 
-char *strnstr(const char *haystack, const char *needle, size_t len)
-{
-	int i;
-	size_t needle_len;
-
-	/* segfault here if needle is not NULL terminated */
-	if (0 == (needle_len = strlen(needle)))
-		return (char *)haystack;
-
-	for (i=0; i<=(int)(len-needle_len); i++)
-	{
-		if ((haystack[0] == needle[0]) &&
-				(0 == strncmp(haystack, needle, needle_len)))
-			return (char *)haystack;
-
-		haystack++;
-	}
-	return NULL;
-}
 #endif
 
 
@@ -620,8 +587,6 @@ int		test_ft_memdel(size_t size)
 	return (1);
 }
 
-//int		test_ft_striter(char *s, void (*f)(char *))
-//{
 void strtter_func_upper(char *c)
 {
 	*c = ft_toupper(*c);
@@ -630,10 +595,7 @@ void strtter_func_lower(char *c)
 {
 	*c = ft_tolower(*c);
 }
-//}
 
-//int		test_ft_striteri(char *s, void (*f)(unsigned int, char *))
-//{
 void strtteri_func_upper(unsigned int i, char *s)
 {
 	i = 0+i;
@@ -644,7 +606,6 @@ void strtteri_func_lower(unsigned int i, char *s)
 	i = 0+i;
 	*s = ft_tolower(*s);
 }
-//}
 
 char strmap_func_upper(char c)
 {
@@ -686,7 +647,7 @@ void	lst_show_elt(t_list *l)
 	char *	elt;
 
 	elt = (char *)(l->content);
-	printf("%p:[content:%p(\"%s\"), size:%lu, next:%p]\n", l, elt, elt, l->content_size, l->next);
+	printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, elt, l->content_size, l->next);
 }
 
 void	lst_show_lst(t_list *l)
@@ -719,9 +680,9 @@ t_list *func_for_ft_lstmap(t_list *elem)
 		tmp = (t_list*)ft_malloc(sizeof(t_list));
 	}
 	s = (char*)(elem->content);
-	l = (ft_strlen(s) % 10);
-	if(l == 0)
-		return (NULL);
+	l = ft_strlen(s);//l = (ft_strlen(s) % 10);
+	//if(l == 0)
+	//	return (NULL);
 	tmp->content_size = l+1;
 	for (size_t i=0; i<l; i++)
 		buffer[i] = s[l-1-i];
@@ -752,10 +713,15 @@ int main()
 	buffer = NULL;
 	TESTONS((buffer = ft_malloc(0)) != NULL);
 	ft_free(buffer);
-	buffer = ft_malloc(BIG);
-	TESTONS(buffer != NULL);
-	for (i = 0; i < BIG; i++)
-		buffer[i] = (char)(i+1);
+	buffer = malloc(BIG);
+	if(buffer)
+	{
+		ft_free(buffer);
+		buffer = ft_malloc(BIG);
+		TESTONS(buffer != NULL);
+		for (i = 0; i < BIG; i++)
+			buffer[i] = (char)(i+1);
+	}
 	ft_free(buffer);
 	buffer = ft_malloc(255);
 	TESTONS(buffer != NULL);
@@ -1139,18 +1105,19 @@ int main()
 		TESTONS(test_ft_atoi("9223372036854775805"));//  == -3);
 		TESTONS(test_ft_atoi("9223372036854775806"));//  == -2);
 		TESTONS(test_ft_atoi("9223372036854775807"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775808"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775809"));//  == -1);
-		TESTONS(test_ft_atoi("9223372036854775810"));//  == -1);
-		TESTONS(test_ft_atoi("1000000000000000000000000"));//   == -1);
 		TESTONS(test_ft_atoi("-9223372036854775805"));// == 3);
 		TESTONS(test_ft_atoi("-9223372036854775806"));// == 2);
 		TESTONS(test_ft_atoi("-9223372036854775807"));// == 1);
 		TESTONS(test_ft_atoi("-9223372036854775808"));// == 0);
+		/* uncomment for testing the same coportment than the real atoi :
+		TESTONS(test_ft_atoi("9223372036854775808"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775809"));//  == -1);
+		TESTONS(test_ft_atoi("9223372036854775810"));//  == -1);
+		TESTONS(test_ft_atoi("1000000000000000000000000"));//   == -1);
 		TESTONS(test_ft_atoi("-9223372036854775809"));// == 0);
 		TESTONS(test_ft_atoi("-9223372036854775810"));// == 0);
 		TESTONS(test_ft_atoi("-1000000000000000000000000"));//  == 0);
-		TESTONS(test_ft_atoi(""));//  == 0);
+		*/
 	}
 
 	{//isalpha
@@ -1484,44 +1451,47 @@ int main()
 		ft_lstdel(&lst, &lst_free_elt);
 
 
-		t_list	*elt1 = elt0->next;
-		t_list	*elt2 = elt1->next;
-		t_list	*elt3 = elt2->next;
+		t_list	*elt1 = (elt0 ? elt0->next : NULL);
+		t_list	*elt2 = (elt1 ? elt1->next : NULL);
+		t_list	*elt3 = (elt2 ? elt2->next : NULL);
+		t_list	*elt4 = (elt3 ? elt3->next : NULL);
 
-		if(ft_memcmp(elt0->content, "! dlrow", 7) != 0)
+		if(elt0 && ft_memcmp(elt0->content, "! dlrow", 7) != 0)
 		{		
 			ft_putendl("elt0->content \"! dlrow\" ?");
 			ft_print_memory(elt0->content, 7);
 			ft_print_memory("! dlrow", 7);
 		}
-		TESTONS(ft_memcmp(elt0->content, "! dlrow", 7)==0);
+		TESTONS(elt0 && ft_memcmp(elt0->content, "! dlrow", 7)==0);
 
-		if(ft_memcmp(elt1->content, "frednow", 7) != 0)
+		if(elt1 && ft_memcmp(elt1->content, "repus y", 7) != 0)
 		{		
-			ft_putendl("elt1->content \"frednow\" ?");
+			ft_putendl("elt1->content \"repus y\" ?");
 			ft_print_memory(elt1->content, 7);
-			ft_print_memory("frednow", 7);
+			ft_print_memory("repus y", 7);
 		}
-		TESTONS(ft_memcmp(elt1->content, "frednow", 7)==0);
+		TESTONS(elt1 && ft_memcmp(elt1->content, "repus y", 7)==0);
 
-		if(ft_memcmp(elt2->content, "olleh", 5) != 0)
+		if(elt2 && ft_memcmp(elt2->content, "!lufitu", 7) != 0)
 		{		
-			ft_putendl("elt2->content \"olleh\" ?");
-			ft_print_memory(elt2->content, 5);
+			ft_putendl("elt2->content \"!lufitu\" ?");
+			ft_print_memory(elt2->content, 7);
+			ft_print_memory("!lufitu", 7);
+		}
+		TESTONS(elt2 && ft_memcmp(elt2->content, "!lufitu", 7)==0);
+
+		if(elt3 && ft_memcmp(elt3->content, "olleh", 5) != 0)
+		{		
+			ft_putendl("elt3->content \"olleh\" ?");
+			ft_print_memory(elt3->content, 5);
 			ft_print_memory("olleh", 5);
-			ft_putstr("ft_memcmp(elt2->content, \"olleh\", 5) = ");
-			ft_putnbr(ft_memcmp(elt2->content, "olleh", 5));
+			ft_putstr("ft_memcmp(elt3->content, \"olleh\", 5) = ");
+			ft_putnbr(ft_memcmp(elt3->content, "olleh", 5));
 			ft_putendl("");
 		}
-		TESTONS(ft_memcmp(elt2->content, "olleh", 5)==0);
+		TESTONS(ft_memcmp(elt3->content, "olleh", 5)==0);
 
-		/*		if(ft_memcmp(m0->content, "olleh", 5) != 0)
-				{		
-				ft_putendl("m0->content \"olleh\" ?");
-				ft_print_memory(m0->content, 5);
-				ft_print_memory("olleh", 5);
-				}*/
-		TESTONS(elt3 == NULL);
+		TESTONS(elt4 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
 		ft_lstdel(&elt0, &lst_free_elt);
