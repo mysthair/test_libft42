@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/28 19:28:51 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/11/30 17:03:18 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int    test_ft_memcpy(void *dest, const void *src, size_t n)
 	char	*s, *d;
 	void 	*ret;
 
-	s = ft_malloc(n);
+	s = ft_memalloc(n);
 	memcpy(s, src, n);
 	d = (char*)dest;
 	ret = ft_memcpy(dest, src, n);
@@ -89,7 +89,7 @@ int    test_ft_memcpy(void *dest, const void *src, size_t n)
 		TEST(d[i] == s[i]);
 		i++;
 	}
-	ft_free(s);
+	ft_strdel(&s);
 	return (1);
 }
 
@@ -100,7 +100,7 @@ int    test_ft_memccpy(void *dest, const void *src, int c, size_t n)
 	char	*d;
 	void	*r;
 
-	s = ft_malloc(n);
+	s = ft_memalloc(n);
 	ft_memcpy(s, src, n);
 	r = ft_memccpy(dest, src, c, n);
 	d = (char*)dest;
@@ -121,7 +121,7 @@ int    test_ft_memccpy(void *dest, const void *src, int c, size_t n)
 		i++;
 	}
 	TEST((size_t)(r - dest) == (i + 1));
-	ft_free(s);
+	ft_strdel(&s);
 	return (1);
 }
 int	test_ft_memmove(void *dest, const void *src, size_t n)
@@ -132,7 +132,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 
 	char	*origin;
 
-	origin = ft_malloc(n);
+	origin = ft_memalloc(n);
 	memcpy(origin, src, n);
 
 	ft_putendl("\nft_memmove(dest, src, n)");
@@ -152,7 +152,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 		size_t	k = dest - src;
 
 		ft_putendl("\ncas 2\n");
-		s = ft_malloc(n + k);
+		s = ft_memalloc(n + k);
 		ft_memcpy(s, src, n + k);
 		d = s + k;
 		TEST(ft_strnequ(s, src, n));
@@ -183,13 +183,13 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 			i++;
 		}
 
-		ft_free(s);
+		ft_strdel(&s);
 	}
 	else 
 	{
 		ft_putendl("\ncas 3\n");
-		d = ft_malloc(n);
-		s = ft_malloc(n);
+		d = ft_memalloc(n);
+		s = ft_memalloc(n);
 		ft_memcpy(s, src, n);
 		ft_memcpy(d, dest, n);
 
@@ -204,8 +204,8 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 			TEST(d[i] == s[i]);
 			i++;
 		}
-		ft_free(d);
-		ft_free(s);
+		ft_strdel(&d);
+		ft_strdel(&s);
 	}		
 
 
@@ -251,7 +251,7 @@ int     test_ft_memcmp(const void *s1, const void *s2, size_t n)
 
 int	test_ft_strdel(size_t size)
 {
-	char	*t = ft_malloc(size);
+	char	*t = ft_memalloc(size);
 
 	ft_strdel(&t);
 	TEST(t == NULL);
@@ -270,7 +270,7 @@ int		test_ft_strdup(char *str)
 
 	t = ft_strdup(str);
 	r = ft_strcmp(t, str);
-	ft_free(t);
+	ft_strdel(&t);
 	return (r==0);
 }
 
@@ -305,13 +305,13 @@ int		test_ft_strcat(char *dest, char *src)
 	char	*ret;
 	int		t;
 
-	buff = ft_malloc(ft_strlen(dest) + strlen(src) + 1);
+	buff = ft_memalloc(ft_strlen(dest) + strlen(src) + 1);
 	ft_strcpy(buff, dest);
 	ret = ft_strcat(dest, src);
 	TEST(ret == dest);
 	strcat(buff, src);
 	t = ft_strcmp(buff, dest);
-	ft_free(buff);
+	ft_strdel(&buff);
 	return (t == 0);
 }
 
@@ -321,7 +321,7 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 	char	*ret;
 	int		t;
 
-	buff = ft_malloc(ft_strlen(dest) + strlen(src) + 1);
+	buff = ft_memalloc(ft_strlen(dest) + strlen(src) + 1);
 	ft_strncpy(buff, dest, n);
 	ret = ft_strncat(dest, src, n);
 	TEST(ret == dest);
@@ -336,7 +336,7 @@ int		test_ft_strncat(char *dest, char *src, size_t n)
 		ft_putendl("\ndest:");
 		ft_print_memory(dest, n);
 	}
-	ft_free(buff);
+	ft_strdel(&buff);
 	TEST(t==0);
 	return (1);
 }
@@ -347,7 +347,7 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 	size_t 	r1;
 	size_t	r2;
 
-	d = (char*)ft_malloc(size+strlen(dst)+1);
+	d = (char*)ft_memalloc(size+strlen(dst)+1);
 	ft_bzero(d, size+strlen(dst)+1);
 	ft_strcpy(d, dst);
 
@@ -369,7 +369,7 @@ int		test_ft_strlcat(char *dst, const char *src, size_t size)
 	TEST(ft_strncmp(d, dst, size)==0);
 	TEST(r1 == r2);
 
-	ft_free(d);
+	ft_strdel(&d);
 	return (1);
 }
 
@@ -444,8 +444,8 @@ int     test_ft_strcmp(char const *s1, char const *s2)
 		ft_strcmp(s1, s2);
 		TEST(strcmp(s1, os1) == 0);
 		TEST(strcmp(s2, os2) == 0);
-		ft_free(os1); 
-		ft_free(os2);
+		ft_strdel(&os1); 
+		ft_strdel(&os2);
 	}
 	if (strcmp(s1, s2) != ft_strcmp(s1, s2))
 	{
@@ -469,8 +469,8 @@ int     test_ft_strncmp(char *s1, char *s2, size_t size)
 		ft_strncmp(s1, s2, size);
 		TEST(ft_strncmp(s1, os1, size) == 0);
 		TEST(ft_strncmp(s2, os2, size) == 0);
-		ft_free(os1); 
-		ft_free(os2);
+		ft_strdel(&os1); 
+		ft_strdel(&os2);
 	}
 	if (strncmp(s1, s2, size) != ft_strncmp(s1, s2, size))
 	{
@@ -555,9 +555,9 @@ int    test_ft_memalloc(size_t size)
 	char	*t;
 	size_t	i;
 
-	o = ft_malloc(size);
+	o = ft_memalloc(size);
 	if (o)
-		ft_free(o);
+		ft_memdel(&o);
 	p = ft_memalloc(size);
 	//TEST(sizeof(p) == size);
 	TEST((p && o) || (!p && !o));
@@ -665,7 +665,7 @@ void lst_free_elt(void* data, size_t size)
 	elt = (char *)data;
 	size = 0 + size;
 	printf("freeing elt %p(\"%s\")\n", elt, elt); 
-	ft_free(data);
+	ft_memdel(&data);
 }
 
 t_list *func_for_ft_lstmap(t_list *elem)
@@ -676,8 +676,8 @@ t_list *func_for_ft_lstmap(t_list *elem)
 	size_t	l;
 	if(buffer==NULL)
 	{
-		buffer = ft_malloc(13*sizeof(char));
-		tmp = (t_list*)ft_malloc(sizeof(t_list));
+		buffer = ft_memalloc(13*sizeof(char));
+		tmp = (t_list*)ft_memalloc(sizeof(t_list));
 	}
 	s = (char*)(elem->content);
 	l = ft_strlen(s);//l = (ft_strlen(s) % 10);
@@ -691,7 +691,6 @@ t_list *func_for_ft_lstmap(t_list *elem)
 	tmp->next = NULL;
 	return (tmp); 
 }
-
 
 t_list  *lstmap_test_fn(t_list *list)
 { //copiryght moolitest
@@ -709,21 +708,21 @@ int main()
 	char    *buffer;
 	int		i;
 
-	//ft_malloc
+	//ft_memalloc
 	buffer = NULL;
-	TESTONS((buffer = ft_malloc(0)) != NULL);
-	ft_free(buffer);
+	TESTONS((buffer = ft_memalloc(0)) != NULL);
+	ft_strdel(&buffer);
 	buffer = malloc(BIG);
 	if(buffer)
 	{
-		ft_free(buffer);
-		buffer = ft_malloc(BIG);
+		ft_strdel(&buffer);
+		buffer = ft_memalloc(BIG);
 		TESTONS(buffer != NULL);
 		for (i = 0; i < BIG; i++)
 			buffer[i] = (char)(i+1);
 	}
-	ft_free(buffer);
-	buffer = ft_malloc(255);
+	ft_strdel(&buffer);
+	buffer = ft_memalloc(255);
 	TESTONS(buffer != NULL);
 	for (i = 0; i < 255; i++)
 		buffer[i] = (char)(i+1);
@@ -1346,21 +1345,21 @@ int main()
 		TESTONS(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
 		TESTONS(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
 		for (int i=0; i<4; i++)
-			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
-		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
+			ft_strdel(&(ftsplitresultof__Ha_Ho_123______erf_[i]));
+		ft_memdel((void**)ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
 	{
 		char *t;
 
 		TESTONS(ft_strequ((t = ft_itoa(0)),"0"));
-		ft_free(t);
+		ft_strdel(&t);
 		TESTONS(ft_strequ((t = ft_itoa(123)),"123"));
-		ft_free(t);
+		ft_strdel(&t);
 		TESTONS(ft_strequ((t = ft_itoa(-10)),"-10"));
-		ft_free(t);
+		ft_strdel(&t);
 		TESTONS(ft_strequ((t = ft_itoa(12345)),"12345"));
-		ft_free(t);
+		ft_strdel(&t);
 	}
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
@@ -1378,10 +1377,10 @@ int main()
 			lst_show_elt(tst[2]);
 			lst_show_elt(tst[3]);
 
-			ft_memdel((void*)(tst + 0));
-			ft_memdel((void*)(tst + 1));
-			ft_memdel((void*)(tst + 2));
-			ft_memdel((void*)(tst + 3));
+			ft_strdel((void*)(tst + 0));
+			ft_strdel((void*)(tst + 1));
+			ft_strdel((void*)(tst + 2));
+			ft_strdel((void*)(tst + 3));
 		}
 
 		const char *z1 = "hello";
@@ -1524,39 +1523,39 @@ int main()
 			char 	*abcde = "abcde";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 		{
 			char 	*abcde = "abcde";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 3)), "cde"));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 		{
 			char 	*abcde = "abcde";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 10)), "cde"));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 
 		{
 			char 	*abcde = "abcde";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 2, 0)), ""));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 
 		{
 			char 	*abcde = "abcde";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 		{
 			char 	*abcde = "";
 			char	*r;
 			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
-			ft_free(r);
+			ft_strdel(&r);
 		}
 
 		{
@@ -1570,7 +1569,7 @@ int main()
 				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r);
 			}
 			TESTONS(r != NULL && ft_strequ(r, str)); // crash?
-			ft_free(r);
+			ft_strdel(&r);
 		}
 		{
 			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
@@ -1583,7 +1582,7 @@ int main()
 				SHOW_STRING("ft_strsub(str, 0, 0) : ", result);
 			}
 			TESTONS(result != NULL && ft_strequ(result, ""));
-			ft_free(result);
+			ft_strdel(&result);
 		}
 
 		/*{  ***crash !! ***
@@ -1598,7 +1597,7 @@ int main()
 				SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
 			}
 			TESTONS(r != NULL && ft_strcmp(r, str) == 0); // crash?
-			ft_free(r);
+			ft_strdel(&r);
 		}*/
 		{
 			char    *str = "i just want this part #############";
@@ -1608,6 +1607,6 @@ int main()
 		}
 	}
 
-	ft_free(buffer);
+	ft_strdel(&buffer);
 	return (0);
 }
