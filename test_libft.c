@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/30 17:03:18 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/01 12:49:50 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -557,9 +557,8 @@ int    test_ft_memalloc(size_t size)
 
 	o = ft_memalloc(size);
 	if (o)
-		ft_memdel(&o);
-	p = ft_memalloc(size);
-	//TEST(sizeof(p) == size);
+		free(o);
+	p = malloc(size);
 	TEST((p && o) || (!p && !o));
 	if (p)
 	{
@@ -570,6 +569,7 @@ int    test_ft_memalloc(size_t size)
 			TEST(t[i] == 0);
 			i++;
 		}
+		free(p);
 	}
 	return (1);
 }
