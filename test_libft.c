@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/01 12:49:50 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/01 16:31:07 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1360,6 +1360,16 @@ int main()
 		ft_strdel(&t);
 		TESTONS(ft_strequ((t = ft_itoa(12345)),"12345"));
 		ft_strdel(&t);
+		t = ft_itoa((int)0x7FFFFFFFFFFFFFFF);
+		ft_putendl(t);
+		TESTONS(ft_strequ((t = ft_itoa(0x7FFFFFFF)),"2147483647"));
+		ft_strdel(&t);
+		TESTONS(ft_strequ((t = ft_itoa(0x80000000)),"-2147483648"));
+		ft_strdel(&t);
+		TESTONS(ft_strequ((t = ft_itoa((int)0x7FFFFFFFFFFFFFFF)),"-1"));
+		ft_strdel(&t);
+		TESTONS(ft_strequ((t = ft_itoa((int)0x8000000000000000)),"0"));
+		ft_strdel(&t);
 	}
 
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
@@ -1548,28 +1558,63 @@ int main()
 		{
 			char 	*abcde = "abcde";
 			char	*r;
-			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
+			TESTONS(ft_strequ((r = ft_strsub(abcde, 10, 10)), ""));
 			ft_strdel(&r);
 		}
 		{
-			char 	*abcde = "";
+			char 	*vide = "";
 			char	*r;
-			TESTONS(ft_strequ((r=ft_strsub(abcde, 10, 10)), ""));
+			TESTONS(ft_strequ((r=ft_strsub(vide, 10, 10)), ""));
+			ft_strdel(&r);
+		}
+
+		{
+			char 	*vide = "";
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(vide, 0, 0)), ""));
+			ft_strdel(&r);
+		}
+		{
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(NULL, 10, 2)), ""));
+			ft_strdel(&r);
+		}
+		{
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(NULL, 2, 10)), ""));
+			ft_strdel(&r);
+		}
+		{
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(NULL, 2, 0)), ""));
+			ft_strdel(&r);
+		}
+		{
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(NULL, 0, 2)), ""));
+			ft_strdel(&r);
+		}
+		{
+			char	*r;
+			TESTONS(ft_strequ((r=ft_strsub(NULL, 0, 0)), ""));
 			ft_strdel(&r);
 		}
 
 		{
 			char *str = "Un jour je serai, le meilleur codeur ! ^^";
 
-			char	* r = ft_strsub(str, 0, (size_t)-10);
-			if (r == NULL)
+			char	* r1 = ft_strsub(str, 0, (size_t)-10);
+			char	* r2 = ft_strsub2(str, 0, (size_t)-10);
+			if (r1 == NULL)
 				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
 			else
 			{
-				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r);
+				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r1);
 			}
-			TESTONS(r != NULL && ft_strequ(r, str)); // crash?
-			ft_strdel(&r);
+			TESTONS(r1 ==NULL);
+			TESTONS(r2 != NULL && ft_strequ(r2, str));
+			ft_strdel(&r1);
+			ft_strdel(&r2);
 		}
 		{
 			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
