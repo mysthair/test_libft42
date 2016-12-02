@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/02 16:04:26 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/02 17:49:37 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1429,24 +1429,24 @@ int main()
 		}
 	}
 	{	char *abcde = "abcde";
-		char *xyz = "xyz"
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, xyz), "abcdexyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, ""),"abcde"));
+		char *xyz = "xyz";
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, xyz), "abcdexyz"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, ""),"abcde"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, NULL),"abcd"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL),""));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""),""));
 	}
 
-	{
+/*	{ ici
 		FAIL_IF_NOT(0);
 	}
 
 	{
 		FAIL_IF_NOT(0);
-	}
+	}*/
 
 
 	{ // ftrsplit
