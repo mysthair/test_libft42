@@ -19,7 +19,9 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-#define DEBUG
+#include <unistd.h>
+
+//#define DEBUG
 
 #define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
 	ft_putstr(T); ft_putstr("\"\n");
@@ -571,26 +573,25 @@ int     test_ft_tolower(int c)
 int    test_ft_memalloc(size_t size)
 {
 	void	*o;
-	void	*p;
+	void	*m;
 	char	*t;
 	size_t	i;
 
-	o = ft_memalloc(size);
-	if (o)
-		free(o);
-	p = malloc(size);
-	TEST((p && o) || (!p && !o));
-	if (p)
+	m = ft_memalloc(size);
+	if (m)
 	{
-		t = (char*)p;
+		t = (char*)m;
 		i = 0;
 		while (i < size)
 		{
 			TEST(t[i] == 0);
 			i++;
 		}
-		free(p);
+		free(m);
 	}
+	o = malloc(size);
+	free(o);
+	TEST((m && o) || (!m && !o));
 	return (1);
 }
 
@@ -1770,8 +1771,8 @@ int main()
 				{
 					if (WTERMSIG(status) == SIGSEGV)
 						printf("\033[33mSegmentation Fault\033[0m\n");
-					else if (WTERMSIG(status) == SIGEMT)
-						printf("\033[33mBus Error\033[0m\n");
+					/*else if (WTERMSIG(status) == SIGEMT)
+						printf("\033[33mBus Error\033[0m\n");*/
 					else if (WTERMSIG(status) == SIGILL)
 						printf("\033[33mIllegal Instruction\033[0m\n");
 					else
@@ -1812,8 +1813,8 @@ int main()
 				{
 					if (WTERMSIG(status) == SIGSEGV)
 						ft_putstr("\033[33mSegmentation Fault\033[0m\n");
-					else if (WTERMSIG(status) == SIGEMT)
-						ft_putstr("\033[33mBus Error\033[0m\n");
+					/*else if (WTERMSIG(status) == SIGEMT)
+						ft_putstr("\033[33mBus Error\033[0m\n");*/
 					else if (WTERMSIG(status) == SIGILL)
 						ft_putstr("\033[33mIllegal Instruction\033[0m\n");
 					else
