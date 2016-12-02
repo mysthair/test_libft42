@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/02 18:50:03 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/02 19:02:49 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -743,11 +743,11 @@ int main()
 			buffer[i] = (char)(i+1);
 	}
 	ft_strdel(&buffer);
-	buffer = ft_memalloc(255);
+	buffer = ft_memalloc(256);
 	FAIL_IF_NOT(buffer != NULL);
 	for (i = 0; i < 255; i++)
 		buffer[i] = (char)(i+1);
-
+	buffer[255] = '\0';
 	//ft_memset
 	FAIL_IF_NOT(test_ft_memset(buffer, 0, 61));
 	FAIL_IF_NOT(test_ft_memset(buffer, 'Z', 40));
