@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/02 17:49:37 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/02 18:50:03 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 		ft_strdel(&d);
 		ft_strdel(&s);
 	}		
-
+	ft_strdel(&origin);
 
 	return (1);
 }
@@ -756,7 +756,7 @@ int main()
 
 	//ft_bzero
 	FAIL_IF_NOT(test_ft_bzero(buffer+2, 20));
-
+	
 	//ft_memcpy
 	{
 		int i;
@@ -856,7 +856,7 @@ int main()
 		FAIL_IF_NOT(test_ft_strlen(c));
 		FAIL_IF_NOT(test_ft_strlen(buffer));
 	}
-
+ft_strdel(&buffer);
 	{//strcpy
 		char *src = "1234567890";
 		char dst[100];
