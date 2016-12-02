@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/30 16:39:18 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/12/02 11:30:54 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=test_libft
 
 DIRH=./
 DIRC=
-DIRLIBFT=../libft/
+DIRLIBFT=../libft_a_tester/
 DIRO=objs/
 
 LIBFT=libft.a
