@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/01 16:31:07 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/02 10:32:17 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1263,6 +1263,25 @@ int main()
 		TESTONS(test_ft_strdel(0));
 	}
 
+	{//strnew
+		char	*char30 = ft_strnew(30);
+		int	i;
+		for (i=0; i<=30; i++)
+		{ 
+			TESTONS(char30[i] == '\0');
+		}
+		ft_strdel(&char30);
+	}
+	{//strnew
+		char	*char0 = ft_strnew(0);
+		int	i;
+		for (i=0; i<=0; i++)
+		{ 
+			TESTONS(char0[i] == '\0');
+		}
+		ft_strdel(&char0);
+	}
+
 
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
@@ -1604,7 +1623,7 @@ int main()
 			char *str = "Un jour je serai, le meilleur codeur ! ^^";
 
 			char	* r1 = ft_strsub(str, 0, (size_t)-10);
-			char	* r2 = ft_strsub2(str, 0, (size_t)-10);
+//			char	* r2 = ft_strsub2(str, 0, (size_t)-10);
 			if (r1 == NULL)
 				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
 			else
@@ -1612,9 +1631,9 @@ int main()
 				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r1);
 			}
 			TESTONS(r1 ==NULL);
-			TESTONS(r2 != NULL && ft_strequ(r2, str));
+//			TESTONS(r2 != NULL && ft_strequ(r2, str));
 			ft_strdel(&r1);
-			ft_strdel(&r2);
+//			ft_strdel(&r2);
 		}
 		{
 			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
