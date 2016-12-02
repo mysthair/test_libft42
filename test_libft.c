@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/02 15:00:07 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/02 16:04:26 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,24 @@ int	test_ft_memchr(const void *src, int c, size_t n)
 int     test_ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	return (ft_memcmp(s1, s2, n) == memcmp(s1,s2,n));
+}
+
+int	test_ft_strequ(const char *s1, const char *s2)
+{
+	if(!s1 || !s2)
+	{	
+		TEST(((s1 == s2) && ft_strequ(s1, s2)) || ((s1 != s2) && !ft_strequ(s1, s2)));
+	}
+	return (1);
+}
+
+int	test_ft_strnequ(const char *s1, const char *s2, size_t n)
+{
+	if(!s1 || !s2)
+	{	
+		TEST(((s1 == s2) && ft_strnequ(s1, s2, n)) || ((s1 != s2) && !ft_strnequ(s1, s2, n)));
+	}
+	return (1);
 }
 
 
@@ -1290,6 +1308,14 @@ int main()
 		ft_memdel(&null7);
 		ft_strdel(&ft_strclr_of_abcdef);
 	}
+	{//ft_strclr
+		char 	*ft_strclr_of_vide = ft_strdup("");
+		ft_strclr(ft_strclr_of_vide);
+		void	*null1 = ft_memalloc(1);
+		FAIL_IF_NOT(ft_memcmp((void*)ft_strclr_of_vide, null1, 1) == 0);
+		ft_memdel(&null1);
+		ft_strdel(&ft_strclr_of_vide);
+	}
 
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
@@ -1362,6 +1388,65 @@ int main()
 		ft_strdel(&ft_strmapi_upper_txtaz123HAHZ);
 		ft_strdel(&ft_strmapi_lower_txtaz123HAHZ);
 	}
+
+
+	{ // strequ
+		char *abcd = "abcd";
+		FAIL_IF_NOT(test_ft_strequ(abcd, abcd));
+		FAIL_IF_NOT(test_ft_strequ(abcd, "abcd"));
+		FAIL_IF_NOT(test_ft_strequ("abcd", "abcd"));
+		FAIL_IF_NOT(test_ft_strequ(abcd, "ab"));
+		FAIL_IF_NOT(test_ft_strequ("ab", abcd));
+		FAIL_IF_NOT(test_ft_strequ(abcd, ""));
+		FAIL_IF_NOT(test_ft_strequ("", abcd));
+		FAIL_IF_NOT(test_ft_strequ("", ""));
+		FAIL_IF_NOT(test_ft_strequ("", NULL));
+		FAIL_IF_NOT(test_ft_strequ(NULL, ""));
+		FAIL_IF_NOT(test_ft_strequ(NULL, abcd));
+		FAIL_IF_NOT(test_ft_strequ(abcd, NULL));
+	}
+
+	{ // strnequ
+		char *abcd = "abcd";
+		int i = 10;
+		while (i > -3)
+		{
+			FAIL_IF_NOT(test_ft_strnequ(abcd, abcd, 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "abcd", 2));
+			FAIL_IF_NOT(test_ft_strnequ("abcd", "abcd", 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "ab", 2));
+			FAIL_IF_NOT(test_ft_strnequ("ab", abcd, 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "", 2));
+			FAIL_IF_NOT(test_ft_strnequ("", abcd, 2));
+			FAIL_IF_NOT(test_ft_strnequ("", "", 2));
+			FAIL_IF_NOT(test_ft_strnequ("", NULL, 2));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, "", 2));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, 2));
+
+			i--;
+		}
+	}
+	{	char *abcde = "abcde";
+		char *xyz = "xyz"
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, xyz), "abcdexyz"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, ""),"abcde"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcd, NULL),"abcd"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz"));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL),""));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""),""));
+	}
+
+	{
+		FAIL_IF_NOT(0);
+	}
+
+	{
+		FAIL_IF_NOT(0);
+	}
+
 
 	{ // ftrsplit
 		char	*__Ha_Ho_123______erf_ = "__Ha_Ho_123______erf_";
