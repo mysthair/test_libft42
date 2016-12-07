@@ -485,6 +485,17 @@ int     test_ft_strncmp(char *s1, char *s2, size_t size)
 
 int     test_ft_atoi(char *str)
 {
+	int o,m;
+
+	o = atoi(str);
+	m = ft_atoi(str);
+	if(o != m)
+	{
+		ft_putstr("ft_atoi(\""); ft_putstr(str), ft_putstr("\" = ");
+		ft_putnbr(m); ft_putstr("\n");
+		ft_putstr("   atoi(\""); ft_putstr(str), ft_putstr("\" = ");
+		ft_putnbr(o); ft_putstr("\n");
+	}
 	TEST(atoi(str) == ft_atoi(str));
 	return (1);
 }
