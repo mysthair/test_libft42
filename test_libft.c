@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/02 19:02:49 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/07 13:42:20 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1434,10 +1434,14 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, ""),"abcde"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL),""));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""),""));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde") 
+				|| ft_strequ(ft_strjoin(abcde, NULL), NULL));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz")
+				|| ft_strequ(ft_strjoin(NULL, xyz), NULL));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL), "")
+				|| ft_strequ(ft_strjoin(NULL, NULL), NULL));
+		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""), "")
+			   	|| ft_strequ(ft_strjoin(NULL, ""), NULL));
 	}
 
 /*	{ ici
