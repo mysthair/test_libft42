@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/07 13:42:20 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/07 20:18:41 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -907,6 +907,22 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strncat(dst, "X", 1));
 		FAIL_IF_NOT(ft_strequ(dst, "123456789abcX"));
 	}
+
+	{
+		FAIL_IF_NOT(ft_strequ(ft_strtrim("  test1   "), "test1"));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \n \t bidule \n \t "), "bidule"));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \r\t\n "), "\r"));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim("  \t \n   "), ""));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(" a "), "a"));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim("\n"), ""));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim("\t"), ""));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(NULL), NULL));
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \176			 "), "\176"));
+		char a_strange_char[] = {'-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
+		FAIL_IF_NOT(ft_strequ(ft_strtrim(a_strange_char), a_strange_char));
+	}
+
+
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
@@ -1649,6 +1665,13 @@ ft_strdel(&buffer);
 		{
 			char 	*abcde = "abcde";
 			char	*r;
+			if (!ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"))
+			{
+				ft_putstr("ft_strsub(abcde, 2, 1) = \"");
+				ft_putstr(r);
+				ft_putstr("\"\n");
+				ft_strdel(&r);
+			}
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"));
 			ft_strdel(&r);
 		}
