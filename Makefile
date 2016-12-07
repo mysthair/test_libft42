@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/11/22 12:04:11 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/12/02 11:30:54 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,9 @@ LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
 CC=gcc
-CFLAGS=-g -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
+CFLAGS=-ggdb -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
-INCMD:=$(shell if [ ! -f $(DIRLIBFT)ft_malloc.c ]; then echo malloc ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_free.c ]; then echo free ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
 LOCALFUNCS:=$(INCMD)
