@@ -933,6 +933,20 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(ft_strtrim(a_strange_char), a_strange_char));
 	}
 
+	{//strtrim
+		char *txt = " Ceci, est   le texte à\tdécouper...     ";
+		char **tab = ft_strsplit(txt, ' ');
+		FAIL_IF_NOT(tab && *tab && **tab);
+		FAIL_IF_NOT(ft_strequ(tab[0], "Ceci,"));
+		FAIL_IF_NOT(ft_strequ(tab[1], "est"));
+		FAIL_IF_NOT(ft_strequ(tab[2], "le"));
+		FAIL_IF_NOT(ft_strequ(tab[3], "texte"));
+		FAIL_IF_NOT(ft_strequ(tab[4], "à\tdécouper..."));
+		FAIL_IF_NOT(tab[5] == NULL);
+		for (int i=0; i<5; i++)
+			ft_memdel((void**)(tab + i));
+		ft_memdel((void*)tab);
+	}
 
 	{//strlcat
 		char vide31[31];
@@ -1144,10 +1158,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_atoi("0xFF"));//   == 0);
 		FAIL_IF_NOT(test_ft_atoi("&x0A"));//   == 0);
 		FAIL_IF_NOT(test_ft_atoi("2147483647"));//  == 2147483647);
-		FAIL_IF_NOT(test_ft_atoi("2147483648"));//  == -2147483648);
-		FAIL_IF_NOT(test_ft_atoi("2147483649"));//  == -2147483647);
 		FAIL_IF_NOT(test_ft_atoi("-2147483647"));//  == -2147483647);
 		FAIL_IF_NOT(test_ft_atoi("-2147483648"));//  == -2147483648);
+#ifndef __armv6l__	
+		FAIL_IF_NOT(test_ft_atoi("2147483648"));//  == -2147483648);
+		FAIL_IF_NOT(test_ft_atoi("2147483649"));//  == -2147483647);
 		FAIL_IF_NOT(test_ft_atoi("-2147483649"));//  == 2147483647);
 		FAIL_IF_NOT(test_ft_atoi("9223372036854775805"));//  == -3);
 		FAIL_IF_NOT(test_ft_atoi("9223372036854775806"));//  == -2);
@@ -1156,6 +1171,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775806"));// == 2);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775807"));// == 1);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775808"));// == 0);
+#endif
 		/* uncomment for testing the same coportment than the real atoi :
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775808"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775809"));//  == -1);
@@ -1922,6 +1938,59 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(ft_strequ(r, "t want thi"));
 		}
 	}
+
+
+
+	{
+		//another test for ft_lstmap
+		char* tab[] = { "Un", "Deux", "Trois", "...", 
+						"A very long phrase... more than 20 Characters... "
+						"A very long phrase... more than 20 Characters... "
+						"A very long phrase... more than 20 Characters... "
+						"A very long phrase... more than 20 Characters... "
+						"A very long phrase... more than 20 Characters... "
+						"repeted five times :P",
+						"Six", "Sept", "Huit", "Neuf", "Dix"
+			};
+		t_list *lst = ft_lstnew((void*)"Zero", 5);
+		for (int i=0; i<10; i++)
+			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
+		lst_show_lst(lst);
+
+		t_list* func2_for_lstmap(t_list *elt)
+		{
+			return (ft_lstnew(ft_strjoin(elt->content, elt->content), elt->content_size * 2 - 1)); 
+		};
+	
+		t_list *lst2 = ft_lstmap(lst, &func2_for_lstmap);
+		ft_lstdel(&lst, &lst_free_elt);
+		ft_lstiter(lst2, &lst_show_elt);
+		
+		t_list	*l = lst2;
+		FAIL_IF_NOT(ft_strequ(l->content, "UnUn") && l->content_size == 5);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "DeuxDeux") && l->content_size == 9);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "TroisTrois") && l->content_size == 11);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "......") && l->content_size == 7);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :PA very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :P"));
+	ft_putnbr(lst2->content_size);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "SixSix") && l->content_size == 7);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "SeptSept") && l->content_size == 9);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "HuitHuit") && l->content_size == 9);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "NeufNeuf") && l->content_size == 9);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "DixDix") && l->content_size == 7);
+		l = l->next;
+		FAIL_IF_NOT(ft_strequ(l->content, "ZeroZero") && l->content_size == 9);
+	}
+
 
 	ft_strdel(&buffer);
 	return (0);
