@@ -163,7 +163,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 
 		ft_putendl("before ft_memmove(dest, src, n)");
 		ft_putendl("d :");
-		ft_print_memory(d, n + k);
+		ft_print_memory(d, n);
 		ft_putendl("s :");
 		ft_print_memory(s, n); 
 
@@ -174,9 +174,9 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 		{
 			ft_putendl("after  ft_memmove(dest, src, n)");
 			ft_putendl("d :");
-			ft_print_memory(d, n + k);
+			ft_print_memory(d, n);
 			ft_putendl("dest :");
-			ft_print_memory(dest, n + k);
+			ft_print_memory(dest, n);
 		}	
 		TEST(memcmp(d, dest, n) == 0);
 
@@ -438,7 +438,6 @@ int		test_ft_strstr(const char *big, const char *little)
 				&& ft_strncmp(m, little, l) == 0));
 	return (1);
 }
-
 int		test_ft_strnstr(const char *big, const char *little, size_t size)
 {
 	char	*o;
@@ -455,28 +454,20 @@ int		test_ft_strnstr(const char *big, const char *little, size_t size)
 	return (1);
 }
 
+static int sign(int i)
+{
+	return (i > 0 ? 1 : (i == 0 ? 0 : -1));
+}
 int     test_ft_strcmp(char const *s1, char const *s2)
 {
+	if (sign(strcmp(s1, s2)) != sign(ft_strcmp(s1, s2)))
 	{
-		char *os1, *os2;
-
-		os1 = ft_strdup(s1);
-		os2 = ft_strdup(s2);
-
-		ft_strcmp(s1, s2);
-		TEST(strcmp(s1, os1) == 0);
-		TEST(strcmp(s2, os2) == 0);
-		ft_strdel(&os1); 
-		ft_strdel(&os2);
-	}
-	if (strcmp(s1, s2) != ft_strcmp(s1, s2))
-	{
-		SHOW_STRING(" ", s1);
-		SHOW_STRING(" ", s2);
+		SHOW_STRING("", s1);
+		SHOW_STRING("", s2);
 		ft_putstr("strcmp(s1, s2) = "); ft_putnbr(strcmp(s1, s2)); ft_putstr("\n");
 		ft_putstr("ft_strcmp(s1, s2) = "); ft_putnbr(ft_strcmp(s1, s2)); ft_putstr("\n");
 	}
-	TEST(strcmp(s1, s2) == ft_strcmp(s1, s2));
+	TEST(sign(strcmp(s1, s2)) == sign(ft_strcmp(s1, s2)));
 	return (1);
 }
 
@@ -494,14 +485,14 @@ int     test_ft_strncmp(char *s1, char *s2, size_t size)
 		ft_strdel(&os1); 
 		ft_strdel(&os2);
 	}
-	if (strncmp(s1, s2, size) != ft_strncmp(s1, s2, size))
+	if (sign(strncmp(s1, s2, size)) != sign(ft_strncmp(s1, s2, size)))
 	{
 		SHOW_STRING(" ", s1);
 		SHOW_STRING(" ", s2);
 		ft_putstr("strncmp(s1, s2, size) = "); ft_putnbr(strncmp(s1, s2, size)); ft_putstr("\n");
 		ft_putstr("ft_strncmp(s1, s2, size) = "); ft_putnbr(ft_strncmp(s1, s2, size)); ft_putstr("\n");
 	}
-	TEST(strncmp(s1, s2, size) == ft_strncmp(s1, s2, size));
+	TEST(sign(strncmp(s1, s2, size)) == sign(ft_strncmp(s1, s2, size)));
 	return (1);
 }
 
@@ -669,7 +660,7 @@ char	strmapi_func_lower(unsigned i, char c)
 #else
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 #endif
-#define BIG (1024*1024*1024)
+//#define BIG (1024*1024*1024)
 
 //#define WARNING_IF_NOT(cond) ft_putstr("testons " STRINGIFY(cond) " .. \n"); FT_WARNING(cond); ft_putstr("        " STRINGIFY(cond) " .. OK\n"); 
 
@@ -690,6 +681,7 @@ void	lst_show_lst(t_list *l)
 		l = l->next;
 	}
 }
+
 void lst_free_elt(void* data, size_t size)
 {
 	char *   elt;
@@ -744,7 +736,7 @@ int main()
 	buffer = NULL;
 	FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
 	ft_strdel(&buffer);
-	buffer = malloc(BIG);
+	/*buffer = malloc(BIG);
 	if(buffer)
 	{
 		ft_strdel(&buffer);
@@ -753,7 +745,7 @@ int main()
 		for (i = 0; i < BIG; i++)
 			buffer[i] = (char)(i+1);
 	}
-	ft_strdel(&buffer);
+	ft_strdel(&buffer);*/
 	buffer = ft_memalloc(256);
 	FAIL_IF_NOT(buffer != NULL);
 	for (i = 0; i < 255; i++)
@@ -920,17 +912,28 @@ ft_strdel(&buffer);
 	}
 
 	{
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("  test1   "), "test1"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \n \t bidule \n \t "), "bidule"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \r\t\n "), "\r"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("  \t \n   "), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" a "), "a"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("\n"), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("\t"), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(NULL), NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \176			 "), "\176"));
-		char a_strange_char[] = {'-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(a_strange_char), a_strange_char));
+		char *s = NULL;
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("  test1   ")), "test1"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \n \t bidule \n \t ")), "bidule"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \r\t\n ")), "\r"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("  \t \n   ")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" a ")), "a"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("\n")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("\t")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(NULL)), NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \176			 ")), "\176"));
+		ft_strdel(&s);
+		char a_strange_char[] = { '-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(a_strange_char)), a_strange_char));
+		ft_strdel(&s);
 	}
 
 	{//strtrim
@@ -1052,7 +1055,7 @@ ft_strdel(&buffer);
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		FAIL_IF_NOT(test_ft_strlcat(abcde31, "123456789012", 10));
 	}
-
+	
 	{//strchr
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '6'));
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", 'X'));
@@ -1312,13 +1315,13 @@ ft_strdel(&buffer);
 	{//ft_memalloc
 		FAIL_IF_NOT(test_ft_memalloc(10));
 		FAIL_IF_NOT(test_ft_memalloc(0));
-		FAIL_IF_NOT(test_ft_memalloc(BIG));
+		//FAIL_IF_NOT(test_ft_memalloc(BIG));
 	}
 
 	{ //ft_memdel
 		FAIL_IF_NOT(test_ft_memdel(1024));
 		FAIL_IF_NOT(test_ft_memdel(0));
-		FAIL_IF_NOT(test_ft_memdel(BIG));
+	//n	FAIL_IF_NOT(test_ft_memdel(BIG));
 	}	
 
 	{// strdel
@@ -1473,18 +1476,27 @@ ft_strdel(&buffer);
 	}
 	{	char *abcde = "abcde";
 		char *xyz = "xyz";
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, xyz), "abcdexyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, ""),"abcde"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde") 
-				|| (ft_strjoin(abcde, NULL) == NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz")
-				|| (ft_strjoin(NULL, xyz) == NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL), "")
-				|| (ft_strjoin(NULL, NULL) == NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""), "")
-				|| (ft_strjoin(NULL, "") == NULL));
+		char *s;
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, xyz)), "abcdexyz"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, "")),"abcde"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin("", xyz)), "xyz"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin("", "")),""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, NULL)),"abcde") 
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, xyz)),"xyz")
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, NULL)), "")
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, "")), "")
+			   	|| (s == NULL));
+		ft_strdel(&s);
 	}
 
 /*	{ ici
@@ -1753,7 +1765,6 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(vide, 0, 0)), ""));
 			ft_strdel(&r);
 		}
-
 
 		pid_t pid = fork();
 		if (pid == -1) 
