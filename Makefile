@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/12/02 11:30:54 by jleblanc         ###   ########.fr        #
+#    Updated: 2016/12/09 15:03:47 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
 CC=gcc
-CFLAGS=-ggdb -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
+CFLAGS=-g3 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
