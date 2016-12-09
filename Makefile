@@ -88,7 +88,7 @@ $(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)  $(MISSING_O)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(MISSING_O) $(LIBFT) $(OBJS) 
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(LIBFT) $(OBJS) 
 
 test: $(NAME)
 	./$(NAME)	
