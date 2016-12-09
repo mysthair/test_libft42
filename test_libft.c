@@ -1452,21 +1452,21 @@ ft_strdel(&buffer);
 
 	{ // strnequ
 		char *abcd = "abcd";
-		int i = 10;
+		int i = 6;
 		while (i > -3)
 		{
-			FAIL_IF_NOT(test_ft_strnequ(abcd, abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "abcd", 2));
-			FAIL_IF_NOT(test_ft_strnequ("abcd", "abcd", 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "ab", 2));
-			FAIL_IF_NOT(test_ft_strnequ("ab", abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "", 2));
-			FAIL_IF_NOT(test_ft_strnequ("", abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ("", "", 2));
-			FAIL_IF_NOT(test_ft_strnequ("", NULL, 2));
-			FAIL_IF_NOT(test_ft_strnequ(NULL, "", 2));
-			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "abcd", i));
+			FAIL_IF_NOT(test_ft_strnequ("abcd", "abcd", i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "ab", i));
+			FAIL_IF_NOT(test_ft_strnequ("ab", abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "", i));
+			FAIL_IF_NOT(test_ft_strnequ("", abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ("", "", i));
+			FAIL_IF_NOT(test_ft_strnequ("", NULL, i));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, "", i));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, i));
 
 			i--;
 		}
@@ -1478,13 +1478,13 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde") 
-				|| ft_strequ(ft_strjoin(abcde, NULL), NULL));
+				|| (ft_strjoin(abcde, NULL) == NULL));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz")
-				|| ft_strequ(ft_strjoin(NULL, xyz), NULL));
+				|| (ft_strjoin(NULL, xyz) == NULL));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL), "")
-				|| ft_strequ(ft_strjoin(NULL, NULL), NULL));
+				|| (ft_strjoin(NULL, NULL) == NULL));
 		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""), "")
-			   	|| ft_strequ(ft_strjoin(NULL, ""), NULL));
+				|| (ft_strjoin(NULL, "") == NULL));
 	}
 
 /*	{ ici
