@@ -22,7 +22,7 @@ LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
 CC=gcc
-CFLAGS=-ggdb -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
+CFLAGS=-ggdb -O2 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
