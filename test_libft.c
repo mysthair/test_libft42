@@ -670,7 +670,7 @@ void	lst_show_elt(t_list *l)
 	char *	elt;
 
 	elt = (char *)(l->content);
-	printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, elt, l->content_size, l->next);
+	printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
 }
 
 void	lst_show_lst(t_list *l)
@@ -687,30 +687,22 @@ void lst_free_elt(void* data, size_t size)
 	char *   elt;
 
 	elt = (char *)data;
-	size = 0 + size;
-	printf("freeing elt %p(\"%s\")\n", elt, elt); 
+	printf("freeing elt %p(\"%s\")\n", elt, size?(elt?elt:""):"(O-sized)"); 
 	ft_memdel(&data);
 }
 
 t_list *func_for_ft_lstmap(t_list *elem)
 {
-	static char* buffer = NULL;
+	char* buffer = NULL;
 	static t_list	*tmp = NULL;
 	char	*s;
-	size_t	l;
-	if(buffer==NULL)
-	{
-		buffer = ft_memalloc(13*sizeof(char));
-		tmp = (t_list*)ft_memalloc(sizeof(t_list));
-	}
+	size_t		l = elem->content_size;
+	buffer = ft_strnew(l);
+	tmp = (t_list*)ft_memalloc(sizeof(t_list));
 	s = (char*)(elem->content);
-	l = ft_strlen(s);//l = (ft_strlen(s) % 10);
-	//if(l == 0)
-	//	return (NULL);
-	tmp->content_size = l+1;
-	for (size_t i=0; i<l; i++)
-		buffer[i] = s[l-1-i];
-	buffer[l] = '\0';
+	tmp->content_size = l;
+	for (size_t i = 0; i < l - 1; i++)
+		buffer[i] = s[l - 2 - i];
 	tmp->content = (void*)buffer;
 	tmp->next = NULL;
 	return (tmp); 
@@ -1532,8 +1524,6 @@ ft_strdel(&buffer);
 		ft_strdel(&t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(12345)),"12345"));
 		ft_strdel(&t);
-		t = ft_itoa((int)0x7FFFFFFFFFFFFFFF);
-		ft_putendl(t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(0x7FFFFFFF)),"2147483647"));
 		ft_strdel(&t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(0x80000000)),"-2147483648"));
@@ -1549,9 +1539,9 @@ ft_strdel(&buffer);
 			t_list	*tst[4];
 
 			tst[0] = ft_lstnew("1", 2);
-			tst[1] = ft_lstnew("12", 3);
-			tst[2] = ft_lstnew("123", 4);
-			tst[3] = ft_lstnew("1234", 5);
+			tst[1] = ft_lstnew(NULL, 3);
+			tst[2] = ft_lstnew("123", 0);
+			tst[3] = ft_lstnew(NULL, 0);
 
 
 			lst_show_elt(tst[0]);
@@ -1559,10 +1549,10 @@ ft_strdel(&buffer);
 			lst_show_elt(tst[2]);
 			lst_show_elt(tst[3]);
 
-			ft_strdel((void*)(tst + 0));
-			ft_strdel((void*)(tst + 1));
-			ft_strdel((void*)(tst + 2));
-			ft_strdel((void*)(tst + 3));
+			ft_lstdel(tst + 0, &lst_free_elt);
+			ft_lstdel(tst + 1, &lst_free_elt);
+			ft_lstdel(tst + 2, &lst_free_elt);
+			ft_lstdel(tst + 3, &lst_free_elt);
 		}
 
 		const char *z1 = "hello";
@@ -1704,13 +1694,13 @@ ft_strdel(&buffer);
 		{
 			char 	*abcde = "abcde";
 			char	*r;
-			if (!ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"))
+			if (!ft_strequ((r = ft_strsub(abcde, 2, 1)), "c"))
 			{
 				ft_putstr("ft_strsub(abcde, 2, 1) = \"");
 				ft_putstr(r);
 				ft_putstr("\"\n");
-				ft_strdel(&r);
 			}
+			ft_strdel(&r);
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"));
 			ft_strdel(&r);
 		}
@@ -1730,7 +1720,7 @@ ft_strdel(&buffer);
 		{
 			char 	*abcde = "abcde";
 			char	*r;
-			FAIL_IF_NOT(ft_strequ((r=ft_strsub(abcde, 2, 0)), ""));
+			FAIL_IF_NOT(ft_strequ((r = ft_strsub(abcde, 2, 0)), ""));
 			ft_strdel(&r);
 		}
 
@@ -1928,25 +1918,26 @@ ft_strdel(&buffer);
 			ft_strdel(&result);
 		}
 
-		/*{  ***crash !! ***
+		{
 
 		  char *str = "Un jour je serai, le meilleur codeur ! ^^";
 
 		  char	* r = ft_strsub(str, 19, (size_t)-10);
 		  if (r == NULL)
-		  ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
+		 	 ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
 		  else
 		  {
-		  SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
+		  	SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
 		  }
-		  FAIL_IF_NOT(r != NULL && ft_strcmp(r, str) == 0); // crash?
+		  FAIL_IF_NOT(r == NULL || ft_strcmp(r, str) == 0);
 		  ft_strdel(&r);
-		  }*/
+		}
 		{
 			char    *str = "i just want this part #############";
 			char	* r = ft_strsub(str, 5, 10);
 			//				      1234567890
 			FAIL_IF_NOT(ft_strequ(r, "t want thi"));
+			ft_strdel(&r);
 		}
 	}
 
