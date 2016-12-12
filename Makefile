@@ -97,5 +97,8 @@ testnorm:
 	norminette $(DIRLIBFT)
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
 
-log:
-	make test_libft && valgrind --tool=memcheck --leak-check=yes --log-file=vg.log ./test_libft
+vg.log: test_libft
+	valgrind --tool=memcheck --leak-check=yes --track-origins=yes --log-fd=1 ./test_libft> vg.log
+
+memcheck: vg.log
+	less vg.log

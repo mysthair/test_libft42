@@ -670,7 +670,13 @@ void	lst_show_elt(t_list *l)
 	char *	elt;
 
 	elt = (char *)(l->content);
-	printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
+	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
+	ft_putaddr(l); 
+	ft_putstr(":[content:");	ft_putaddr(elt); 
+	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
+	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
+	ft_putstr(", next:");		ft_putaddr(l->next);
+	ft_putstr("]\n");
 }
 
 void	lst_show_lst(t_list *l)
@@ -682,13 +688,25 @@ void	lst_show_lst(t_list *l)
 	}
 }
 
-void lst_free_elt(void* data, size_t size)
+void func_del_for_ft_lstmap(void* data, size_t size)
 {
 	char *   elt;
 
 	elt = (char *)data;
-	printf("freeing elt %p(\"%s\")\n", elt, size?(elt?elt:""):"(O-sized)"); 
-	ft_memdel(&data);
+	if (!elt)
+		ft_putstr("func_del_for_ft_lstmap *NULL !\n");
+	else	
+	{ 
+		ft_putstr("func_del_for_ft_lstmap ");
+		ft_putaddr(elt); 
+		if (elt) { 
+			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
+		} 
+		ft_putstr(", size ");	ft_putnbr(size);
+		ft_putstr("\n");
+
+		ft_memdel(&data);
+	}
 }
 
 t_list *func_for_ft_lstmap(t_list *elem)
@@ -708,13 +726,30 @@ t_list *func_for_ft_lstmap(t_list *elem)
 	return (tmp); 
 }
 
+t_list* func2_for_lstmap(t_list *elt)
+{
+	char	*txt;
+	size_t 	size; 
+	t_list	*new;
+
+	new = NULL;
+	if (elt)
+	{
+		txt = ft_strjoin(elt->content, elt->content);
+		size = ft_strlen(txt); 
+		new = ft_lstnew(txt, 1 + size);
+		ft_strdel(&txt);
+	}
+	return (new);
+};
+
 t_list  *lstmap_test_fn(t_list *list)
 { //copiryght moolitest
 	t_list  *l2;
 
 	l2 = malloc(sizeof(t_list));
 	bzero(l2, sizeof(t_list));
-	l2->content = malloc(list->content_size * 2);
+	l2->content = ft_memalloc(list->content_size * 2);
 	l2->content_size = list->content_size * 2;
 	return (l2);
 }
@@ -940,7 +975,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(tab[5] == NULL);
 		for (int i=0; i<5; i++)
 			ft_memdel((void**)(tab + i));
-		ft_memdel((void*)tab);
+		ft_memdel((void*)&tab);
 	}
 
 	{//strlcat
@@ -1508,9 +1543,9 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[2], "123"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
 		FAIL_IF_NOT(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
-		for (int i=0; i<4; i++)
-			ft_strdel(&(ftsplitresultof__Ha_Ho_123______erf_[i]));
-		ft_memdel((void**)ftsplitresultof__Ha_Ho_123______erf_);
+		for (int i=0; i < 4; i++)
+			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
+		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
 	{
@@ -1549,10 +1584,10 @@ ft_strdel(&buffer);
 			lst_show_elt(tst[2]);
 			lst_show_elt(tst[3]);
 
-			ft_lstdel(tst + 0, &lst_free_elt);
-			ft_lstdel(tst + 1, &lst_free_elt);
-			ft_lstdel(tst + 2, &lst_free_elt);
-			ft_lstdel(tst + 3, &lst_free_elt);
+			ft_lstdel(tst + 0, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 1, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 2, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 3, &func_del_for_ft_lstmap);
 		}
 
 		const char *z1 = "hello";
@@ -1573,7 +1608,7 @@ ft_strdel(&buffer);
 				}
 
 				ft_putendl("ft_lstdelone");
-				ft_lstdelone(&elt, &lst_free_elt);
+				ft_lstdelone(&elt, &func_del_for_ft_lstmap);
 				FAIL_IF_NOT(elt == NULL); */
 
 		{
@@ -1619,7 +1654,7 @@ ft_strdel(&buffer);
 		lst_show_lst(elt0); 
 
 		ft_putendl("ft_lstdel(&l, ..");
-		ft_lstdel(&lst, &lst_free_elt);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
 
 
 		t_list	*elt1 = (elt0 ? elt0->next : NULL);
@@ -1665,7 +1700,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(elt4 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
-		ft_lstdel(&elt0, &lst_free_elt);
+		ft_lstdel(&elt0, &func_del_for_ft_lstmap);
 	}
 
 
@@ -1686,6 +1721,8 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(map->content_size == 42);
 		FAIL_IF_NOT(!!map);
 		FAIL_IF_NOT(map->next->content_size == 200);
+		ft_lstdel(&list, &func_del_for_ft_lstmap);
+		ft_lstdel(&map, &func_del_for_ft_lstmap);
 	} 
 
 
@@ -1825,13 +1862,17 @@ ft_strdel(&buffer);
 				if (WIFSIGNALED(status))
 				{
 					if (WTERMSIG(status) == SIGSEGV)
-						printf("\033[33mSegmentation Fault\033[0m\n");
+						ft_putstr("\033[33mSegmentation Fault\033[0m\n");
 					/*else if (WTERMSIG(status) == SIGEMT)
 						printf("\033[33mBus Error\033[0m\n");*/
 					else if (WTERMSIG(status) == SIGILL)
-						printf("\033[33mIllegal Instruction\033[0m\n");
+						ft_putstr("\033[33mIllegal Instruction\033[0m\n");
 					else
-						printf("\033[33mThe processus receive the signal %d\033[0m\n", WTERMSIG(status));
+					{
+						ft_putstr("\033[33mThe processus receive the signal ");
+						ft_putnbr(WTERMSIG(status));
+						ft_putstr("\033[0m\n");
+					}
 				}
 			}
 			else
@@ -1954,21 +1995,20 @@ ft_strdel(&buffer);
 						"repeted five times :P",
 						"Six", "Sept", "Huit", "Neuf", "Dix"
 			};
-		t_list *lst = ft_lstnew((void*)"Zero", 5);
-		for (int i=0; i<10; i++)
+		t_list *lst = NULL;
+		for (int i=0; i < 10; i++)
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
 		lst_show_lst(lst);
 
-		t_list* func2_for_lstmap(t_list *elt)
-		{
-			return (ft_lstnew(ft_strjoin(elt->content, elt->content), elt->content_size * 2 - 1)); 
-		};
-	
-		t_list *lst2 = ft_lstmap(lst, &func2_for_lstmap);
-		ft_lstdel(&lst, &lst_free_elt);
-		ft_lstiter(lst2, &lst_show_elt);
+		t_list *lst2;
+		lst2 = ft_lstmap(lst, &func2_for_lstmap);
+		FAIL_IF_NOT(lst2 != NULL);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
 		
+		ft_lstiter(lst2, &lst_show_elt);
+	
 		t_list	*l = lst2;
+
 		FAIL_IF_NOT(ft_strequ(l->content, "UnUn") && l->content_size == 5);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "DeuxDeux") && l->content_size == 9);
@@ -1978,7 +2018,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(l->content, "......") && l->content_size == 7);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :PA very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :P"));
-	ft_putnbr(lst2->content_size);
+//	ft_putnbr(lst2->content_size);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "SixSix") && l->content_size == 7);
 		l = l->next;
@@ -1990,10 +2030,21 @@ ft_strdel(&buffer);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "DixDix") && l->content_size == 7);
 		l = l->next;
-		FAIL_IF_NOT(ft_strequ(l->content, "ZeroZero") && l->content_size == 9);
+		FAIL_IF_NOT(l == NULL);
+
+		ft_lstdel(&lst2, &func_del_for_ft_lstmap);
+		FAIL_IF_NOT(lst2 == NULL);
 	}
+	{
+		t_list	*lst = NULL;
+		ft_lstadd(&lst, ft_lstnew(NULL, 1));
+		ft_lstadd(&lst, ft_lstnew("#@!", 0));
+		ft_lstadd(&lst, NULL);
 
-
+		lst_show_lst(lst);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
+	}
 	ft_strdel(&buffer);
+	ft_putendl("ALL TESTS ARE OK");
 	return (0);
 }
