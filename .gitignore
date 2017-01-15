@@ -5,4 +5,5 @@
 test_libft
 libft.h
 test_libft.dSYM
-test_libft
+*.log
+a.out

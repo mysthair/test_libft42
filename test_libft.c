@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/09 15:54:42 by jleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/15 15:45:35 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 
 		ft_putendl("before ft_memmove(dest, src, n)");
 		ft_putendl("d :");
-		ft_print_memory(d, n + k);
+		ft_print_memory(d, n);
 		ft_putendl("s :");
 		ft_print_memory(s, n); 
 
@@ -174,9 +174,9 @@ int	test_ft_memmove(void *dest, const void *src, size_t n)
 		{
 			ft_putendl("after  ft_memmove(dest, src, n)");
 			ft_putendl("d :");
-			ft_print_memory(d, n + k);
+			ft_print_memory(d, n);
 			ft_putendl("dest :");
-			ft_print_memory(dest, n + k);
+			ft_print_memory(dest, n);
 		}	
 		TEST(memcmp(d, dest, n) == 0);
 
@@ -438,7 +438,6 @@ int		test_ft_strstr(const char *big, const char *little)
 				&& ft_strncmp(m, little, l) == 0));
 	return (1);
 }
-
 int		test_ft_strnstr(const char *big, const char *little, size_t size)
 {
 	char	*o;
@@ -455,28 +454,20 @@ int		test_ft_strnstr(const char *big, const char *little, size_t size)
 	return (1);
 }
 
+static int sign(int i)
+{
+	return (i > 0 ? 1 : (i == 0 ? 0 : -1));
+}
 int     test_ft_strcmp(char const *s1, char const *s2)
 {
+	if (sign(strcmp(s1, s2)) != sign(ft_strcmp(s1, s2)))
 	{
-		char *os1, *os2;
-
-		os1 = ft_strdup(s1);
-		os2 = ft_strdup(s2);
-
-		ft_strcmp(s1, s2);
-		TEST(strcmp(s1, os1) == 0);
-		TEST(strcmp(s2, os2) == 0);
-		ft_strdel(&os1); 
-		ft_strdel(&os2);
-	}
-	if (strcmp(s1, s2) != ft_strcmp(s1, s2))
-	{
-		SHOW_STRING(" ", s1);
-		SHOW_STRING(" ", s2);
+		SHOW_STRING("", s1);
+		SHOW_STRING("", s2);
 		ft_putstr("strcmp(s1, s2) = "); ft_putnbr(strcmp(s1, s2)); ft_putstr("\n");
 		ft_putstr("ft_strcmp(s1, s2) = "); ft_putnbr(ft_strcmp(s1, s2)); ft_putstr("\n");
 	}
-	TEST(strcmp(s1, s2) == ft_strcmp(s1, s2));
+	TEST(sign(strcmp(s1, s2)) == sign(ft_strcmp(s1, s2)));
 	return (1);
 }
 
@@ -494,14 +485,14 @@ int     test_ft_strncmp(char *s1, char *s2, size_t size)
 		ft_strdel(&os1); 
 		ft_strdel(&os2);
 	}
-	if (strncmp(s1, s2, size) != ft_strncmp(s1, s2, size))
+	if (sign(strncmp(s1, s2, size)) != sign(ft_strncmp(s1, s2, size)))
 	{
 		SHOW_STRING(" ", s1);
 		SHOW_STRING(" ", s2);
 		ft_putstr("strncmp(s1, s2, size) = "); ft_putnbr(strncmp(s1, s2, size)); ft_putstr("\n");
 		ft_putstr("ft_strncmp(s1, s2, size) = "); ft_putnbr(ft_strncmp(s1, s2, size)); ft_putstr("\n");
 	}
-	TEST(strncmp(s1, s2, size) == ft_strncmp(s1, s2, size));
+	TEST(sign(strncmp(s1, s2, size)) == sign(ft_strncmp(s1, s2, size)));
 	return (1);
 }
 
@@ -669,7 +660,7 @@ char	strmapi_func_lower(unsigned i, char c)
 #else
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 #endif
-#define BIG (1024*1024*1024)
+//#define BIG (1024*1024*1024)
 
 //#define WARNING_IF_NOT(cond) ft_putstr("testons " STRINGIFY(cond) " .. \n"); FT_WARNING(cond); ft_putstr("        " STRINGIFY(cond) " .. OK\n"); 
 
@@ -679,7 +670,13 @@ void	lst_show_elt(t_list *l)
 	char *	elt;
 
 	elt = (char *)(l->content);
-	printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, elt, l->content_size, l->next);
+	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
+	ft_putaddr(l); 
+	ft_putstr(":[content:");	ft_putaddr(elt); 
+	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
+	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
+	ft_putstr(", next:");		ft_putaddr(l->next);
+	ft_putstr("]\n");
 }
 
 void	lst_show_lst(t_list *l)
@@ -690,42 +687,60 @@ void	lst_show_lst(t_list *l)
 		l = l->next;
 	}
 }
-void lst_free_elt(void* data, size_t size)
+
+void func_del_for_ft_lstmap(void* data, size_t size)
 {
 	char *   elt;
 
 	elt = (char *)data;
-	size = 0 + size;
-	printf("freeing elt %p(\"%s\")\n", elt, elt); 
-	ft_memdel(&data);
+	if (!elt)
+		ft_putstr("func_del_for_ft_lstmap *NULL !\n");
+	else	
+	{ 
+		ft_putstr("func_del_for_ft_lstmap ");
+		ft_putaddr(elt); 
+		if (elt) { 
+			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
+		} 
+		ft_putstr(", size ");	ft_putnbr(size);
+		ft_putstr("\n");
+
+		ft_memdel(&data);
+	}
 }
 
 static t_list *func_for_ft_lstmap(t_list *elem)
 {
-	static char* buffer = NULL;
+	char* buffer = NULL;
 	static t_list	*tmp = NULL;
 	char	*s;
-	size_t	l;
-	if(buffer==NULL)
-	{
-		buffer = ft_memalloc(13*sizeof(char));
-		tmp = (t_list*)ft_memalloc(sizeof(t_list));
-	}
+	size_t		l = elem->content_size;
+	buffer = ft_strnew(l);
+	tmp = (t_list*)ft_memalloc(sizeof(t_list));
 	s = (char*)(elem->content);
-	l = ft_strlen(s);//l = (ft_strlen(s) % 10);
-	//if(l == 0)
-	//	return (NULL);
-	tmp->content_size = l+1;
-	for (size_t i=0; i<l; i++)
-		buffer[i] = s[l-1-i];
-	buffer[l] = '\0';
+	tmp->content_size = l;
+	for (size_t i = 0; i < l - 1; i++)
+		buffer[i] = s[l - 2 - i];
 	tmp->content = (void*)buffer;
 	tmp->next = NULL;
 	return (tmp); 
 }
-static t_list* func2_for_lstmap(t_list *elt)
+
+t_list* func2_for_lstmap(t_list *elt)
 {
-	return (ft_lstnew(ft_strjoin(elt->content, elt->content), elt->content_size * 2 - 1)); 
+	char	*txt;
+	size_t 	size; 
+	t_list	*new;
+
+	new = NULL;
+	if (elt)
+	{
+		txt = ft_strjoin(elt->content, elt->content);
+		size = ft_strlen(txt); 
+		new = ft_lstnew(txt, 1 + size);
+		ft_strdel(&txt);
+	}
+	return (new);
 };
 
 t_list  *lstmap_test_fn(t_list *list)
@@ -734,7 +749,7 @@ t_list  *lstmap_test_fn(t_list *list)
 
 	l2 = malloc(sizeof(t_list));
 	bzero(l2, sizeof(t_list));
-	l2->content = malloc(list->content_size * 2);
+	l2->content = ft_memalloc(list->content_size * 2);
 	l2->content_size = list->content_size * 2;
 	return (l2);
 }
@@ -748,7 +763,7 @@ int main()
 	buffer = NULL;
 	FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
 	ft_strdel(&buffer);
-	buffer = malloc(BIG);
+	/*buffer = malloc(BIG);
 	if(buffer)
 	{
 		ft_strdel(&buffer);
@@ -757,7 +772,7 @@ int main()
 		for (i = 0; i < BIG; i++)
 			buffer[i] = (char)(i+1);
 	}
-	ft_strdel(&buffer);
+	ft_strdel(&buffer);*/
 	buffer = ft_memalloc(256);
 	FAIL_IF_NOT(buffer != NULL);
 	for (i = 0; i < 255; i++)
@@ -924,17 +939,28 @@ ft_strdel(&buffer);
 	}
 
 	{
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("  test1   "), "test1"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \n \t bidule \n \t "), "bidule"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \r\t\n "), "\r"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("  \t \n   "), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" a "), "a"));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("\n"), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim("\t"), ""));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(NULL), NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(" \176			 "), "\176"));
-		char a_strange_char[] = {'-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
-		FAIL_IF_NOT(ft_strequ(ft_strtrim(a_strange_char), a_strange_char));
+		char *s = NULL;
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("  test1   ")), "test1"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \n \t bidule \n \t ")), "bidule"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \r\t\n ")), "\r"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("  \t \n   ")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" a ")), "a"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("\n")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("\t")), ""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(NULL)), NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \176			 ")), "\176"));
+		ft_strdel(&s);
+		char a_strange_char[] = { '-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
+		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(a_strange_char)), a_strange_char));
+		ft_strdel(&s);
 	}
 
 	{//strtrim
@@ -949,7 +975,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(tab[5] == NULL);
 		for (int i=0; i<5; i++)
 			ft_memdel((void**)(tab + i));
-		ft_memdel((void*)tab);
+		ft_memdel((void*)&tab);
 	}
 
 	{//strlcat
@@ -1056,7 +1082,7 @@ ft_strdel(&buffer);
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		FAIL_IF_NOT(test_ft_strlcat(abcde31, "123456789012", 10));
 	}
-
+	
 	{//strchr
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '6'));
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", 'X'));
@@ -1316,13 +1342,13 @@ ft_strdel(&buffer);
 	{//ft_memalloc
 		FAIL_IF_NOT(test_ft_memalloc(10));
 		FAIL_IF_NOT(test_ft_memalloc(0));
-		FAIL_IF_NOT(test_ft_memalloc(BIG));
+		//FAIL_IF_NOT(test_ft_memalloc(BIG));
 	}
 
 	{ //ft_memdel
 		FAIL_IF_NOT(test_ft_memdel(1024));
 		FAIL_IF_NOT(test_ft_memdel(0));
-		FAIL_IF_NOT(test_ft_memdel(BIG));
+	//n	FAIL_IF_NOT(test_ft_memdel(BIG));
 	}	
 
 	{// strdel
@@ -1456,39 +1482,48 @@ ft_strdel(&buffer);
 
 	{ // strnequ
 		char *abcd = "abcd";
-		int i = 10;
+		int i = 6;
 		while (i > -3)
 		{
-			FAIL_IF_NOT(test_ft_strnequ(abcd, abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "abcd", 2));
-			FAIL_IF_NOT(test_ft_strnequ("abcd", "abcd", 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "ab", 2));
-			FAIL_IF_NOT(test_ft_strnequ("ab", abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, "", 2));
-			FAIL_IF_NOT(test_ft_strnequ("", abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ("", "", 2));
-			FAIL_IF_NOT(test_ft_strnequ("", NULL, 2));
-			FAIL_IF_NOT(test_ft_strnequ(NULL, "", 2));
-			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, 2));
-			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, 2));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "abcd", i));
+			FAIL_IF_NOT(test_ft_strnequ("abcd", "abcd", i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "ab", i));
+			FAIL_IF_NOT(test_ft_strnequ("ab", abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, "", i));
+			FAIL_IF_NOT(test_ft_strnequ("", abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ("", "", i));
+			FAIL_IF_NOT(test_ft_strnequ("", NULL, i));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, "", i));
+			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, i));
+			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, i));
 
 			i--;
 		}
 	}
 	{	char *abcde = "abcde";
 		char *xyz = "xyz";
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, xyz), "abcdexyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, ""),"abcde"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin("", xyz), "xyz"));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin("", ""),""));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(abcde, NULL),"abcde") 
-				|| ft_strequ(ft_strjoin(abcde, NULL), NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, xyz),"xyz")
-				|| ft_strequ(ft_strjoin(NULL, xyz), NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, NULL), "")
-				|| ft_strequ(ft_strjoin(NULL, NULL), NULL));
-		FAIL_IF_NOT(ft_strequ(ft_strjoin(NULL, ""), "")
-			   	|| ft_strequ(ft_strjoin(NULL, ""), NULL));
+		char *s;
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, xyz)), "abcdexyz"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, "")),"abcde"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin("", xyz)), "xyz"));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin("", "")),""));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, NULL)),"abcde") 
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, xyz)),"xyz")
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, NULL)), "")
+				|| (s == NULL));
+		ft_strdel(&s);
+		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, "")), "")
+			   	|| (s == NULL));
+		ft_strdel(&s);
 	}
 
 /*	{ ici
@@ -1508,9 +1543,9 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[2], "123"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
 		FAIL_IF_NOT(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
-		for (int i=0; i<4; i++)
-			ft_strdel(&(ftsplitresultof__Ha_Ho_123______erf_[i]));
-		ft_memdel((void**)ftsplitresultof__Ha_Ho_123______erf_);
+		for (int i=0; i < 4; i++)
+			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
+		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
 
 	{
@@ -1524,8 +1559,6 @@ ft_strdel(&buffer);
 		ft_strdel(&t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(12345)),"12345"));
 		ft_strdel(&t);
-		t = ft_itoa((int)0x7FFFFFFFFFFFFFFF);
-		ft_putendl(t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(0x7FFFFFFF)),"2147483647"));
 		ft_strdel(&t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa(0x80000000)),"-2147483648"));
@@ -1541,9 +1574,9 @@ ft_strdel(&buffer);
 			t_list	*tst[4];
 
 			tst[0] = ft_lstnew("1", 2);
-			tst[1] = ft_lstnew("12", 3);
-			tst[2] = ft_lstnew("123", 4);
-			tst[3] = ft_lstnew("1234", 5);
+			tst[1] = ft_lstnew(NULL, 3);
+			tst[2] = ft_lstnew("123", 0);
+			tst[3] = ft_lstnew(NULL, 0);
 
 
 			lst_show_elt(tst[0]);
@@ -1551,10 +1584,10 @@ ft_strdel(&buffer);
 			lst_show_elt(tst[2]);
 			lst_show_elt(tst[3]);
 
-			ft_strdel((void*)(tst + 0));
-			ft_strdel((void*)(tst + 1));
-			ft_strdel((void*)(tst + 2));
-			ft_strdel((void*)(tst + 3));
+			ft_lstdel(tst + 0, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 1, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 2, &func_del_for_ft_lstmap);
+			ft_lstdel(tst + 3, &func_del_for_ft_lstmap);
 		}
 
 		const char *z1 = "hello";
@@ -1575,7 +1608,7 @@ ft_strdel(&buffer);
 				}
 
 				ft_putendl("ft_lstdelone");
-				ft_lstdelone(&elt, &lst_free_elt);
+				ft_lstdelone(&elt, &func_del_for_ft_lstmap);
 				FAIL_IF_NOT(elt == NULL); */
 
 		{
@@ -1621,7 +1654,7 @@ ft_strdel(&buffer);
 		lst_show_lst(elt0); 
 
 		ft_putendl("ft_lstdel(&l, ..");
-		ft_lstdel(&lst, &lst_free_elt);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
 
 
 		t_list	*elt1 = (elt0 ? elt0->next : NULL);
@@ -1667,7 +1700,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(elt4 == NULL);
 
 		ft_putendl("ft_lstdel(&m, ..");
-		ft_lstdel(&elt0, &lst_free_elt);
+		ft_lstdel(&elt0, &func_del_for_ft_lstmap);
 	}
 
 
@@ -1688,6 +1721,8 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(map->content_size == 42);
 		FAIL_IF_NOT(!!map);
 		FAIL_IF_NOT(map->next->content_size == 200);
+		ft_lstdel(&list, &func_del_for_ft_lstmap);
+		ft_lstdel(&map, &func_del_for_ft_lstmap);
 	} 
 
 
@@ -1696,13 +1731,13 @@ ft_strdel(&buffer);
 		{
 			char 	*abcde = "abcde";
 			char	*r;
-			if (!ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"))
+			if (!ft_strequ((r = ft_strsub(abcde, 2, 1)), "c"))
 			{
 				ft_putstr("ft_strsub(abcde, 2, 1) = \"");
 				ft_putstr(r);
 				ft_putstr("\"\n");
-				ft_strdel(&r);
 			}
+			ft_strdel(&r);
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(abcde, 2, 1)), "c"));
 			ft_strdel(&r);
 		}
@@ -1722,7 +1757,7 @@ ft_strdel(&buffer);
 		{
 			char 	*abcde = "abcde";
 			char	*r;
-			FAIL_IF_NOT(ft_strequ((r=ft_strsub(abcde, 2, 0)), ""));
+			FAIL_IF_NOT(ft_strequ((r = ft_strsub(abcde, 2, 0)), ""));
 			ft_strdel(&r);
 		}
 
@@ -1757,7 +1792,6 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(vide, 0, 0)), ""));
 			ft_strdel(&r);
 		}
-
 
 		pid_t pid = fork();
 		if (pid == -1) 
@@ -1828,13 +1862,17 @@ ft_strdel(&buffer);
 				if (WIFSIGNALED(status))
 				{
 					if (WTERMSIG(status) == SIGSEGV)
-						printf("\033[33mSegmentation Fault\033[0m\n");
+						ft_putstr("\033[33mSegmentation Fault\033[0m\n");
 					/*else if (WTERMSIG(status) == SIGEMT)
 						printf("\033[33mBus Error\033[0m\n");*/
 					else if (WTERMSIG(status) == SIGILL)
-						printf("\033[33mIllegal Instruction\033[0m\n");
+						ft_putstr("\033[33mIllegal Instruction\033[0m\n");
 					else
-						printf("\033[33mThe processus receive the signal %d\033[0m\n", WTERMSIG(status));
+					{
+						ft_putstr("\033[33mThe processus receive the signal ");
+						ft_putnbr(WTERMSIG(status));
+						ft_putstr("\033[0m\n");
+					}
 				}
 			}
 			else
@@ -1921,25 +1959,26 @@ ft_strdel(&buffer);
 			ft_strdel(&result);
 		}
 
-		/*{  ***crash !! ***
+		{
 
 		  char *str = "Un jour je serai, le meilleur codeur ! ^^";
 
 		  char	* r = ft_strsub(str, 19, (size_t)-10);
 		  if (r == NULL)
-		  ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
+		 	 ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
 		  else
 		  {
-		  SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
+		  	SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
 		  }
-		  FAIL_IF_NOT(r != NULL && ft_strcmp(r, str) == 0); // crash?
+		  FAIL_IF_NOT(r == NULL || ft_strcmp(r, str) == 0);
 		  ft_strdel(&r);
-		  }*/
+		}
 		{
 			char    *str = "i just want this part #############";
 			char	* r = ft_strsub(str, 5, 10);
 			//				      1234567890
 			FAIL_IF_NOT(ft_strequ(r, "t want thi"));
+			ft_strdel(&r);
 		}
 	}
 
@@ -1956,17 +1995,20 @@ ft_strdel(&buffer);
 						"repeted five times :P",
 						"Six", "Sept", "Huit", "Neuf", "Dix"
 			};
-		t_list *lst = ft_lstnew((void*)"Zero", 5);
-		for (int i=0; i<10; i++)
+		t_list *lst = NULL;
+		for (int i=0; i < 10; i++)
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
 		lst_show_lst(lst);
 
-
-		t_list *lst2 = ft_lstmap(lst, &func2_for_lstmap);
-		ft_lstdel(&lst, &lst_free_elt);
-		ft_lstiter(lst2, &lst_show_elt);
+		t_list *lst2;
+		lst2 = ft_lstmap(lst, &func2_for_lstmap);
+		FAIL_IF_NOT(lst2 != NULL);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
 		
+		ft_lstiter(lst2, &lst_show_elt);
+	
 		t_list	*l = lst2;
+
 		FAIL_IF_NOT(ft_strequ(l->content, "UnUn") && l->content_size == 5);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "DeuxDeux") && l->content_size == 9);
@@ -1976,7 +2018,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(l->content, "......") && l->content_size == 7);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :PA very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... A very long phrase... more than 20 Characters... repeted five times :P"));
-	ft_putnbr(lst2->content_size);
+//	ft_putnbr(lst2->content_size);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "SixSix") && l->content_size == 7);
 		l = l->next;
@@ -1988,10 +2030,21 @@ ft_strdel(&buffer);
 		l = l->next;
 		FAIL_IF_NOT(ft_strequ(l->content, "DixDix") && l->content_size == 7);
 		l = l->next;
-		FAIL_IF_NOT(ft_strequ(l->content, "ZeroZero") && l->content_size == 9);
+		FAIL_IF_NOT(l == NULL);
+
+		ft_lstdel(&lst2, &func_del_for_ft_lstmap);
+		FAIL_IF_NOT(lst2 == NULL);
 	}
+	{
+		t_list	*lst = NULL;
+		ft_lstadd(&lst, ft_lstnew(NULL, 1));
+		ft_lstadd(&lst, ft_lstnew("#@!", 0));
+		ft_lstadd(&lst, NULL);
 
-
+		lst_show_lst(lst);
+		ft_lstdel(&lst, &func_del_for_ft_lstmap);
+	}
 	ft_strdel(&buffer);
+	ft_putendl("ALL TESTS ARE OK");
 	return (0);
 }
