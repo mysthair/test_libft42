@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_assert.c                                        :+:      :+:    :+:   */
+/*   ft_putaddr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 17:28:36 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/11/07 17:44:14 by jleblanc         ###   ########.fr       */
+/*   Created: 2016/09/03 13:01:01 by jleblanc          #+#    #+#             */
+/*   Updated: 2016/11/21 16:06:17 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "test_libft.h"
 
-void	ft_assert(int cond, char const *file, char const *line, char const *msg)
+void	ft_putaddr(void const *a)
 {
-	if (!cond)
-	{
-		ft_putstr(file);
-		ft_putstr(":");
-		ft_putstr(line);
-		ft_putstr(":assert ");
-		ft_putstr(msg);
-		ft_putstr(" failed\n");
-		ft_exit(-1);
-	}
+	ft_putaddr_fd(a, 1);
 }

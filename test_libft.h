@@ -22,11 +22,13 @@ TYPEDEF_SIZE_T;
 */
 #include <string.h>
 
-void   *ft_malloc(size_t n);
-void   ft_free(void *p);
-void   ft_exit(int n);
-void   ft_print_memory(const void *addr, size_t size);
-void   ft_assert(int cond, char *file, char *line, char *msg);
+//void   *ft_malloc(size_t n);
+//void   ft_free(void *p);
+void	ft_exit(int n);
+void	ft_print_memory(const void *addr, size_t size);
+void	ft_assert(int cond, char const *file, char const *line, char const *msg);
+void	ft_putaddr(void const *ptr);
+void	ft_putaddr_fd(void const *ptr, int fd);
 
 #ifdef DONT_HAVE_STRLCPY                                                        
 size_t  strlcat(char *dst, const char *src, size_t size);

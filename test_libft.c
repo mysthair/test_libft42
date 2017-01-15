@@ -954,8 +954,10 @@ ft_strdel(&buffer);
 		ft_strdel(&s);
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("\t")), ""));
 		ft_strdel(&s);
+#ifdef PROTECTED_TEST		
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(NULL)), NULL));
 		ft_strdel(&s);
+#endif
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(" \176			 ")), "\176"));
 		ft_strdel(&s);
 		char a_strange_char[] = { '-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
@@ -1474,10 +1476,12 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strequ(abcd, ""));
 		FAIL_IF_NOT(test_ft_strequ("", abcd));
 		FAIL_IF_NOT(test_ft_strequ("", ""));
+#ifdef PROTECTED_TEST
 		FAIL_IF_NOT(test_ft_strequ("", NULL));
 		FAIL_IF_NOT(test_ft_strequ(NULL, ""));
 		FAIL_IF_NOT(test_ft_strequ(NULL, abcd));
 		FAIL_IF_NOT(test_ft_strequ(abcd, NULL));
+#endif
 	}
 
 	{ // strnequ
@@ -1493,11 +1497,12 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(test_ft_strnequ(abcd, "", i));
 			FAIL_IF_NOT(test_ft_strnequ("", abcd, i));
 			FAIL_IF_NOT(test_ft_strnequ("", "", i));
+#ifdef PROTECTED_TEST
 			FAIL_IF_NOT(test_ft_strnequ("", NULL, i));
 			FAIL_IF_NOT(test_ft_strnequ(NULL, "", i));
 			FAIL_IF_NOT(test_ft_strnequ(NULL, abcd, i));
 			FAIL_IF_NOT(test_ft_strnequ(abcd, NULL, i));
-
+#endif
 			i--;
 		}
 	}
@@ -1512,6 +1517,7 @@ ft_strdel(&buffer);
 		ft_strdel(&s);
 		FAIL_IF_NOT(ft_strequ((s=ft_strjoin("", "")),""));
 		ft_strdel(&s);
+#ifdef PROTECTED_TEST
 		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(abcde, NULL)),"abcde") 
 				|| (s == NULL));
 		ft_strdel(&s);
@@ -1524,6 +1530,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ((s=ft_strjoin(NULL, "")), "")
 			   	|| (s == NULL));
 		ft_strdel(&s);
+#endif
 	}
 
 /*	{ ici
@@ -2039,7 +2046,9 @@ ft_strdel(&buffer);
 		t_list	*lst = NULL;
 		ft_lstadd(&lst, ft_lstnew(NULL, 1));
 		ft_lstadd(&lst, ft_lstnew("#@!", 0));
+#ifdef TEST_PROTECTED
 		ft_lstadd(&lst, NULL);
+#endif
 
 		lst_show_lst(lst);
 		ft_lstdel(&lst, &func_del_for_ft_lstmap);

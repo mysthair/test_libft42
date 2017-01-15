@@ -14,7 +14,7 @@ NAME=test_libft
 
 DIRH=./
 DIRC=
-DIRLIBFT=../libft/
+DIRLIBFT=../libft_a_tester/
 DIRO=objs/
 
 LIBFT=libft.a
@@ -22,16 +22,28 @@ LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
 CC=gcc
-CFLAGS=-g3 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
+CFLAGS=-g3 -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
 
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
+INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
 LOCALFUNCS:=$(INCMD)
 
 #LOCALFUNCS = malloc free exit assert print_memory
 #LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))
 OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
+
+OS:=$(shell uname)
+CPU:=$(shell uname -m)
+ifeq ($(OS),Linux)
+  HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
+  MISSING_O=strlcat_$(CPU).o strnstr_$(CPU).o
+else
+  HAVE_STRLCPY:=-DHAVE_STRLCPY
+  MISSING_O=
+endif
 
 #testlocfunc:
 #	echo "LOCALFUNCS=$(LOCALFUNCS)"
@@ -61,7 +73,8 @@ $(DIRO)%.o: %.c
 
 clean:
 	@echo "$(TITLE)"
-	rm -rf $(DIRO)
+	rm -rf $(DIRO) $(MISSING_O)
+	make -C $(DIRLIBFT) clean 
 
 fclean: clean
 	@echo "$(TITLE)"
@@ -74,15 +87,6 @@ re:
 	make fclean
 	make all
 	make test
-OS:=$(shell uname)
-CPU:=$(shell uname -m)
-ifeq ($(OS),Linux)
-  HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-  MISSING_O=strlcat_$(CPU).o strnstr_$(CPU).o
-else
-  HAVE_STRLCPY:=-DHAVE_STRLCPY
-  MISSING_O=
-endif
 
 $(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)  $(MISSING_O)
 ifeq ($(OS), Linux)
