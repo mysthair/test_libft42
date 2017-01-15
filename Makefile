@@ -22,17 +22,18 @@ LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
 
 CC=gcc
-CFLAGS=-g3 -O0 -std=gnu11 -Wall -Wextra -Werror -I$(DIRH)
+CFLAGS=-Wall -Wextra -Werror -I$(DIRH)
 
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
-INCMD:=$(INCMD) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
-LOCALFUNCS:=$(INCMD)
+#pour tester une libft protetegee on peut decomanter cette ligne
+#CFLAGS+=-DTEST_PROTECTED
 
-#LOCALFUNCS = malloc free exit assert print_memory
-#LOCALFILES=$(addprefix ft_, $(addsuffix .c, $(LOCALFUNCS)))
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
+LOCALFUNCS:=$(MISSFT)
+
 OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
 
 OS:=$(shell uname)
@@ -45,17 +46,9 @@ else
   MISSING_O=
 endif
 
-#testlocfunc:
-#	echo "LOCALFUNCS=$(LOCALFUNCS)"
-#	echo "OBJS=$(OBJS)"
-
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
 all: test $(LIBFT)
-	@echo "$(TITLE)"
-	@echo "################################################################################"
-	@echo "##                          $(LIBFT) testeur                                    ##"
-	@echo "################################################################################"
 
 $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
@@ -64,7 +57,7 @@ $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
 	make -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
 
-#$(NAME) $(OBJS):$(HEADERS)
+$(NAME) $(OBJS):$(HEADERS)
 
 $(DIRO)%.o: %.c
 	@echo "$(TITLE)"
@@ -88,7 +81,7 @@ re:
 	make all
 	make test
 
-$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS)  $(MISSING_O)
+$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS) $(MISSING_O)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif

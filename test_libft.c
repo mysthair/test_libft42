@@ -711,15 +711,17 @@ void func_del_for_ft_lstmap(void* data, size_t size)
 
 static t_list *func_for_ft_lstmap(t_list *elem)
 {
-	char* buffer = NULL;
+	char* 			buffer = NULL;
 	static t_list	*tmp = NULL;
-	char	*s;
-	size_t		l = elem->content_size;
+	char			*s;
+	size_t			l = elem->content_size;
+	size_t 			i;
+
 	buffer = ft_strnew(l);
 	tmp = (t_list*)ft_memalloc(sizeof(t_list));
 	s = (char*)(elem->content);
 	tmp->content_size = l;
-	for (size_t i = 0; i < l - 1; i++)
+	for (i = 0; i < l - 1; i++)
 		buffer[i] = s[l - 2 - i];
 	tmp->content = (void*)buffer;
 	tmp->next = NULL;
@@ -968,6 +970,7 @@ ft_strdel(&buffer);
 	{//strtrim
 		char *txt = " Ceci, est   le texte à\tdécouper...     ";
 		char **tab = ft_strsplit(txt, ' ');
+		int i;
 		FAIL_IF_NOT(tab && *tab && **tab);
 		FAIL_IF_NOT(ft_strequ(tab[0], "Ceci,"));
 		FAIL_IF_NOT(ft_strequ(tab[1], "est"));
@@ -975,7 +978,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(tab[3], "texte"));
 		FAIL_IF_NOT(ft_strequ(tab[4], "à\tdécouper..."));
 		FAIL_IF_NOT(tab[5] == NULL);
-		for (int i=0; i<5; i++)
+		for (i=0; i<5; i++)
 			ft_memdel((void**)(tab + i));
 		ft_memdel((void*)&tab);
 	}
@@ -1545,12 +1548,14 @@ ft_strdel(&buffer);
 	{ // ftrsplit
 		char	*__Ha_Ho_123______erf_ = "__Ha_Ho_123______erf_";
 		char	**ftsplitresultof__Ha_Ho_123______erf_ =  ft_strsplit(__Ha_Ho_123______erf_, '_');
+		int i;
+
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[0], "Ha"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[1], "Ho"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[2], "123"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
 		FAIL_IF_NOT(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
-		for (int i=0; i < 4; i++)
+		for (i=0; i < 4; i++)
 			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
 		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
 	}
@@ -2003,7 +2008,9 @@ ft_strdel(&buffer);
 						"Six", "Sept", "Huit", "Neuf", "Dix"
 			};
 		t_list *lst = NULL;
-		for (int i=0; i < 10; i++)
+		int i;
+
+		for (i=0; i < 10; i++)
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
 		lst_show_lst(lst);
 
@@ -2054,6 +2061,8 @@ ft_strdel(&buffer);
 		ft_lstdel(&lst, &func_del_for_ft_lstmap);
 	}
 	ft_strdel(&buffer);
-	ft_putendl("ALL TESTS ARE OK");
+	ft_putendl("#############################################################");
+	ft_putendl("##############     ALL TESTS ARE OK       ###################");
+	ft_putendl("#############################################################");
 	return (0);
 }
