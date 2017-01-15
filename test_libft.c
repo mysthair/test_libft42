@@ -6,7 +6,7 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2016/12/07 20:18:41 by jleblanc         ###   ########.fr       */
+/*   Updated: 2016/12/09 15:54:42 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -700,7 +700,7 @@ void lst_free_elt(void* data, size_t size)
 	ft_memdel(&data);
 }
 
-t_list *func_for_ft_lstmap(t_list *elem)
+static t_list *func_for_ft_lstmap(t_list *elem)
 {
 	static char* buffer = NULL;
 	static t_list	*tmp = NULL;
@@ -723,6 +723,10 @@ t_list *func_for_ft_lstmap(t_list *elem)
 	tmp->next = NULL;
 	return (tmp); 
 }
+static t_list* func2_for_lstmap(t_list *elt)
+{
+	return (ft_lstnew(ft_strjoin(elt->content, elt->content), elt->content_size * 2 - 1)); 
+};
 
 t_list  *lstmap_test_fn(t_list *list)
 { //copiryght moolitest
@@ -1957,11 +1961,7 @@ ft_strdel(&buffer);
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
 		lst_show_lst(lst);
 
-		t_list* func2_for_lstmap(t_list *elt)
-		{
-			return (ft_lstnew(ft_strjoin(elt->content, elt->content), elt->content_size * 2 - 1)); 
-		};
-	
+
 		t_list *lst2 = ft_lstmap(lst, &func2_for_lstmap);
 		ft_lstdel(&lst, &lst_free_elt);
 		ft_lstiter(lst2, &lst_show_elt);
