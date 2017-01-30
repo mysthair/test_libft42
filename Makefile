@@ -24,7 +24,7 @@ HEADERS=$(LIBFTH) test_libft.h
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror -I$(DIRH)
 
-#pour tester une libft protetegee on peut decomanter cette ligne
+#pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
@@ -32,23 +32,24 @@ MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
-LOCALFUNCS:=$(MISSFT)
+#LOCALFUNCS:=$(MISSFT)
+LOCALFUNCS=
 
-OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
+#OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
 
 OS:=$(shell uname)
 CPU:=$(shell uname -m)
+MISSING_O=$(addprefix $(DIRO)ft_, $(addsuffix _$(CPU).o, $(MISSFT)))
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-  MISSING_O=strlcat_$(CPU).o strnstr_$(CPU).o
+MISSING_O:=$(MISSING_O) strlcat_$(CPU).o strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
-  MISSING_O=
 endif
 
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
-all: test $(LIBFT)
+all: $(NAME) $(LIBFT)
 
 $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
@@ -59,7 +60,7 @@ $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 
 $(NAME) $(OBJS):$(HEADERS)
 
-$(DIRO)%.o: %.c
+$(DIRO)%.o: %.s
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
@@ -79,7 +80,7 @@ re:
 	@echo "$(TITLE)"
 	make fclean
 	make all
-	make test
+	make
 
 $(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS) $(MISSING_O)
 ifeq ($(OS), Linux)
