@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2016/12/09 15:03:47 by jleblanc         ###   ########.fr        #
+#    Updated: 2017/01/25 17:32:36 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=test_libft
 
 DIRH=./
 DIRC=
-DIRLIBFT=../libft_a_tester/
+DIRLIBFT=libft_a_tester/
 DIRO=objs/
 
 LIBFT=libft.a
@@ -48,7 +48,7 @@ endif
 
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
-all: test $(LIBFT)
+all: $(NAME) $(LIBFT)
 
 $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
@@ -99,3 +99,15 @@ vg.log: test_libft
 
 memcheck: vg.log
 	less vg.log
+
+link:
+	rm -f libft_a_tester
+	ln -s ../libft libft_a_tester
+
+link1:
+	rm -f libft_a_tester
+	ln -s ~/libft_a_tester
+
+link2:
+	rm -f libft_a_tester
+	ln -s ~/tmp/libft_a_tester libft_a_tester
