@@ -4,9 +4,13 @@
 #define _STRINGIFY(x) #x                                                        
 #define STRINGIFY(x) _STRINGIFY(x)                                              
 
-#define FT_ASSERT(cond) \
+#define PROTECTED_TEST
+
+
+#define FT_ASSERT(cond) { \
 	ft_putstr("testons " #cond "\n"); \
-	ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond )  
+	ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond ); \
+}
 
 #define TEST(cond) \
 	if(!(cond)) { \
@@ -21,6 +25,14 @@ TYPEDEF_SIZE_T;
 # endif
 */
 #include <string.h>
+
+# define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+
+#define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
+
+
+#define FORK_TEST(t) { ft_putstr(#t " .. \n"); ft_putendl(fork_test(&t) ? #t " .. OK" : #t " .. KO" ); }
+
 
 //void   *ft_malloc(size_t n);
 //void   ft_free(void *p);

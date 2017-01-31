@@ -6,12 +6,12 @@
 /*   By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 17:42:37 by jleblanc          #+#    #+#             */
-/*   Updated: 2017/01/25 18:47:52 by jleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 15:58:49 by jleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "test_libft.h"
+#include "libft.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -21,17 +21,60 @@
 
 #include <unistd.h>
 
-//#define DEBUG
-
-#define SHOW_STRING(C,  T) ft_putstr(C #T "=\""); \
-	ft_putstr(T); ft_putstr("\"\n");
-
 #ifdef DONT_HAVE_STRLCPY
 
 size_t	strlcat(char *dst, const char *src, size_t size);
 char	*strnstr(const char *haystack, const char *needle, size_t len);
 
 #endif
+
+void ft_perror(char *msg)
+{
+	ft_putendl_fd(msg, 2);
+}
+
+int		fork_test(int (*f)())
+{
+	pid_t pid = fork();
+	if (pid == -1) {
+		ft_perror("fork failed");
+		_exit(EXIT_FAILURE);
+	}else if (pid == 0){
+       
+        if ((*f)())
+			_exit(EXIT_SUCCESS);
+		else
+			_exit(EXIT_SUCCESS);
+	}else{
+		int status;
+		(void)waitpid(pid, &status, 0);
+		if(status == -1){
+			switch(errno){
+			case ECHILD:
+				ft_putendl("Fork : The calling process has no existing unwaited-for child processes");
+				break;
+			case EFAULT:
+				ft_putendl("Fork : The status or rusage argument points to an illegal address (may not be detected before the exit of a child process).");
+				break;
+			case EINVAL:
+				ft_putendl("Fork : Invalid or undefined flags are passed in the options argument.");
+				break;
+			case EINTR:
+				ft_putendl("Fork : The call is interrupted by a caught signal or the signal does not have the SA_RESTART flag set.");
+				break;
+			default:
+				ft_putendl("Fork : unknow status");
+				break;
+			}
+			ft_putendl("\n   .. KO");
+			return (0);
+		}else{
+			ft_putendl("\n  .. OK");
+			return (1);
+		}
+	}	
+}
+
 
 
 int test_ft_memset(void* buffer, int value, size_t size)
@@ -414,9 +457,9 @@ int 	test_ft_strrchr(const char *s, int c)
 	if (!(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0)))
 	{
 		ft_putstr(o?"o != NULL\n":"o == NULL\n");
-		if(o) { SHOW_STRING(" ", o); }
+		if(o) { SHOW_STRING("trrchr(s, c) = ", o); }
 		ft_putstr(m?"m != NULL\n":"m == NULL\n");
-		if(m) { SHOW_STRING(" ", m); }
+		if(m) { SHOW_STRING("ft_strrchr(s, c) = ", m); }
 	}
 	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
 	TEST(strrchr(s,c) == ft_strrchr(s, c)); //?
@@ -669,15 +712,6 @@ char	strmapi_func_lower(unsigned i, char c)
 }
 
 
-//#define DEBUG
-#ifdef DEBUG
-# define FAIL_IF_NOT(cond) ft_putstr("testons " STRINGIFY(cond) " .. \n"); FT_ASSERT(cond); ft_putstr("        " STRINGIFY(cond) " .. OK\n"); 
-#else
-# define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
-#endif
-//#define BIG (1024*1024*1024)
-
-//#define WARNING_IF_NOT(cond) ft_putstr("testons " STRINGIFY(cond) " .. \n"); FT_WARNING(cond); ft_putstr("        " STRINGIFY(cond) " .. OK\n"); 
 
 #include <stdio.h>
 void	lst_show_elt(t_list *l)
@@ -771,43 +805,51 @@ t_list  *lstmap_test_fn(t_list *list)
 	return (l2);
 }
 
-int main()
-{
-	char    *buffer;
-	int		i;
 
 	//ft_memalloc
-	buffer = NULL;
-	FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
-	ft_strdel(&buffer);
-	/*buffer = malloc(BIG);
-	if(buffer)
+int test_00()
 	{
-		ft_strdel(&buffer);
-		buffer = ft_memalloc(BIG);
-		FAIL_IF_NOT(buffer != NULL);
-		for (i = 0; i < BIG; i++)
-			buffer[i] = (char)(i+1);
-	}
-	ft_strdel(&buffer);*/
-	buffer = ft_memalloc(256);
-	FAIL_IF_NOT(buffer != NULL);
-	for (i = 0; i < 255; i++)
-		buffer[i] = (char)(i+1);
-	buffer[255] = '\0';
-	//ft_memset
-	FAIL_IF_NOT(test_ft_memset(buffer, 0, 61));
-	FAIL_IF_NOT(test_ft_memset(buffer, 'Z', 40));
-	FAIL_IF_NOT(test_ft_memset(buffer, 'Y', 20));
-	FAIL_IF_NOT(test_ft_memset(buffer, 'X', 10));
+		char    *buffer;
+		int		i;
 
-	//ft_bzero
-	FAIL_IF_NOT(test_ft_bzero(buffer+2, 20));
+		buffer = NULL;
+		FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
+		ft_strdel(&buffer);
+		/*buffer = malloc(BIG);
+		if(buffer)
+		{
+			ft_strdel(&buffer);
+			buffer = ft_memalloc(BIG);
+			FAIL_IF_NOT(buffer != NULL);
+			for (i = 0; i < BIG; i++)
+				buffer[i] = (char)(i+1);
+		}
+		ft_strdel(&buffer);*/
+		buffer = ft_memalloc(256);
+		FAIL_IF_NOT(buffer != NULL);
+		for (i = 0; i < 255; i++)
+			buffer[i] = (char)(i+1);
+		buffer[255] = '\0';
+
+		//ft_memset
+		FAIL_IF_NOT(test_ft_memset(buffer, 0, 61));
+		FAIL_IF_NOT(test_ft_memset(buffer, 'Z', 40));
+		FAIL_IF_NOT(test_ft_memset(buffer, 'Y', 20));
+		FAIL_IF_NOT(test_ft_memset(buffer, 'X', 10));
 	
+		//ft_bzero
+		FAIL_IF_NOT(test_ft_bzero(buffer+2, 20));
+
+		ft_strdel(&buffer);
+		return(1);
+	}	
 	//ft_memcpy
+int test_01()
 	{
 		int i;
+		char buffer[256];
 		char buffer2[256];
+		
 		ft_memset(buffer, 'X', 255);
 		buffer[255] = '\0';
 		for (i=0; i<10; i++)
@@ -817,10 +859,14 @@ int main()
 		FAIL_IF_NOT(test_ft_memcpy(buffer2, buffer, 255));
 		FAIL_IF_NOT(test_ft_memcpy(buffer + 5, buffer + 10, 10));
 		FAIL_IF_NOT(test_ft_memcpy(buffer, buffer + 26, 10));
+	
+		return(1);
 	}
 
+int test_02()
 	{//ft_memccpy
 		int i;
+		char buffer[256];
 		char buffer2[255];
 		ft_bzero(buffer2, 255);
 		ft_memset(buffer, 'X', 59);
@@ -834,10 +880,12 @@ int main()
 		FAIL_IF_NOT(test_ft_memccpy(buffer2, buffer + 3, '7', 10));
 		FAIL_IF_NOT(test_ft_memccpy(buffer + 20, buffer + 5, '7', 10));
 		FAIL_IF_NOT(test_ft_memccpy(buffer + 20, buffer + 5, '7' , 10));
+	
+		return (1);
 	}
 
 	//ft_memmove
-	{
+int test_03()	{
 		int i;
 		char	O123456789abcdefghijklmnopqrstuvwxyz[60];
 
@@ -860,10 +908,13 @@ int main()
 		FAIL_IF_NOT(ft_memcmp(abcdef___, "ababcdef", 8)==0);
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
 		FAIL_IF_NOT(test_ft_memmove(abcdef___ + 2 , abcdef___, 6));
+	
+		return(1);
 	}		
 
-	{//memchr
+int test_04()	{//memchr
 		int i;
+		char	buffer[256];
 
 		ft_memset(buffer, 'X', 59);
 		for (i=0; i<10; i++)
@@ -874,9 +925,11 @@ int main()
 		FAIL_IF_NOT(test_ft_memchr(buffer , '0', 10));
 		FAIL_IF_NOT(test_ft_memchr(buffer , '8', 10));
 		FAIL_IF_NOT(test_ft_memchr(buffer , '9', 10));
+	
+		return(1);
 	}
 
-	{// ft_memcmp
+int test_05()	{// ft_memcmp
 		char	*a = "12345\0""12345\0";
 		char	*b = a+6;
 		char	*c = "12346";
@@ -885,43 +938,52 @@ int main()
 		FAIL_IF_NOT(test_ft_memcmp(a+1,b,6));
 		FAIL_IF_NOT(test_ft_memcmp(a,c,6));
 		FAIL_IF_NOT(test_ft_memcmp(c,a,6));
+	
+		return(1);
 	}
 
-	{ // ft_strdup
+int test_06()	{ // ft_strdup
 		char *text = "hello world!";
 		FAIL_IF_NOT(test_ft_strdup(text));
 		FAIL_IF_NOT(test_ft_strdup("&AFsd1''2\t3\n4+-{}5\0""67890"));
 		FAIL_IF_NOT(test_ft_strdup(""));
+	
+		return(1);
 	}
 
-	{//ft_strlen
+int test_07()	{//ft_strlen
 		char *a = "hello";
 		char *b = "";
 		char *c = "world!\n";
 		FAIL_IF_NOT(test_ft_strlen(a));
 		FAIL_IF_NOT(test_ft_strlen(b));
 		FAIL_IF_NOT(test_ft_strlen(c));
-		FAIL_IF_NOT(test_ft_strlen(buffer));
+	
+		return(1);
 	}
-ft_strdel(&buffer);
-	{//strcpy
+	
+int test_08()	{//strcpy
 		char *src = "1234567890";
 		char dst[100];
 		ft_bzero(dst,100);
 		ft_strcpy(dst, src);
 		FAIL_IF_NOT(ft_memcmp(src, dst, 11) == 0);
-	}
+		
+		return(1);
+}
 
-	{//strncpy
+int test_09()	{//strncpy
 		char *src = "1234567890";
 		char dst[31];
 		ft_bzero(dst, 31);
 		ft_memset(dst, '.', 30);
 		FAIL_IF_NOT(test_ft_strncpy(dst, src, 8));
 		FAIL_IF_NOT(test_ft_strncpy(dst, src, 12));
+	
+		return(1);
 	}
 
-	{//strcat
+int test_10()	{//strcat
 		char dst[31];
 		ft_bzero(dst, 31);
 		ft_memset(dst+1, 'y', 29);
@@ -931,8 +993,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strcat(dst, ""));
 		FAIL_IF_NOT(test_ft_strcat(dst, "X"));
 		FAIL_IF_NOT(ft_strequ(dst, "12345abcdX"));
+	
+		return(1);
 	}
-	{//strncat
+int test_11()	{//strncat
 		char dst[31];
 		ft_bzero(dst, 31);
 		FAIL_IF_NOT(test_ft_strncat(dst, "xxx", 0));
@@ -953,8 +1017,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strequ(dst, "123456789abc"));
 		FAIL_IF_NOT(test_ft_strncat(dst, "X", 1));
 		FAIL_IF_NOT(ft_strequ(dst, "123456789abcX"));
+	
+		return(1);
 	}
-
+int test_12()
 	{
 		char *s = NULL;
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim("  test1   ")), "test1"));
@@ -980,8 +1046,10 @@ ft_strdel(&buffer);
 		char a_strange_char[] = { '-', '>', 0xF0, 0x9D, 0x84, 0x9E, '<', '-', '\0' };
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(a_strange_char)), a_strange_char));
 		ft_strdel(&s);
+	
+		return(1);
 	}
-
+int test_13()
 	{//strtrim
 		char *txt = " Ceci, est   le texte à\tdécouper...     ";
 		char **tab = ft_strsplit(txt, ' ');
@@ -996,8 +1064,10 @@ ft_strdel(&buffer);
 		for (i=0; i<5; i++)
 			ft_memdel((void**)(tab + i));
 		ft_memdel((void*)&tab);
+	
+		return(1);
 	}
-
+int test_14()
 	{//strlcat
 		char vide31[31];
 		char abcde31[31];
@@ -1101,8 +1171,10 @@ ft_strdel(&buffer);
 
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		FAIL_IF_NOT(test_ft_strlcat(abcde31, "123456789012", 10));
-	}
 	
+		return(1);
+	}
+int test_15()
 	{//strchr
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '6'));
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", 'X'));
@@ -1111,7 +1183,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strchr("123456\t78901234567890", '\t'));
 		/*failed !!	FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '\0')); */
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '\0'));
+	
+		return(1);
 	}
+int test_16()
 	{//strrchr
 		FAIL_IF_NOT(test_ft_strrchr("12345678901234567890", '6'));
 		FAIL_IF_NOT(test_ft_strrchr("12345678901234567890", 'X'));
@@ -1124,7 +1199,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_strrchr(abcd, 'b') == abcd + 1);
 		FAIL_IF_NOT(ft_strrchr(abcd, 'X') == NULL);
 		FAIL_IF_NOT(ft_strrchr(abcd, '\0') == abcd + 4);
+	
+		return(1);
 	}
+int test_17()
 	{//ft_strstr
 		FAIL_IF_NOT(test_ft_strstr("Foo Bar Baz","Bar"));
 		FAIL_IF_NOT(test_ft_strstr("Foo Bar Bar Baz","Bar"));
@@ -1132,8 +1210,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strstr("Foo Bar Baz",""));
 		FAIL_IF_NOT(test_ft_strstr("","Bat"));
 		FAIL_IF_NOT(test_ft_strstr("",""));
+	
+		return(1);
 	}
 
+int test_18()
 	{//ft_strnstr
 		FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", 7));
 		FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", 8));
@@ -1160,7 +1241,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strnstr("","", i));
 		FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", i));
 		}
+	
+		return(1);
 	}
+int test_19()
 	{//ft_strcmp
 
 		FAIL_IF_NOT(test_ft_strcmp("1234", "1234"));
@@ -1179,7 +1263,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strcmp("\x7F", "\x80"));
 		FAIL_IF_NOT(test_ft_strcmp("\x80", "\x7F"));
 
+	
+		return(1);
 	}
+int test_20()
 	{//ft_strncmp
 		FAIL_IF_NOT(test_ft_strncmp("1234", "1234", 10));
 		FAIL_IF_NOT(test_ft_strncmp("12345", "12335", 10));
@@ -1233,8 +1320,11 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(test_ft_strncmp("\x7F", "\x80", i));
 			FAIL_IF_NOT(test_ft_strncmp("\x80", "\x7F", i));
 		}
+	
+		return(1);
 	}
 
+int test_21()
 	{//ft_atoi
 		FAIL_IF_NOT(test_ft_atoi("0"));// == 0);
 		FAIL_IF_NOT(test_ft_atoi("12"));//  == 12);
@@ -1265,7 +1355,7 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775807"));// == 1);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775808"));// == 0);
 #endif
-		/* uncomment for testing the same coportment than the real atoi :
+		/* uncomment for compare result with the real atoi :
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775808"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775809"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775810"));//  == -1);
@@ -1274,9 +1364,11 @@ ft_strdel(&buffer);
 		   FAIL_IF_NOT(test_ft_atoi("-9223372036854775810"));// == 0);
 		   FAIL_IF_NOT(test_ft_atoi("-1000000000000000000000000"));//  == 0);
 		   */
+	
+		return(1);
 	}
 
-	{//isalpha
+int test_22()	{//isalpha
 		FAIL_IF_NOT(test_ft_isalpha('a'));
 		FAIL_IF_NOT(test_ft_isalpha('b'));
 		FAIL_IF_NOT(test_ft_isalpha('z'));
@@ -1289,7 +1381,10 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_isalpha('&'));
 		FAIL_IF_NOT(test_ft_isalpha('\n'));
 		FAIL_IF_NOT(test_ft_isalpha('\0'));
+	
+		return(1);
 	}
+int test_23()
 	{//ft_isdigit
 		FAIL_IF_NOT(test_ft_isdigit('a'));
 		FAIL_IF_NOT(test_ft_isdigit('A'));
@@ -1300,8 +1395,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_isdigit('0'));
 		FAIL_IF_NOT(test_ft_isdigit('3'));
 		FAIL_IF_NOT(test_ft_isdigit('9'));
+	
+		return(1);
 	}
 
+int test_24()
 	{
 		FAIL_IF_NOT(test_ft_isalnum('0'));
 		FAIL_IF_NOT(test_ft_isalnum('9'));
@@ -1317,8 +1415,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_isalnum('\n'));
 		FAIL_IF_NOT(test_ft_isalnum('\t'));
 		FAIL_IF_NOT(test_ft_isalnum('\0'));
+	
+		return(1);
 	}
 
+int test_25()
 	{//isprint
 		/*		char i;
 				printf("tab = { ");
@@ -1362,8 +1463,11 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(test_ft_isprint(c));
 		}
 #endif
+	
+		return(1);
 	}
 
+int test_26()
 	{//toupper
 		FAIL_IF_NOT(test_ft_toupper('a'));
 		FAIL_IF_NOT(test_ft_toupper('j'));
@@ -1375,13 +1479,18 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_toupper('\t'));
 		FAIL_IF_NOT(test_ft_toupper('\n'));
 		FAIL_IF_NOT(test_ft_toupper('\0'));
+
 #ifdef DEBUG
 		for(int c=-256; c<=512; c++)
 		{
 			FAIL_IF_NOT(test_ft_toupper(c));
 		}	
 #endif
+	
+		return(1);
 	}
+
+int test_27()
 	{//tolower
 		FAIL_IF_NOT(test_ft_tolower('a'));
 		FAIL_IF_NOT(test_ft_tolower('j'));
@@ -1400,80 +1509,49 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(test_ft_tolower(c));
 		}
 #endif
+	
+		return(1);
 	}
 
+int test_28()
 	{//ft_memalloc
 		FAIL_IF_NOT(test_ft_memalloc(10));
 		FAIL_IF_NOT(test_ft_memalloc(0));
 		//FAIL_IF_NOT(test_ft_memalloc(BIG));
+	
+		return(1);
 	}
 
+int test_29()
 	{ //ft_memdel
 		FAIL_IF_NOT(test_ft_memdel(1024));
 		FAIL_IF_NOT(test_ft_memdel(0));
 	//n	FAIL_IF_NOT(test_ft_memdel(BIG));
+	
+		return(1);
 	}	
 
+
+int test_30()
 	{// strdel
 		FAIL_IF_NOT(test_ft_strdel(10));
 		FAIL_IF_NOT(test_ft_strdel(1));
 		FAIL_IF_NOT(test_ft_strdel(0));
+	
+		return(1);
 	}
 
-	{//strnew && strdel
-		{
-			char	*char30 = ft_strnew(30);
-			int	i;
-			for (i=0; i<=30; i++)
-			{ 
-				FAIL_IF_NOT(char30[i] == '\0');
-			}
-			ft_strdel(&char30);
+int test_31()
+	{//strnew
+		char	*char256 = ft_strnew(256);
+		int	i;
+		for (i=0; i<=256; i++)
+		{ 
+			FAIL_IF_NOT(char256[i] == '\0');
 		}
-		{
-			char	*char0 = ft_strnew(0);
-			for (i=0; i<=0; i++)
-			{ 
-				FAIL_IF_NOT(char0 == NULL || char0[i] == '\0');
-			}
-			ft_strdel(&char0);
-		}
-#ifdef PROTECTED_TEST
-		{
-			int error = 0;
-			int k; 
-			for (k=-20; k<1024; k++)
-			{
-				char	*charK = ft_strnew(k);
-				int	i;
-				for (i=0; i<=k; i++)
-				{ 
-					if(charK[i] != '\0')
-						error++;
-				}
-				ft_strdel(&charK);
-			}
-			FAIL_IF_NOT(error == 0);
-		}
-		{
-			int X = 0x7FFFFFFE;
-		
-			ft_putstr("testons ft_strnew(0x7FFFFFFE) ..");
+		ft_strdel(&char256);
 
-			char	*char7FFFFFFE = ft_strnew(X);
-			int error_ft_strnew_7FFFFFFE = 0;
-			int i;
-			for (i=0; char7FFFFFFE && i<=X; i++)
-			{ 
-				if (char7FFFFFFE && char7FFFFFFE[i] != '\0')
-					error_ft_strnew_7FFFFFFE++;
-			}
-			ft_strdel(&char7FFFFFFE);
-			FAIL_IF_NOT(error_ft_strnew_7FFFFFFE == 0);
-		
-			ft_putendl("OK");
-		}
-		{
+	/*	{
 			int X = 0x7FFFFFFF;
 			
 			ft_putstr("testons ft_strnew(0x7FFFFFFF) ..");
@@ -1490,10 +1568,12 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(error_ft_strnew_7FFFFFFF == 0);
 
 			ft_putendl("OK");
-		}
-#endif		
+		}*/
+	
+		return(1);
 	}
 
+int test_32()
 	{//ft_strclr
 		char 	*ft_strclr_of_abcdef = ft_strdup("abcdef");
 		ft_strclr(ft_strclr_of_abcdef);
@@ -1501,7 +1581,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_memcmp((void*)ft_strclr_of_abcdef, null7, 7) == 0);
 		ft_memdel(&null7);
 		ft_strdel(&ft_strclr_of_abcdef);
+	
+		return(1);
 	}
+
+int test_33()
 	{//ft_strclr
 		char 	*ft_strclr_of_vide = ft_strdup("");
 		ft_strclr(ft_strclr_of_vide);
@@ -1509,8 +1593,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(ft_memcmp((void*)ft_strclr_of_vide, null1, 1) == 0);
 		ft_memdel(&null1);
 		ft_strdel(&ft_strclr_of_vide);
+	
+		return(1);
 	}
 
+int test_34()
 	{//ft_striter
 		char	*t = "txtaz123HAHZ";
 
@@ -1529,8 +1616,11 @@ ft_strdel(&buffer);
 
 		ft_strdel(&ft_stirter_upper_txtaz123HAHZ);
 		ft_strdel(&ft_stirter_lower_txtaz123HAHZ);
+	
+		return(1);
 	}
 
+int test_35()
 	{//ft_striteri
 		char	*t = "txtaz123HAHZ";
 
@@ -1549,8 +1639,12 @@ ft_strdel(&buffer);
 
 		ft_strdel(&ft_stirteri_upper_txtaz123HAHZ);
 		ft_strdel(&ft_stirteri_lower_txtaz123HAHZ);
+	
+		return(1);
 	}
 
+int test_36()
+{
 	{//ft_strmap
 		char	*ft_strmap_upper_txtaz123HAHZ;
 		char	*ft_strmap_lower_txtaz123HAHZ;
@@ -1565,13 +1659,17 @@ ft_strdel(&buffer);
 
 		ft_strdel(&ft_strmap_upper_txtaz123HAHZ);
 		ft_strdel(&ft_strmap_lower_txtaz123HAHZ);
+	
 	}
 	{
 		char *ft_strmap_of_vide = ft_strmap("", &strmap_func_upper);
 		FAIL_IF_NOT(ft_strequ(ft_strmap_of_vide, ""));
 		ft_strdel(&ft_strmap_of_vide);
 	}
+	return(1);
+}
 
+int test_37()
 	{//ft_strmapi
 		char	*ft_strmapi_upper_txtaz123HAHZ;
 		char	*ft_strmapi_lower_txtaz123HAHZ;
@@ -1586,9 +1684,12 @@ ft_strdel(&buffer);
 
 		ft_strdel(&ft_strmapi_upper_txtaz123HAHZ);
 		ft_strdel(&ft_strmapi_lower_txtaz123HAHZ);
+	
+		return(1);
 	}
 
 
+int test_38()
 	{ // strequ
 		char *abcd = "abcd";
 		FAIL_IF_NOT(test_ft_strequ(abcd, abcd));
@@ -1605,8 +1706,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(test_ft_strequ(NULL, abcd));
 		FAIL_IF_NOT(test_ft_strequ(abcd, NULL));
 #endif
+	
+		return(1);
 	}
 
+int test_39()
 	{ // strnequ
 		char *abcd = "abcd";
 		int i = 6;
@@ -1628,7 +1732,11 @@ ft_strdel(&buffer);
 #endif
 			i--;
 		}
+	
+		return(1);
 	}
+
+int test_40()
 	{	char *abcde = "abcde";
 		char *xyz = "xyz";
 		char *s;
@@ -1654,6 +1762,8 @@ ft_strdel(&buffer);
 			   	|| (s == NULL));
 		ft_strdel(&s);
 #endif
+	
+		return(1);
 	}
 
 /*	{ ici
@@ -1665,6 +1775,7 @@ ft_strdel(&buffer);
 	}*/
 
 
+int test_41()
 	{ // ftrsplit
 		char	*__Ha_Ho_123______erf_ = "__Ha_Ho_123______erf_";
 		char	**ftsplitresultof__Ha_Ho_123______erf_ =  ft_strsplit(__Ha_Ho_123______erf_, '_');
@@ -1678,8 +1789,11 @@ ft_strdel(&buffer);
 		for (i=0; i < 4; i++)
 			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
 		ft_memdel((void**)&ftsplitresultof__Ha_Ho_123______erf_);
+	
+		return(1);
 	}
 
+int test_42()
 	{
 		char *t;
 
@@ -1699,8 +1813,11 @@ ft_strdel(&buffer);
 		ft_strdel(&t);
 		FAIL_IF_NOT(ft_strequ((t = ft_itoa((int)0x8000000000000000)),"0"));
 		ft_strdel(&t);
+	
+		return(1);
 	}
 
+int test_43()
 	{ // ft_lstnew  ft_lstdelone ft_lstadd ft_lstdel
 		{
 			t_list	*tst[4];
@@ -1833,9 +1950,12 @@ ft_strdel(&buffer);
 
 		ft_putendl("ft_lstdel(&m, ..");
 		ft_lstdel(&elt0, &func_del_for_ft_lstmap);
+	
+		return(1);
 	}
 
 
+int test_44()
 	{ // copiright moulytest :P
 		t_list  *list;
 		t_list  *map;
@@ -1855,9 +1975,11 @@ ft_strdel(&buffer);
 		FAIL_IF_NOT(map->next->content_size == 200);
 		ft_lstdel(&list, &func_del_for_ft_lstmap);
 		ft_lstdel(&map, &func_del_for_ft_lstmap);
+	
+		return(1);
 	} 
 
-
+int test_45()
 	{
 		//strsub
 		{
@@ -2112,10 +2234,12 @@ ft_strdel(&buffer);
 			FAIL_IF_NOT(ft_strequ(r, "t want thi"));
 			ft_strdel(&r);
 		}
+		
+		return(1);
 	}
 
 
-
+int test_46()
 	{
 		//another test for ft_lstmap
 		char* tab[] = { "Un", "Deux", "Trois", "...", 
@@ -2168,8 +2292,10 @@ ft_strdel(&buffer);
 
 		ft_lstdel(&lst2, &func_del_for_ft_lstmap);
 		FAIL_IF_NOT(lst2 == NULL);
-	}
-	{
+		
+		return(1);
+}
+int test_47()	{
 		t_list	*lst = NULL;
 		ft_lstadd(&lst, ft_lstnew(NULL, 1));
 		ft_lstadd(&lst, ft_lstnew("#@!", 0));
@@ -2179,8 +2305,61 @@ ft_strdel(&buffer);
 
 		lst_show_lst(lst);
 		ft_lstdel(&lst, &func_del_for_ft_lstmap);
+	
+		return(1);
 	}
-	ft_strdel(&buffer);
+
+int main()
+{
+	FORK_TEST(test_00);
+	FORK_TEST(test_01);
+	FORK_TEST(test_02);
+	FORK_TEST(test_03);
+	FORK_TEST(test_04);
+	FORK_TEST(test_05);
+	FORK_TEST(test_06);
+	FORK_TEST(test_07);
+	FORK_TEST(test_08);
+	FORK_TEST(test_09);
+	FORK_TEST(test_10);
+	FORK_TEST(test_11);
+	FORK_TEST(test_12);
+	FORK_TEST(test_13);
+	FORK_TEST(test_14);
+	FORK_TEST(test_15);
+	FORK_TEST(test_16);
+	FORK_TEST(test_17);
+	FORK_TEST(test_18);
+	FORK_TEST(test_19);
+	FORK_TEST(test_20);
+	FORK_TEST(test_21);
+	FORK_TEST(test_22);
+	FORK_TEST(test_23);
+	FORK_TEST(test_24);
+	FORK_TEST(test_25);
+	FORK_TEST(test_26);
+	FORK_TEST(test_27);
+	FORK_TEST(test_28);
+	FORK_TEST(test_29);
+	FORK_TEST(test_30);
+	FORK_TEST(test_31);
+	FORK_TEST(test_32);
+	FORK_TEST(test_33);
+	FORK_TEST(test_34);
+	FORK_TEST(test_35);
+	FORK_TEST(test_36);
+	FORK_TEST(test_37);
+	FORK_TEST(test_38);
+	FORK_TEST(test_39);
+	FORK_TEST(test_40);
+	FORK_TEST(test_41);
+	FORK_TEST(test_42);
+	FORK_TEST(test_43);
+	FORK_TEST(test_44);
+	FORK_TEST(test_45);
+	FORK_TEST(test_46);
+	FORK_TEST(test_47);
+
 	ft_putendl("#############################################################");
 	ft_putendl("##############     ALL TESTS ARE OK       ###################");
 	ft_putendl("#############################################################");
