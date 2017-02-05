@@ -1,4 +1,10 @@
-int     test_toi(char *str)
+#include "tests.h"
+#include "libft.h"
+#include "test_libft.h"
+#include "tests.h"
+#include <stdlib.h>
+
+int     test_ft_atoi(char *str)
 {
 	int o,m;
 
@@ -17,7 +23,7 @@ int     test_toi(char *str)
 
 
 
-int test_21()
+int main_test_ft_atoi()
 	{//ft_atoi
 		FAIL_IF_NOT(test_ft_atoi("0"));// == 0);
 		FAIL_IF_NOT(test_ft_atoi("12"));//  == 12);
@@ -48,7 +54,7 @@ int test_21()
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775807"));// == 1);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775808"));// == 0);
 #endif
-		/* uncomment for compare result with the real atoi :
+		/* uncomment this lines to compare with the real atoi ! 
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775808"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775809"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775810"));//  == -1);

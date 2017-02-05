@@ -1,10 +1,14 @@
 #ifndef TEST_LIBFT_H
  #define TEST_LIBFT_H
 
+#include <string.h>
+#include "tests.h"
+
+
 #define _STRINGIFY(x) #x                                                        
 #define STRINGIFY(x) _STRINGIFY(x)                                              
 
-#define PROTECTED_TEST
+//#define PROTECTED_TEST
 
 
 #define FT_ASSERT(cond) { \
@@ -24,7 +28,6 @@
 TYPEDEF_SIZE_T;
 # endif
 */
-#include <string.h>
 
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 

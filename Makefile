@@ -16,38 +16,37 @@ DIRH=./
 DIRC=
 DIRLIBFT=libft_a_tester/
 DIRO=objs/
+DIRS=jllib/
+DIRTESTS=tests/
 
 LIBFT=libft.a
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h
-
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror -I$(DIRH)
-
-#pour tester une libft protegée, on peut ajouter ce flag
-#CFLAGS+=-DTEST_PROTECTED
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
-#LOCALFUNCS:=$(MISSFT)
-LOCALFUNCS=
-
-#OBJS=$(addprefix $(DIRO)ft_, $(addsuffix .o, $(LOCALFUNCS)))
 
 OS:=$(shell uname)
 CPU:=$(shell uname -m)
 MISSING_O=$(addprefix $(DIRO)ft_, $(addsuffix _$(OS)_$(CPU).o, $(MISSFT)))
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-MISSING_O:=$(MISSING_O) strlcat_$(CPU).o strnstr_$(CPU).o
+MISSING_O:=$(MISSING_O) $(DIRO)strlcat_$(CPU).o $(DIRO)strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
 endif
 
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
+
+CC=gcc
+CFLAGS=-g3 -O0 -Wall -Wextra -Werror -I$(DIRH) $(HAVE_STRLCPY)
+
+#pour tester une libft protegée, on peut ajouter ce flag
+#CFLAGS+=-DTEST_PROTECTED
+
 
 all: $(NAME) $(LIBFT)
 
@@ -60,7 +59,7 @@ $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 
 $(NAME) $(OBJS):$(HEADERS)
 
-$(DIRO)%.o: %.s
+$(DIRO)%.o: $(DIRS)%.s
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
@@ -82,11 +81,23 @@ re:
 	make all
 	make
 
-$(NAME): test_libft.c $(LIBFT) $(OBJS) $(HEADERS) $(MISSING_O)
+TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c test_ft_memccpy.c  test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c test_ft_strlen.c test_ft_strdup.c  test_ft_strcpy.c test_ft_strncpy.c test_ft_strcat.c test_ft_strncat.c test_ft_strlcat.c  test_ft_strchr.c test_ft_strrchr.c test_ft_strstr.c test_ft_strnstr.c test_ft_strcmp.c test_ft_strncmp.c test_ft_atoi.c test_ft_isalpha.c test_ft_isdigit.c test_ft_isalnum.c test_ft_isascii.c test_ft_isprint.c test_ft_toupper.c test_ft_tolower.c test_ft_memalloc.c test_ft_memdel.c test_ft_strnew.c test_ft_strdel.c test_ft_strclr.c test_ft_striter.c test_ft_striteri.c test_ft_strmap.c test_ft_strmapi.c test_ft_strequ.c test_ft_strnequ.c test_ft_strsub.c test_ft_strjoin.c test_ft_strtrim.c test_ft_strsplit.c test_ft_itoa.c test_ft_putchar.c test_ft_putstr.c test_ft_putendl.c test_ft_putnbr.c test_ft_putchar_fd.c test_ft_putstr_fd.c test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c test_ft_lstmap.c
+
+TESTS_OBJ:=$(addprefix $(DIRO), $(TESTS_FILES:.c=.o))
+
+$(DIRO)%.o:$(DIRTESTS)/%.c
+	@echo "$(TITLE)"
+	@mkdir -p objs
+	$(CC) $(CFLAGS) -o $@ -c $< 
+	
+verif:
+	echo $(TESTS_OBJ)
+
+$(NAME): test_libft.o $(LIBFT) $(OBJS) $(HEADERS) $(MISSING_O) $(TESTS_OBJ)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.c $(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(LIBFT) $(OBJS) 
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.o $(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: $(NAME)
 	./$(NAME)	
@@ -118,26 +129,17 @@ link2:
 #####################################################################################
 ###   WIP
 #####################################################################################
-TESTS_FILES:=ft_strsub2.c ft_strnlen.c ft_exit.c ft_assert.c ft_print_memory.c \
- ft_split.c ft_isspace.c \
- ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c \
- ft_memmove.c ft_memchr.c ft_memcmp.c ft_strlen.c ft_strdup.c ft_strcpy.c \
- ft_strncpy.c ft_strcat.c ft_strncat.c ft_strlcat.c ft_strchr.c ft_strrchr.c \
- ft_strstr.c ft_strnstr.c ft_strcmp.c ft_strncmp.c ft_atoi.c ft_isalpha.c \
- ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_toupper.c ft_tolower.c \
- ft_memalloc.c ft_memdel.c ft_strnew.c ft_strdel.c ft_strclr.c ft_striter.c \
- ft_striteri.c ft_strmap.c ft_strmapi.c ft_strequ.c ft_strnequ.c ft_strsub.c \
- ft_strjoin.c ft_strtrim.c ft_strsplit.c ft_itoa.c ft_putchar.c ft_putstr.c \
- ft_putendl.c ft_putnbr.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c \
- ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c ft_lstadd.c \
- ft_lstiter.c ft_lstmap.c
-
-LIBOBJ:=$(TESTS_FILES:.c=.o)
 
 truc:
 	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
 	for f in $(LIBFILES) ; do touch test_$$f ; done
 	ls test*.c
+	
+#listoffunc:=$(TESTS_FILES:.c=)
+#lst_tests:
+#	rm tests.h
+#	for f in $(listoffunc) ; do echo "int $$f();" >> tests.h ; done
+	
 #####################################################################################
 #####################################################################################
 #####################################################################################
