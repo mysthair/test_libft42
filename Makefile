@@ -55,7 +55,7 @@ $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 
 $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
-	make -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
+	make -j -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
 
 $(NAME) $(OBJS):$(HEADERS)
 
