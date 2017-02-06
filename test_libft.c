@@ -36,10 +36,13 @@ int		fork_test(int (*f)())
 		_exit(EXIT_FAILURE);
 	}else if (pid == 0){
        
-        if ((*f)())
+        	if ((*f)()){
+			ft_putendl(" .. OK");
 			_exit(EXIT_SUCCESS);
-		else
-			_exit(EXIT_SUCCESS);
+		}else{
+			ft_putendl(" .. KO");
+			_exit(EXIT_FAILURE);
+		}
 	}else{
 		int status;
 		(void)waitpid(pid, &status, 0);
@@ -61,11 +64,17 @@ int		fork_test(int (*f)())
 				ft_putendl("Fork : unknow status");
 				break;
 			}
-			ft_putendl("\n   .. KO");
+			ft_putendl(" ... KO");
 			return (0);
 		}else{
-			ft_putendl("\n  .. OK");
-			return (1);
+			int ret = WEXITSTATUS(status);
+			if(ret==EXIT_SUCCESS){
+				ft_putendl(" ... OK");
+				return (1);
+			}else{
+				ft_putendl(" ... KO");
+				_exit(-1);
+			}
 		}
 	}	
 }
@@ -75,38 +84,15 @@ int		fork_test(int (*f)())
 
 
 
-
-
-
-
-
-
-
-
-
-/*	{ ici
-		FAIL_IF_NOT(0);
-	}
-
-	{
-		FAIL_IF_NOT(0);
-	}*/
-
-
-
-
-
-
-
-
-
-
 int main()
 {
-#undef FORK_TEST
-#define FORK_TEST(f) f()
+//#undef FORK_TEST
+//#define FORK_TEST(f) f()
 
-
+#if 0
+	FORK_TEST(main_test_ft_strnstr);
+	FORK_TEST(main_test_ft_strdup);
+#else
 	FORK_TEST(main_test_ft_memcpy);
 	FORK_TEST(main_test_ft_memccpy);
 	FORK_TEST(main_test_ft_memmove);
@@ -152,7 +138,7 @@ int main()
 	FORK_TEST(main_test_ft_lstnew);
 	FORK_TEST(main_test_ft_strsub);
 	FORK_TEST(main_test_ft_lstmap);
-
+#endif
 	ft_putendl("#############################################################");
 	ft_putendl("##############     ALL TESTS ARE OK       ###################");
 	ft_putendl("#############################################################");

@@ -12,6 +12,12 @@ static int test_ft_strsplit1()
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[1], "Ho"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[2], "123"));
 		FAIL_IF_NOT(ft_strequ(ftsplitresultof__Ha_Ho_123______erf_[3], "erf"));
+		if(ftsplitresultof__Ha_Ho_123______erf_[4]!=NULL)
+		{
+			ft_putstr("ftsplitresultof__Ha_Ho_123______erf_[4] = \"");
+			ft_putstr(ftsplitresultof__Ha_Ho_123______erf_[4]);
+			ft_putstr("\"\n");
+		}
 		FAIL_IF_NOT(ftsplitresultof__Ha_Ho_123______erf_[4] == NULL);
 		for (i=0; i < 4; i++)
 			ft_strdel(ftsplitresultof__Ha_Ho_123______erf_ + i);
@@ -20,7 +26,7 @@ static int test_ft_strsplit1()
 		return(1);
 	}
 static int test_ft_strsplit2()
-	{//strtrim ?????
+	{//strtrim
 		char *txt = " Ceci, est   le texte à\tdécouper...     ";
 		char **tab = ft_strsplit(txt, ' ');
 		int i;

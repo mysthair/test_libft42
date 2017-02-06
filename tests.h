@@ -1,6 +1,52 @@
 #ifndef TESTS_H
 #define TESTS_H
 
+
+#define _STRINGIFY(x) #x                                                        
+#define STRINGIFY(x) _STRINGIFY(x)                                              
+
+//#define PROTECTED_TEST
+
+
+/*#define FT_ASSERT(cond) { \
+	ft_putstr("testons " #cond "\n"); \
+	ft_assert(cond, __FILE__, STRINGIFY(__LINE__), #cond ); \
+}*/
+
+
+#define TEST(cond) \
+	if(!(cond)) { \
+		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond ") FAILED! :(    KO\n"); \
+		return (0); \
+	}
+
+#define FT_ASSERT(cond) TEST(cond)
+
+
+/*# ifndef NULL
+#  define NULL 0
+#  define TYPEDEF_SIZE_T typedef unsigned long size_t
+TYPEDEF_SIZE_T;
+# endif
+*/
+
+# define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+
+#define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
+
+
+#define FORK_TEST(t) {\
+	ft_putstr(#t " .. \n");\
+	if(fork_test(&t)) {\
+		ft_putendl(#t " .. OK");\
+	}else{\
+		ft_putendl(" .. KO");\
+		_exit(-1);\
+	}\
+}
+
+
+
 int main_test_ft_memset();
 int main_test_ft_bzero();
 int main_test_ft_memcpy();

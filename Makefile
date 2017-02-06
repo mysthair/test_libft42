@@ -21,12 +21,12 @@ DIRTESTS=tests/
 
 LIBFT=libft.a
 LIBFTH=libft.h
-HEADERS=$(LIBFTH) test_libft.h
+HEADERS=$(LIBFTH) test_libft.h tests.h
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
+#MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
 
 OS:=$(shell uname)
@@ -42,7 +42,7 @@ endif
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
 CC=gcc
-CFLAGS=-g3 -O0 -Wall -Wextra -Werror -I$(DIRH) $(HAVE_STRLCPY)
+CFLAGS=-Wall -Wextra -Werror -I$(DIRH) -I$(DIRLIBFT) $(HAVE_STRLCPY)
 
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
@@ -57,7 +57,7 @@ $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
 	make -j -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
 
-$(NAME) $(OBJS):$(HEADERS)
+$(NAME) $(OBJS) $(MISSING_O): $(HEADERS)
 
 $(DIRO)%.o: $(DIRS)%.s
 	@echo "$(TITLE)"
@@ -100,7 +100,7 @@ endif
 	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.o $(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: $(NAME)
-	./$(NAME)	
+	( ./$(NAME) && echo "OK" ) || echo "KO"
 
 testnorm:
 	norminette $(DIRLIBFT)
@@ -113,16 +113,25 @@ memcheck: vg.log
 	less vg.log
 
 link:
-	rm -f libft_a_tester
+	rm -f libft.a libft.h libft_a_tester
 	ln -s ../libft libft_a_tester
 
 link1:
-	rm -f libft_a_tester
-	ln -s ~/libft_a_tester
+	rm -f libft.a libft.h libft_a_tester
+	ln -s ~/libft_a_tester1 libft_a_tester
 
 link2:
-	rm -f libft_a_tester
-	ln -s ~/tmp/libft_a_tester libft_a_tester
+	rm -f libft.a libft.h libft_a_tester
+	ln -s ~/libft_a_tester2 libft_a_tester
+
+link3:
+	rm -f libft.a libft.h libft_a_tester
+	ln -s ~/libft_a_tester3 libft_a_tester
+
+link4:
+	rm -f libft.a libft.h libft_a_tester
+	ln -s ~/libft_a_tester4 libft_a_tester
+
 
 
 

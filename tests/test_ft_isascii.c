@@ -12,13 +12,11 @@ static int     test_ft_isascii(int c)
 int main_test_ft_isascii()
 {
 	int i;
-	int errors = 0;
-	
 	for (i =  -10; i< 520; i++)
 	{
-		errors += test_ft_isascii(i);
+		FAIL_IF_NOT( test_ft_isascii(i));
 	}
 
-	return (errors);
+	return (1);
 }
 

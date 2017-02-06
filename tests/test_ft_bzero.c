@@ -28,5 +28,5 @@ int	main_test_ft_bzero()
 	errors += test_ft_bzero(buffer, 1024);
 	errors += test_ft_bzero(buffer, 0);
 
-	return errors;
+	return (errors == 0 ? 1 : 0);
 }
