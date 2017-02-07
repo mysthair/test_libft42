@@ -25,7 +25,7 @@ static int    test_ft_memalloc(size_t size)
 	}
 	o = malloc(size);
 	free(o);
-	TEST((m && o) || (!m && !o));
+	TEST(size == 0 || (m && o) || (!m && !o));
 	return (1);
 }
 

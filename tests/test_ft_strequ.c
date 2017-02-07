@@ -5,9 +5,13 @@
 
 static int	test_ft_strequ(const char *s1, const char *s2)
 {
-	if(!s1 || !s2)
+	if(!s1 && !s2)
 	{	
-		TEST(((s1 == s2) && ft_strequ(s1, s2)) || ((s1 != s2) && !ft_strequ(s1, s2)));
+		TEST(ft_strequ(s1, s2) == ((ft_strcmp(s1, s2) == 0 ? 1 : 0)));
+	}
+	else
+	{
+		TEST(ft_strequ(s1, s2) == ((s1 == s2) ? 1 : 0));
 	}
 	return (1);
 }
