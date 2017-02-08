@@ -14,30 +14,30 @@ NAME=test_libft
 
 DIRH=./
 DIRC=
-DIRLIBFT=libft_a_tester/
-DIRO=objs/
-DIRS=jllib/
-DIRTESTS=tests/
+DIRLIBFT=libft_a_tester
+DIRO=objs
+DIRS=jllib
+DIRTESTS=tests
 
-LIBFT=$(DIRLIBFT)libft.a
+LIBFT=$(DIRLIBFT)/libft.a
 LIBS=-L$(DIRLIBFT)-lft
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h tests.h
 
 INC=-I. -I$(DIRLIBFT)
 
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_print_memory.c ]; then echo print_memory ;fi)
-#MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_exit.c ]; then echo exit ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_assert.c ]; then echo assert ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_putaddr.c ]; then echo putaddr ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_print_memory.c ]; then echo print_memory ;fi)
+#MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_exit.c ]; then echo exit ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_assert.c ]; then echo assert ;fi)
 
 OS:=$(shell uname)
 CPU:=$(shell uname -m)
-MISSING_O=$(addprefix $(DIRO)ft_, $(addsuffix _$(OS)_$(CPU).o, $(MISSFT)))
+MISSING_O=$(addprefix $(DIRO)/ft_, $(addsuffix _$(OS)_$(CPU).o, $(MISSFT)))
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-MISSING_O:=$(MISSING_O) $(DIRO)strlcat_$(CPU).o $(DIRO)strnstr_$(CPU).o
+MISSING_O:=$(MISSING_O) $(DIRO)/strlcat_$(CPU).o $(DIRO)/strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
 endif
@@ -51,27 +51,31 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 #CFLAGS+=-DTEST_PROTECTED
 
 
-all: $(NAME) $(LIBFT)
+all: $(DIRLIBFT) $(NAME) $(LIBFT)
 
-$(LIBFTH):$(DIRLIBFT)$(LIBFTH)
-	cp $(DIRLIBFT)$(LIBFTH) $(LIBFTH)
+$(DIRLIBFT):
+	if [ -d ../libft ]; then ln -s ../libft $(DIRLIBFT) ; \
+	else echo "error ../libft not exist"; fi
+
+$(LIBFTH): $(DIRLIBFT) $(DIRLIBFT)/$(LIBFTH)
+	cp $(DIRLIBFT)/$(LIBFTH) $(LIBFTH)
 
 $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
 	make -j -C $(DIRLIBFT) 
-	#&& cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
+	#&& cp -v $(DIRLIBFT)/$(LIBFT) $(LIBFT)
 
-$(NAME) $(OBJS) $(MISSING_O): $(HEADERS)
+$(NAME) $(OBJS) $(MISSING_O): $(DIRLIBFT) $(HEADERS)
 
-$(DIRO)%.o: $(DIRS)%.s
+$(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
 clean:
 	@echo "$(TITLE)"
-	rm -rf $(OBJS) $(MISSING_O) $(DIRO)test_libft.o
-	rmdir --ignore-fail-on-non-empty $(DIRO)
+	rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
+	rm -rf $(DIRO)
 	make -C $(DIRLIBFT) clean 
 
 fclean: clean
@@ -88,13 +92,13 @@ re:
 
 TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c test_ft_memccpy.c  test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c test_ft_strlen.c test_ft_strdup.c  test_ft_strcpy.c test_ft_strncpy.c test_ft_strcat.c test_ft_strncat.c test_ft_strlcat.c  test_ft_strchr.c test_ft_strrchr.c test_ft_strstr.c test_ft_strnstr.c test_ft_strcmp.c test_ft_strncmp.c test_ft_atoi.c test_ft_isalpha.c test_ft_isdigit.c test_ft_isalnum.c test_ft_isascii.c test_ft_isprint.c test_ft_toupper.c test_ft_tolower.c test_ft_memalloc.c test_ft_memdel.c test_ft_strnew.c test_ft_strdel.c test_ft_strclr.c test_ft_striter.c test_ft_striteri.c test_ft_strmap.c test_ft_strmapi.c test_ft_strequ.c test_ft_strnequ.c test_ft_strsub.c test_ft_strjoin.c test_ft_strtrim.c test_ft_strsplit.c test_ft_itoa.c test_ft_putchar.c test_ft_putstr.c test_ft_putendl.c test_ft_putnbr.c test_ft_putchar_fd.c test_ft_putstr_fd.c test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c test_ft_lstmap.c
 
-TESTS_OBJ:=$(addprefix $(DIRO), $(TESTS_FILES:.c=.o))
+TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 
-$(DIRO)test_libft.o:test_libft.c
+$(DIRO)/test_libft.o:test_libft.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
-$(DIRO)%.o:$(DIRTESTS)/%.c
+$(DIRO)/%.o:$(DIRTESTS)/%.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
@@ -102,12 +106,12 @@ $(DIRO)%.o:$(DIRTESTS)/%.c
 verif:
 	echo $(TESTS_OBJ)
 
-$(NAME): $(DIRO)test_libft.o $(LIBFT) $(OBJS) \
+$(NAME): $(DIRO)/test_libft.o $(LIBFT) $(OBJS) \
 		$(HEADERS) $(MISSING_O) $(TESTS_OBJ)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)test_libft.o \
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
 		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: $(NAME)
@@ -116,6 +120,12 @@ test: $(NAME)
 testnorm:
 	norminette $(DIRLIBFT)
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
+
+
+
+#####################################################################################
+###   WIP
+#####################################################################################
 
 vg.log: test_libft
 	valgrind --tool=memcheck --leak-check=yes --track-origins=yes --log-fd=1 ./test_libft> vg.log
@@ -142,19 +152,11 @@ link3:
 link4:
 	rm -f libft.a libft.h libft_a_tester
 	ln -s ~/libft_a_tester4 libft_a_tester
-
-
-
-
-#####################################################################################
-###   WIP
-#####################################################################################
-
-truc:
-	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
-	for f in $(LIBFILES) ; do touch test_$$f ; done
-	ls test*.c
-	
+#truc:
+#	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
+#	for f in $(LIBFILES) ; do touch test_$$f ; done
+#	ls test*.c
+#	
 #listoffunc:=$(TESTS_FILES:.c=)
 #lst_tests:
 #	rm tests.h
