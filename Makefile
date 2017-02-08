@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2017/01/31 15:28:12 by jleblanc         ###   ########.fr        #
+#    Updated: 2017/02/08 15:37:29 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,8 +56,8 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 all: $(LINKFT) $(NAME) $(LIBFT)
 
 $(LINKFT):
-	if [ -e ../libft ]; then ln -s ../libft $(LINKFT) ; \
-	else echo "error ../libft not exist"; fi
+	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then ln -s $(DIRLIBFT) $(LINKFT) ; \
+	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
 $(LIBFTH): $(LINKFT) $(LINKFT)/$(LIBFTH)
 	cp $(LINKFT)/$(LIBFTH) $(LIBFTH)
@@ -78,19 +78,18 @@ clean:
 	@echo "$(TITLE)"
 	rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
 	rm -rf $(DIRO)
-	make -C $(LINKFT) clean 
+	if [ -L $(LINKFT) ]; then make -C $(LINKFT) clean ; fi
 
 fclean: clean
 	@echo "$(TITLE)"
 	rm -f $(LIBFT) $(LIBFTH)
 	rm -f *.e $(NAME)
 	@rm -rf *.dSYM
-	make -C $(LINKFT) fclean 
+	if [ -L $(LINKFT) ]; then make -C $(LINKFT) fclean ; fi
 re:
 	@echo "$(TITLE)"
 	make fclean
 	make all
-	make
 
 TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c test_ft_memccpy.c  test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c test_ft_strlen.c test_ft_strdup.c  test_ft_strcpy.c test_ft_strncpy.c test_ft_strcat.c test_ft_strncat.c test_ft_strlcat.c  test_ft_strchr.c test_ft_strrchr.c test_ft_strstr.c test_ft_strnstr.c test_ft_strcmp.c test_ft_strncmp.c test_ft_atoi.c test_ft_isalpha.c test_ft_isdigit.c test_ft_isalnum.c test_ft_isascii.c test_ft_isprint.c test_ft_toupper.c test_ft_tolower.c test_ft_memalloc.c test_ft_memdel.c test_ft_strnew.c test_ft_strdel.c test_ft_strclr.c test_ft_striter.c test_ft_striteri.c test_ft_strmap.c test_ft_strmapi.c test_ft_strequ.c test_ft_strnequ.c test_ft_strsub.c test_ft_strjoin.c test_ft_strtrim.c test_ft_strsplit.c test_ft_itoa.c test_ft_putchar.c test_ft_putstr.c test_ft_putendl.c test_ft_putnbr.c test_ft_putchar_fd.c test_ft_putstr_fd.c test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c test_ft_lstmap.c
 
@@ -137,23 +136,27 @@ memcheck: vg.log
 
 link:
 	rm -f $(LINKFT)
-	if [ -e ../libft ]; then ln -s ../libft $(LINKFT) ; fi
+	if [ -d ../libft -o -L ../libft ]; then ln -s ../libft $(LINKFT) ; fi
 
 link1:
 	rm -f $(LINKFT)
-	if [ -e ../libft_a_tester1 ]; then ln -s ../libft_a_tester1 $(LINKFT) ; fi
+	if [ -d ../libft_a_tester1 -o -L ../libft_a_tester1 ]; \
+		then ln -s ../libft_a_tester1 $(LINKFT) ; fi
 
 link2:
 	rm -f $(LINKFT)
-	if [ -e ../libft_a_tester2 ]; then ln -s ../libft_a_tester2 $(LINKFT) ; fi
+	if [ -d ../libft_a_tester2 -o -L ../libft_a_tester2 ]; \
+		then ln -s ../libft_a_tester2 $(LINKFT) ; fi
 
 link3:
 	rm -f $(LINKFT)
-	if [ -e ../libft_a_tester3 ]; then ln -s ../libft_a_tester3 $(LINKFT) ; fi
+	if [ -d ../libft_a_tester3 -o -L ../libft_a_tester3 ]; \
+		then ln -s ../libft_a_tester3 $(LINKFT) ; fi
 
 link4:
 	rm -f $(LINKFT)
-	if [ -e ../libft_a_tester4 ]; then ln -s ../libft_a_tester4 $(LINKFT) ; fi
+	if [ -d ../libft_a_tester4 -o -L ../libft_a_tester4 ]; \
+		then ln -s ../libft_a_tester4 $(LINKFT) ; fi
 
 #truc:
 #	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
