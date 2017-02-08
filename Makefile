@@ -12,25 +12,27 @@
 
 NAME=test_libft
 
+DIRLIBFT=../libft
+
 DIRH=./
 DIRC=
-DIRLIBFT=libft_a_tester
 DIRO=objs
 DIRS=jllib
 DIRTESTS=tests
 
-LIBFT=$(DIRLIBFT)/libft.a
-LIBS=-L$(DIRLIBFT)-lft
+LINKFT=link_libft
+LIBFT=$(LINKFT)/libft.a
+LIBS=-L$(LINKFT)-lft
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h tests.h
 
-INC=-I. -I$(DIRLIBFT)
+INC=-I. -I$(LINKFT)
 
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_putaddr.c ]; then echo putaddr ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_print_memory.c ]; then echo print_memory ;fi)
-#MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_exit.c ]; then echo exit ;fi)
-MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)/ft_assert.c ]; then echo assert ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_print_memory.c ]; then echo print_memory ;fi)
+#MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_exit.c ]; then echo exit ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_assert.c ]; then echo assert ;fi)
 
 OS:=$(shell uname)
 CPU:=$(shell uname -m)
@@ -51,21 +53,21 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 #CFLAGS+=-DTEST_PROTECTED
 
 
-all: $(DIRLIBFT) $(NAME) $(LIBFT)
+all: $(LINKFT) $(NAME) $(LIBFT)
 
-$(DIRLIBFT):
-	if [ -d ../libft ]; then ln -s ../libft $(DIRLIBFT) ; \
+$(LINKFT):
+	if [ -e ../libft ]; then ln -s ../libft $(LINKFT) ; \
 	else echo "error ../libft not exist"; fi
 
-$(LIBFTH): $(DIRLIBFT) $(DIRLIBFT)/$(LIBFTH)
-	cp $(DIRLIBFT)/$(LIBFTH) $(LIBFTH)
+$(LIBFTH): $(LINKFT) $(LINKFT)/$(LIBFTH)
+	cp $(LINKFT)/$(LIBFTH) $(LIBFTH)
 
-$(LIBFT): $(DIRLIBFT) $(LIBFTH)
+$(LIBFT): $(LINKFT) $(LIBFTH)
 	@echo "$(TITLE)"
-	make -j -C $(DIRLIBFT) 
-	#&& cp -v $(DIRLIBFT)/$(LIBFT) $(LIBFT)
+	make -j -C $(LINKFT) 
+	#&& cp -v $(LINKFT)/$(LIBFT) $(LIBFT)
 
-$(NAME) $(OBJS) $(MISSING_O): $(DIRLIBFT) $(HEADERS)
+$(NAME) $(OBJS) $(MISSING_O): $(LINKFT) $(HEADERS)
 
 $(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
@@ -76,14 +78,14 @@ clean:
 	@echo "$(TITLE)"
 	rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
 	rm -rf $(DIRO)
-	make -C $(DIRLIBFT) clean 
+	make -C $(LINKFT) clean 
 
 fclean: clean
 	@echo "$(TITLE)"
 	rm -f $(LIBFT) $(LIBFTH)
 	rm -f *.e $(NAME)
 	@rm -rf *.dSYM
-	make -C $(DIRLIBFT) fclean 
+	make -C $(LINKFT) fclean 
 re:
 	@echo "$(TITLE)"
 	make fclean
@@ -118,7 +120,7 @@ test: $(NAME)
 	( ./$(NAME) && echo "OK" ) || echo "KO"
 
 testnorm:
-	norminette $(DIRLIBFT)
+	norminette $(LINKFT)
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
 
 
@@ -134,24 +136,25 @@ memcheck: vg.log
 	less vg.log
 
 link:
-	rm -f libft.a libft.h libft_a_tester
-	ln -s ../libft libft_a_tester
+	rm -f $(LINKFT)
+	if [ -e ../libft ]; then ln -s ../libft $(LINKFT) ; fi
 
 link1:
-	rm -f libft.a libft.h libft_a_tester
-	ln -s ~/libft_a_tester1 libft_a_tester
+	rm -f $(LINKFT)
+	if [ -e ../libft_a_tester1 ]; then ln -s ../libft_a_tester1 $(LINKFT) ; fi
 
 link2:
-	rm -f libft.a libft.h libft_a_tester
-	ln -s ~/libft_a_tester2 libft_a_tester
+	rm -f $(LINKFT)
+	if [ -e ../libft_a_tester2 ]; then ln -s ../libft_a_tester2 $(LINKFT) ; fi
 
 link3:
-	rm -f libft.a libft.h libft_a_tester
-	ln -s ~/libft_a_tester3 libft_a_tester
+	rm -f $(LINKFT)
+	if [ -e ../libft_a_tester3 ]; then ln -s ../libft_a_tester3 $(LINKFT) ; fi
 
 link4:
-	rm -f libft.a libft.h libft_a_tester
-	ln -s ~/libft_a_tester4 libft_a_tester
+	rm -f $(LINKFT)
+	if [ -e ../libft_a_tester4 ]; then ln -s ../libft_a_tester4 $(LINKFT) ; fi
+
 #truc:
 #	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
 #	for f in $(LIBFILES) ; do touch test_$$f ; done

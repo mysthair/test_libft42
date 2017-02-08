@@ -8,3 +8,4 @@ test_libft.dSYM
 *.log
 a.out
 libft_a_tester
+link_libft
