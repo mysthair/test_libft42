@@ -19,9 +19,12 @@ DIRO=objs/
 DIRS=jllib/
 DIRTESTS=tests/
 
-LIBFT=libft.a
+LIBFT=$(DIRLIBFT)libft.a
+LIBS=-L$(DIRLIBFT)-lft
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h tests.h
+
+INC=-I. -I$(DIRLIBFT)
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(DIRLIBFT)ft_putaddr.c ]; then echo putaddr ;fi)
@@ -42,7 +45,7 @@ endif
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror -I$(DIRH) -I$(DIRLIBFT) $(HAVE_STRLCPY)
+CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
@@ -55,7 +58,8 @@ $(LIBFTH):$(DIRLIBFT)$(LIBFTH)
 
 $(LIBFT): $(DIRLIBFT) $(LIBFTH)
 	@echo "$(TITLE)"
-	make -j -C $(DIRLIBFT) && cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
+	make -j -C $(DIRLIBFT) 
+	#&& cp -v $(DIRLIBFT)$(LIBFT) $(LIBFT)
 
 $(NAME) $(OBJS) $(MISSING_O): $(HEADERS)
 
@@ -66,7 +70,8 @@ $(DIRO)%.o: $(DIRS)%.s
 
 clean:
 	@echo "$(TITLE)"
-	rm -rf $(DIRO) $(MISSING_O)
+	rm -rf $(OBJS) $(MISSING_O) $(DIRO)test_libft.o
+	rmdir --ignore-fail-on-non-empty $(DIRO)
 	make -C $(DIRLIBFT) clean 
 
 fclean: clean
@@ -85,6 +90,10 @@ TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c test_ft_memccpy.c
 
 TESTS_OBJ:=$(addprefix $(DIRO), $(TESTS_FILES:.c=.o))
 
+$(DIRO)test_libft.o:test_libft.c
+	@echo "$(TITLE)"
+	@mkdir -p objs
+	$(CC) $(CFLAGS) -o $@ -c $< 
 $(DIRO)%.o:$(DIRTESTS)/%.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
@@ -93,11 +102,13 @@ $(DIRO)%.o:$(DIRTESTS)/%.c
 verif:
 	echo $(TESTS_OBJ)
 
-$(NAME): test_libft.o $(LIBFT) $(OBJS) $(HEADERS) $(MISSING_O) $(TESTS_OBJ)
+$(NAME): $(DIRO)test_libft.o $(LIBFT) $(OBJS) \
+		$(HEADERS) $(MISSING_O) $(TESTS_OBJ)
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft test_libft.o $(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)test_libft.o \
+		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: $(NAME)
 	( ./$(NAME) && echo "OK" ) || echo "KO"

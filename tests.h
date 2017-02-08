@@ -16,11 +16,14 @@
 
 #define TEST(cond) \
 	if(!(cond)) { \
-		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond ") FAILED! :(    KO\n"); \
+		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond \
+	")   FAILED! :(  KO\n"); \
 		return (0); \
 	}
 
 #define FT_ASSERT(cond) TEST(cond)
+# define FAIL_IF_NOT(cond) FT_ASSERT(cond)
+// ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 
 
 /*# ifndef NULL
@@ -30,7 +33,6 @@ TYPEDEF_SIZE_T;
 # endif
 */
 
-# define FAIL_IF_NOT(cond) FT_ASSERT(cond); ft_putstr(STRINGIFY(cond) " .. OK\n"); 
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
