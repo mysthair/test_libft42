@@ -6,13 +6,15 @@
 
 static int	test_ft_strnequ(const char *s1, const char *s2, size_t n)
 {
-	if(!s1 && !s2)
+	if(s1 && s2)
 	{	
-		TEST(ft_strnequ(s1, s2, n) == (ft_strncmp(s1, s2, n) == 0 ? 1 : 0));
+		TEST((!s1 || !s2) 
+			|| (ft_strnequ(s1, s2, n) == (ft_strncmp(s1, s2, n) == 0 ? 1 : 0)));
 	}
 	else
 	{
-		TEST(ft_strnequ(s1, s2, n) == ((s1 == s2) ? 1 : 0));
+		TEST((s1 && s2 ) 
+			|| (ft_strnequ(s1, s2, n) == ((s1 == s2) ? 1 : 0)));
 	}
 	return (1);
 }
