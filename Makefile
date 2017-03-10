@@ -31,7 +31,6 @@ INC=-I. -I$(LINKFT)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_print_memory.c ]; then echo print_memory ;fi)
-#MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_exit.c ]; then echo exit ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_assert.c ]; then echo assert ;fi)
 
 OS:=$(shell uname)
@@ -50,8 +49,11 @@ CC=gcc
 CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 
 #pour tester une libft protegée, on peut ajouter ce flag
-#CFLAGS+=-DTEST_PROTECTED
+#ADDFLAG+=-DTEST_PROTECTED
 
+#pour tester si les malloc ont ete proteges...
+ADDFLAG+=-Dmalloc=nullalloc
+MISSING_O+=$(DIRO)/nullalloc.o
 
 all: $(LINKFT) $(NAME) $(LIBFT)
 
@@ -69,10 +71,15 @@ $(LIBFT): $(LINKFT) $(LIBFTH)
 
 $(NAME) $(OBJS) $(MISSING_O): $(LINKFT) $(HEADERS)
 
-$(DIRO)/%.o: $(DIRS)/%.s
+$(DIRO)/nullalloc.o:$(DIRS)/nullalloc.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $< 
+
+$(DIRO)/%.o: $(DIRS)/%.s
+	@echo "$(TITLE)"
+	@mkdir -p objs
+	$(CC) $(CFLAGS) $(ADDFLAG) -o $@ -c $< 
 
 clean:
 	@echo "$(TITLE)"
