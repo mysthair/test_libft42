@@ -7,8 +7,17 @@ static int test_ft_bzero(void *buffer, size_t size)
 	size_t	i;
 	char 	*data;
 
-	ft_bzero(buffer, size);
 	data = (char*)buffer;
+
+	i = 0;
+	while(buffer && i < size)
+	{	
+		data[i] = (char) i;
+		i++;
+	}	
+
+	ft_bzero(buffer, size);
+
 	i = 0;
 	while(i < size)
 	{	

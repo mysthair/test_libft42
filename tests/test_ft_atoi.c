@@ -42,6 +42,7 @@ int main_test_ft_atoi()
 		FAIL_IF_NOT(test_ft_atoi("2147483647"));//  == 2147483647);
 		FAIL_IF_NOT(test_ft_atoi("-2147483647"));//  == -2147483647);
 		FAIL_IF_NOT(test_ft_atoi("-2147483648"));//  == -2147483648);
+		FAIL_IF_NOT(test_ft_atoi("00000000000000000000000000000000"));// == 0);
 #ifndef __armv6l__	
 		FAIL_IF_NOT(test_ft_atoi("2147483648"));//  == -2147483648);
 		FAIL_IF_NOT(test_ft_atoi("2147483649"));//  == -2147483647);
