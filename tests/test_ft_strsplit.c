@@ -43,8 +43,18 @@ static int test_ft_strsplit2()
 	
 		return(1);
 	}
+	
+static int test_ft_strsplit_null(void)
+{
+	char ** ft_strsplit_null = ft_strsplit(NULL, ' ');
+	FAIL_IF_NOT(ft_strsplit_null == NULL || ft_strlen(ft_strsplit_null[0]) == 0);
+	return (1);
+}
 int main_test_ft_strsplit()
 {
-	return (test_ft_strsplit1() && test_ft_strsplit2());
+	return (test_ft_strsplit1() 
+	&& test_ft_strsplit2()
+	&& test_ft_strsplit_null()
+	);
 }
 
