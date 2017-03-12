@@ -163,7 +163,12 @@ link4:
 #	for f in $(LIBFILES) ; do touch test_$$f ; done
 #	ls test*.c
 #	
-#listoffunc:=$(TESTS_FILES:.c=)
+
+link5:
+	rm -f $(LINKFT)
+	if [ -d ../libft_a_tester5 -o -L ../libft_a_tester5 ]; \
+		then ln -s ../libft_a_tester5 $(LINKFT) ; fi
+
 #lst_tests:
 #	rm tests.h
 #	for f in $(listoffunc) ; do echo "int $$f();" >> tests.h ; done
