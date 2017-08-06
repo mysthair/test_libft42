@@ -5,9 +5,9 @@
 
 static int     test_ft_isalnum(int c)
 {
-	if(!!isalnum(c) != !!ft_isalnum(c))
+	if(!((!!isalnum(c)) == (!!ft_isalnum(c))))
 	{
-		ft_putstr("ft_isalnum("); ft_putnbr(c); ft_putstr(") = ") ; ft_putnbr(ft_isalnum(c));
+		ft_putstr("ft_isalnum("); ft_putnbr(c); ft_putstr(" \""); ft_putchar(c);ft_putstr("\") = ") ; ft_putnbr(ft_isalnum(c));
 		ft_putstr("\nisalnum("); ft_putnbr(c); ft_putstr(") = ") ; ft_putnbr(isalnum(c));
 		ft_putstr("\n");
 	}
@@ -34,7 +34,7 @@ int main_test_ft_isalnum()
 		FAIL_IF_NOT(test_ft_isalnum('\0'));
 	
 		int i;
-		for (i = -128; i<1024; i++)
+		for (i = -255; i<=256; i++)
 			FAIL_IF_NOT(test_ft_isalnum(i));
 	
 		return(1);

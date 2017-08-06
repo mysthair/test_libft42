@@ -33,9 +33,9 @@ int	main_test_ft_bzero()
 	char	buffer[1024];
 	int errors = 0;
 	
-	errors += test_ft_bzero(buffer, 0);
-	errors += test_ft_bzero(buffer, 1024);
-	errors += test_ft_bzero(buffer, 0);
+	errors += (test_ft_bzero(buffer, 0) ? 0 :1);
+	errors += (test_ft_bzero(buffer, 1024) ? 0 :1);
+	errors += (test_ft_bzero(buffer, 0) ? 0 :1);
 
 	return (errors == 0 ? 1 : 0);
 }

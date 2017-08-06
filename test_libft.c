@@ -93,6 +93,8 @@ int main()
 	FORK_TEST(main_test_ft_strnstr);
 	FORK_TEST(main_test_ft_strdup);
 #else
+	FORK_TEST(main_test_ft_memset);
+	FORK_TEST(main_test_ft_bzero);
 	FORK_TEST(main_test_ft_memcpy);
 	FORK_TEST(main_test_ft_memccpy);
 	FORK_TEST(main_test_ft_memmove);
@@ -136,8 +138,13 @@ int main()
 	FORK_TEST(main_test_ft_itoa);
 //	FORK_TEST(main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap);
 	FORK_TEST(main_test_ft_lstnew);
+	FORK_TEST(main_test_ft_lstadd);
+	FORK_TEST(main_test_ft_lstdelone);
+	FORK_TEST(main_test_ft_lstdel);
+	FORK_TEST(main_test_ft_lstiter);
 	FORK_TEST(main_test_ft_strsub);
 	FORK_TEST(main_test_ft_lstmap);
+	
 #endif
 	ft_putendl("#############################################################");
 	ft_putendl("##############     ALL TESTS ARE OK       ###################");

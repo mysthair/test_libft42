@@ -31,7 +31,7 @@ INC=-I. -I$(LINKFT)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_print_memory.c ]; then echo print_memory ;fi)
-#MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_exit.c ]; then echo exit ;fi)
+MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_exit.c ]; then echo exit ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_assert.c ]; then echo assert ;fi)
 
 OS:=$(shell uname)

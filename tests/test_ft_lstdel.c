@@ -30,18 +30,17 @@ static void func_del_for_ft_lstdel(void* data, size_t size)
 	char *   elt;
 
 	elt = (char *)data;
-	if (!elt)
-		ft_putstr("func_del_for_ft_lstdel *NULL !\n");
-	else	
-	{ 
-		ft_putstr("func_del_for_ft_lstdel ");
+	if (!elt){
+		//ft_putstr("func_del_for_ft_lstdel *NULL !\n");
+	}else{ 
+		/*ft_putstr("func_del_for_ft_lstdel ");
 		ft_putaddr(elt); 
 		if (elt) { 
 			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
 		} 
 		ft_putstr(", size ");	ft_putnbr(size);
-		ft_putstr("\n");
-
+		ft_putstr("\n");*/
+    (void)size;
 		ft_memdel(&data);
 	}
 }
@@ -58,6 +57,7 @@ int main_test_ft_lstdel()	{
 		lst_show_lst(lst);
 		ft_lstdel(&lst, &func_del_for_ft_lstdel);
 	
+  	FAIL_IF_NOT(lst == NULL);
 		return(1);
 	}
 

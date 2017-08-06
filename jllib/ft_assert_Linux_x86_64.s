@@ -53,7 +53,7 @@ ft_assert:
 	popq	%rbp
 	.cfi_restore 6
 	.cfi_def_cfa_offset 8
-	jmp	ft_exit
+	jmp	exit
 	.cfi_endproc
 .LFE24:
 	.size	ft_assert, .-ft_assert

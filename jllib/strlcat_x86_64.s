@@ -27,10 +27,10 @@ strlcat:
 	.cfi_def_cfa_offset 48
 	.cfi_offset 3, -48
 	movq	%rdx, %rbx
-	call	strlen
+	call	ft_strlen
 	movq	%r13, %rdi
 	movq	%rax, %r12
-	call	strlen
+	call	ft_strlen
 	cmpq	%rbx, %r12
 	movq	%rax, %rbp
 	leaq	(%rax,%rbx), %rax
@@ -39,7 +39,7 @@ strlcat:
 	movq	%r13, %rsi
 	movq	%r14, %rdi
 	subq	%r12, %rdx
-	call	strncat
+	call	ft_strncat
 	leaq	0(%rbp,%r12), %rax
 .L3:
 	popq	%rbx
