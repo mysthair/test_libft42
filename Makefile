@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2017/02/08 15:37:29 by jleblanc         ###   ########.fr        #
+#    Updated: 2017/08/07 19:00:44 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIBS=-L$(LINKFT)-lft
 LIBFTH=libft.h
 HEADERS=$(LIBFTH) test_libft.h tests.h
 
-INC=-I. -I$(LINKFT)
+INC=-I. -I$(LINKFT) -I$(LINKFT)/includes
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
@@ -56,15 +56,15 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
 all: $(LINKFT) $(NAME) $(LIBFT)
 
 $(LINKFT):
-	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then ln -s $(DIRLIBFT) $(LINKFT) ; \
+	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then test -L $(LINKFT) || ln -s $(DIRLIBFT) $(LINKFT) ; \
 	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
 $(LIBFTH): $(LINKFT) $(LINKFT)/$(LIBFTH)
-	cp $(LINKFT)/$(LIBFTH) $(LIBFTH)
+	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/include/$(LIBFTH) $(LIBFTH)
 
 $(LIBFT): $(LINKFT) $(LIBFTH)
 	@echo "$(TITLE)"
-	make -j -C $(LINKFT) 
+	make -j -C $(LINKFT)
 	#&& cp -v $(LINKFT)/$(LIBFT) $(LIBFT)
 
 $(NAME) $(OBJS) $(MISSING_O): $(LINKFT) $(HEADERS)
@@ -72,13 +72,13 @@ $(NAME) $(OBJS) $(MISSING_O): $(LINKFT) $(HEADERS)
 $(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $< 
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	@echo "$(TITLE)"
 	rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
 	rm -rf $(DIRO)
-	if [ -L $(LINKFT) ]; then make -C $(LINKFT) clean ; fi
+	if [ -L $(LINKFT) -o -d $(LINKFT) ]; then make -C $(LINKFT) clean  ; fi
 
 fclean: clean
 	@echo "$(TITLE)"
@@ -98,12 +98,12 @@ TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 $(DIRO)/test_libft.o:test_libft.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $< 
+	$(CC) $(CFLAGS) -o $@ -c $<
 $(DIRO)/%.o:$(DIRTESTS)/%.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $< 
-	
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 verif:
 	echo $(TESTS_OBJ)
 
@@ -162,7 +162,7 @@ link4:
 #	#for i in 1 2 3 4 5 6 7 8  9 ; do echo "$$i" ; done
 #	for f in $(LIBFILES) ; do touch test_$$f ; done
 #	ls test*.c
-#	
+#
 
 link5:
 	rm -f $(LINKFT)
@@ -172,8 +172,7 @@ link5:
 #lst_tests:
 #	rm tests.h
 #	for f in $(listoffunc) ; do echo "int $$f();" >> tests.h ; done
-	
-#####################################################################################
-#####################################################################################
-#####################################################################################
 
+#####################################################################################
+#####################################################################################
+#####################################################################################
