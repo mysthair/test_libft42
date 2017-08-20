@@ -14,6 +14,8 @@ NAME=test_libft
 
 DIRLIBFT=../libft
 
+#DEBUG=-g3 -O0 -DDEBUG
+
 DIRH=./
 DIRC=
 DIRO=objs
@@ -47,7 +49,7 @@ endif
 TITLE="[ $@ : $? ] ------------------------------------------------------ "
 
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY)
+CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
 
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
