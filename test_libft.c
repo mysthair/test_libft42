@@ -23,6 +23,18 @@
 
 #include <unistd.h>
 
+#ifdef DEBUG
+int		fork_test(int (*f)())
+{
+   	if ((*f)()){
+			ft_putendl(" .. OK");
+			_exit(EXIT_SUCCESS);
+		}else{
+			ft_putendl(" .. KO");
+			_exit(EXIT_FAILURE);
+		}
+}
+#else
 static void ft_perror(const char *msg)
 {
 	ft_putendl_fd(msg, 2);
@@ -35,7 +47,6 @@ int		fork_test(int (*f)())
 		ft_perror("fork failed");
 		_exit(EXIT_FAILURE);
 	}else if (pid == 0){
-       
         	if ((*f)()){
 			ft_putendl(" .. OK");
 			_exit(EXIT_SUCCESS);
@@ -78,6 +89,7 @@ int		fork_test(int (*f)())
 		}
 	}	
 }
+#endif
 
 
 
