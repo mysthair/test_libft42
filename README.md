@@ -11,6 +11,7 @@ Soyons bref: tapez les lignes suivantes:
 	cd testonslalibft
 	#remplacer le/chemin/de/ma/libft par le chemin de votre libft
 	ln -s le/chemin/de/ma/libft libft
+	#mais vous pouvez tout aussi bien cloner ici votre rep libft
 	git clone https://github.com/mysthair/test_libft42
 	cd test_libft42
 	make
