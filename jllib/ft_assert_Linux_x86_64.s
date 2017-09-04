@@ -6,22 +6,19 @@
 	.string	":assert "
 .LC2:
 	.string	" failed\n"
-	.section	.text.unlikely,"ax",@progbits
-.LCOLDB3:
 	.text
-.LHOTB3:
 	.p2align 4,,15
 	.globl	ft_assert
 	.type	ft_assert, @function
 ft_assert:
-.LFB24:
+.LFB4:
 	.cfi_startproc
 	testl	%edi, %edi
-	je	.L6
+	je	.L7
 	rep ret
 	.p2align 4,,10
 	.p2align 3
-.L6:
+.L7:
 	pushq	%rbp
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
@@ -33,17 +30,17 @@ ft_assert:
 	movq	%rdx, %rbp
 	subq	$8, %rsp
 	.cfi_def_cfa_offset 32
-	call	ft_putstr
-	movl	$.LC0, %edi
-	call	ft_putstr
+	call	ft_putstr@PLT
+	leaq	.LC0(%rip), %rdi
+	call	ft_putstr@PLT
 	movq	%rbp, %rdi
-	call	ft_putstr
-	movl	$.LC1, %edi
-	call	ft_putstr
+	call	ft_putstr@PLT
+	leaq	.LC1(%rip), %rdi
+	call	ft_putstr@PLT
 	movq	%rbx, %rdi
-	call	ft_putstr
-	movl	$.LC2, %edi
-	call	ft_putstr
+	call	ft_putstr@PLT
+	leaq	.LC2(%rip), %rdi
+	call	ft_putstr@PLT
 	addq	$8, %rsp
 	.cfi_def_cfa_offset 24
 	movl	$-1, %edi
@@ -53,13 +50,9 @@ ft_assert:
 	popq	%rbp
 	.cfi_restore 6
 	.cfi_def_cfa_offset 8
-	jmp	exit
+	jmp	ft_exit@PLT
 	.cfi_endproc
-.LFE24:
+.LFE4:
 	.size	ft_assert, .-ft_assert
-	.section	.text.unlikely
-.LCOLDE3:
-	.text
-.LHOTE3:
-	.ident	"GCC: (Ubuntu 5.3.1-14ubuntu2) 5.3.1 20160413"
+	.ident	"GCC: (Debian 6.3.0-18) 6.3.0 20170516"
 	.section	.note.GNU-stack,"",@progbits
