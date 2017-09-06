@@ -1,9 +1,11 @@
 #ifndef TESTS_H
 #define TESTS_H
 
+#define SUCCESS 1
+#define FAILED 0
 
-#define _STRINGIFY(x) #x                                                        
-#define STRINGIFY(x) _STRINGIFY(x)                                              
+#define _STRINGIFY(x) #x
+#define STRINGIFY(x) _STRINGIFY(x)
 
 //#define PROTECTED_TEST
 
@@ -23,7 +25,7 @@
 
 #define FT_ASSERT(cond) TEST(cond)
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond)
-// ft_putstr(STRINGIFY(cond) " .. OK\n"); 
+// ft_putstr(STRINGIFY(cond) " .. OK\n");
 
 
 /*# ifndef NULL
@@ -34,19 +36,28 @@ TYPEDEF_SIZE_T;
 */
 
 
+#ifdef DEBUGERF
+# define TRACE(X) X
+#else
+# define TRACE(X) {if(0){X;}}
+#endif
+
+
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
-
+#if 1
 #define FORK_TEST(t) {\
-	ft_putstr(#t " .. \n");\
+	ft_putstr(#t " .. ");\
 	if(fork_test(&t)) {\
-		ft_putendl(#t " .. OK");\
+		TRACE(ft_putendl(#t " .. OK (0)"));\
 	}else{\
-		ft_putendl(" .. KO");\
+		TRACE(ft_putendl(#t " .. KO (0)"));\
 		_exit(-1);\
 	}\
 }
-
+#else
+#define FORK_TEST(t) fork_test(t)
+#endif
 
 
 int main_test_ft_memset();

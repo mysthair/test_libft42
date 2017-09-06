@@ -53,8 +53,8 @@ int main_test_ft_strsub()
 			ft_strsub_abcde_10_10 = ft_strsub(abcde, 10, 10);
 			if(!(ft_strsub_abcde_10_10 == NULL || ft_strequ(ft_strsub_abcde_10_10, "")))
 			{
-				ft_putstr("WARNING : ft_strsub(abcde, 10, 10) = ");
-				ft_putendl(ft_strsub_abcde_10_10 ? ft_strsub_abcde_10_10 : "NULL");
+				TRACE(ft_putstr("WARNING : ft_strsub(abcde, 10, 10) = ");
+				ft_putendl(ft_strsub_abcde_10_10 ? ft_strsub_abcde_10_10 : "NULL"));
 			}
 			//WARNING_IF_NOT(ft_strsub_abcde_10_10 == NULL || ft_strequ(ft_strsub_abcde_10_10, ""));
 			ft_strdel(&ft_strsub_abcde_10_10);
@@ -65,8 +65,8 @@ int main_test_ft_strsub()
 			ft_strsub_vide_10_10 = ft_strsub(vide, 10, 10);
 			if(!(ft_strsub_vide_10_10 == NULL || ft_strequ(ft_strsub_vide_10_10, "")))
 			{
-				ft_putstr("WARNING : ft_strsub(vide, 10, 10) = ");
-				ft_putendl(ft_strsub_vide_10_10 ? ft_strsub_vide_10_10 : "NULL");
+				TRACE(ft_putstr("WARNING : ft_strsub(vide, 10, 10) = ");
+				ft_putendl(ft_strsub_vide_10_10 ? ft_strsub_vide_10_10 : "NULL"));
 			}
 			//FAIL_IF_NOT(ft_strsub_vide_10_10 == NULL || ft_strequ(ft_strsub_vide_10_10, ""));
 			ft_strdel(&ft_strsub_vide_10_10);
@@ -80,19 +80,19 @@ int main_test_ft_strsub()
 		}
 
 		pid_t pid = fork();
-		if (pid == -1) 
+		if (pid == -1)
 		{
 			perror("fork failed");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0) 
+		else if (pid == 0)
 		{
 			char	*r;
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(NULL, 10, 2)), ""));
 			ft_strdel(&r);
 			_exit(EXIT_SUCCESS);
 		}
-		else 
+		else
 		{
 			int status;
 			(void)waitpid(pid, &status, 0);
@@ -116,28 +116,28 @@ int main_test_ft_strsub()
 						ft_putendl("Fork : unknow status");
 						break;
 				}
-				ft_putendl("\n   .. KO");
+				ft_putendl("\n   .. KO (6)");
 			}
 			else
 			{
-				ft_putendl("\n  .. OK");
+				TRACE(ft_putendl("  .. OK (7)");)
 			}
 		}
 
 
 		pid = fork();
-		if (pid == -1) 
+		if (pid == -1)
 		{
 			perror("fork failed");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0) 
+		else if (pid == 0)
 		{
 			char	*r;
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(NULL, 2, 10)), ""));
 			ft_strdel(&r);
 		}
-		else 
+		else
 		{
 			int status;
 			int ret = waitpid(pid, &status, 0);
@@ -170,20 +170,20 @@ int main_test_ft_strsub()
 			FAIL_IF_NOT(ft_strequ((r=ft_strsub(NULL, 2, 0)), ""));
 			ft_strdel(&r);
 		}
-		
+
 		pid = fork();
-		if (pid == -1) 
+		if (pid == -1)
 		{
 			perror("fork failed");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0) 
+		else if (pid == 0)
 		{
 			char	*ft_strsub_NULL_0_2 = ft_strsub(NULL, 0, 2);
 			FAIL_IF_NOT(ft_strsub_NULL_0_2 == NULL || ft_strequ(ft_strsub_NULL_0_2, ""));
 			ft_strdel(&ft_strsub_NULL_0_2);
 		}
-		else 
+		else
 		{
 			int status;
 			int ret = waitpid(pid, &status, 0);
@@ -220,12 +220,12 @@ int main_test_ft_strsub()
 
 			char	* r1 = ft_strsub(str, 0, (size_t)-10);
 			//			char	* r2 = ft_strsub2(str, 0, (size_t)-10);
-			if (r1 == NULL)
+			TRACE(if (r1 == NULL)
 				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
 			else
 			{
 				SHOW_STRING("ft_strsub(str, 0, (size_t)-10) : ", r1);
-			}
+			})
 			FAIL_IF_NOT(r1 ==NULL);
 			//			FAIL_IF_NOT(r2 != NULL && ft_strequ(r2, str));
 			ft_strdel(&r1);
@@ -235,12 +235,12 @@ int main_test_ft_strsub()
 			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
 
 			char	*result = ft_strsub(str, 0, 0);
-			if (result == NULL)
+			TRACE(if (result == NULL)
 				ft_putstr("ft_strsub(str, 0, 0) == NULL)\n");
 			else
 			{
 				SHOW_STRING("ft_strsub(str, 0, 0) : ", result);
-			}
+			})
 			FAIL_IF_NOT(result != NULL && ft_strequ(result, ""));
 			ft_strdel(&result);
 		}
@@ -248,14 +248,14 @@ int main_test_ft_strsub()
 		{
 
 		  char *str = "Un jour je serai, le meilleur codeur ! ^^";
-
 		  char	* r = ft_strsub(str, 19, (size_t)-10);
-		  if (r == NULL)
+
+		  TRACE(if (r == NULL)
 		 	 ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
 		  else
 		  {
 		  	SHOW_STRING("ft_strsub(str, 19, (size_t)-10)", r);
-		  }
+		  })
 		  FAIL_IF_NOT(r == NULL || ft_strcmp(r, str) == 0);
 		  ft_strdel(&r);
 		}
@@ -266,7 +266,6 @@ int main_test_ft_strsub()
 			FAIL_IF_NOT(ft_strequ(r, "t want thi"));
 			ft_strdel(&r);
 		}
-		
+
 		return(1);
 	}
-

@@ -11,12 +11,12 @@ static void	lst_show_elt(t_list *l)
 
 	elt = (char *)(l->content);
 	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	ft_putaddr(l); 
-	ft_putstr(":[content:");	ft_putaddr(elt); 
+	TRACE(ft_putaddr(l);
+	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
 	ft_putstr(", next:");		ft_putaddr(l->next);
-	ft_putstr("]\n");
+	ft_putstr("]\n"));
 }
 
 static void	lst_show_lst(t_list *l)
@@ -46,20 +46,20 @@ t_list *func_for_ft_lstmap(t_list *elem)
 		buffer[i] = s[l - 2 - i];
 	tmp->content = (void*)buffer;
 	tmp->next = NULL;
-	return (tmp); 
+	return (tmp);
 }
 
 static t_list* func2_for_lstmap(t_list *elt)
 {
 	char	*txt;
-	size_t 	size; 
+	size_t 	size;
 	t_list	*new;
 
 	new = NULL;
 	if (elt)
 	{
 		txt = ft_strjoin(elt->content, elt->content);
-		size = ft_strlen(txt); 
+		size = ft_strlen(txt);
 		new = ft_lstnew(txt, 1 + size);
 		ft_strdel(&txt);
 	}
@@ -74,20 +74,20 @@ static void func_del_for_ft_lstmap(void* data, size_t size)
 	elt = (char *)data;
 	if (!elt)
 		ft_putstr("func_del_for_ft_lstmap *NULL !\n");
-	else	
-	{ 
-		ft_putstr("func_del_for_ft_lstmap ");
-		ft_putaddr(elt); 
-		if (elt) { 
-			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
-		} 
+	else
+	{
+		TRACE(ft_putstr("func_del_for_ft_lstmap ");
+		ft_putaddr(elt));
+		TRACE(if (elt) {
+			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
+		}
 		ft_putstr(", size ");	ft_putnbr(size);
-		ft_putstr("\n");
+		ft_putstr("\n");)
 
 		ft_memdel(&data);
 	}
 }
-	
+
 
 static t_list  *lstmap_test_fn(t_list *list)
 { //copiryght moolitest
@@ -121,14 +121,14 @@ static int test_44()
 		FAIL_IF_NOT(map->next->content_size == 200);
 		ft_lstdel(&list, &func_del_for_ft_lstmap);
 		ft_lstdel(&map, &func_del_for_ft_lstmap);
-	
+
 		return(1);
-	} 
-	
+	}
+
 int main_test_ft_lstmap()
 	{
 		//another test for ft_lstmap
-		char* tab[] = { "Un", "Deux", "Trois", "...", 
+		char* tab[] = { "Un", "Deux", "Trois", "...",
 						"A very long phrase... more than 20 Characters... "
 						"A very long phrase... more than 20 Characters... "
 						"A very long phrase... more than 20 Characters... "
@@ -142,15 +142,15 @@ int main_test_ft_lstmap()
 
 		for (i=0; i < 10; i++)
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
-		lst_show_lst(lst);
+		TRACE(lst_show_lst(lst));
 
 		t_list *lst2;
 		lst2 = ft_lstmap(lst, &func2_for_lstmap);
 		FAIL_IF_NOT(lst2 != NULL);
 		ft_lstdel(&lst, &func_del_for_ft_lstmap);
-		
+
 		ft_lstiter(lst2, &lst_show_elt);
-	
+
 		t_list	*l = lst2;
 
 		FAIL_IF_NOT(ft_strequ(l->content, "UnUn") && l->content_size == 5);
@@ -178,8 +178,6 @@ int main_test_ft_lstmap()
 
 		ft_lstdel(&lst2, &func_del_for_ft_lstmap);
 		FAIL_IF_NOT(lst2 == NULL);
-		
+
 		return(test_44());
 }
-	
-

@@ -3,7 +3,8 @@
 #include "test_libft.h"
 #include "tests.h"
 
-
+#define SUCCESS 1
+#define FAILED 0
 
 #ifdef DONT_HAVE_STRLCPY
 
@@ -23,16 +24,16 @@ static int		test_ft_strnstr(const char *big, const char *little, size_t size)
 	o = strnstr(big, little, size);
 	m = ft_strnstr(big, little, size);
 	l = strlen(little);
-	if(!(((o==NULL) && (m==NULL)) 
-		|| ((o!=NULL) && (m!=NULL) 
-			&& strncmp(o, little, l) == 0 
+	if(!(((o==NULL) && (m==NULL))
+		|| ((o!=NULL) && (m!=NULL)
+			&& strncmp(o, little, l) == 0
 			&& ft_strncmp(m, little, l) == 0)))
 	{
 		ft_putstr("error in test_ft_strnstr(big = \""); ft_putstr(big);
 		ft_putstr("\", little=\""); ft_putstr(little);
 		ft_putstr("\", size="); ft_putnbr(size);
 		ft_putstr(")\n");
-	
+
 		ft_putstr("strnstr(big, little, size) = \""); ft_putstr(o);
 		ft_putstr("\"\nft_strnstr(big, little, size) = \""); ft_putstr(m);
 		ft_putstr("\"\n");
@@ -40,7 +41,7 @@ static int		test_ft_strnstr(const char *big, const char *little, size_t size)
 	TEST((o==NULL && m==NULL) || (o!=NULL && m!=NULL));
 	TEST((o==NULL && m==NULL)
 		|| (o!=NULL && m!=NULL && strncmp(o, little, l) == 0  && ft_strncmp(m, little, l) == 0));
-	return (1);
+	return (SUCCESS);
 }
 
 
@@ -58,7 +59,7 @@ int main_test_ft_strnstr()
 		FAIL_IF_NOT(test_ft_strnstr("","Bar", 6));
 		FAIL_IF_NOT(test_ft_strnstr("","", 6));
 		FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", 0));
-		
+
 		for (i=-1; i< 30; i++)
 		{
 			FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", i));
@@ -73,8 +74,6 @@ int main_test_ft_strnstr()
 			FAIL_IF_NOT(test_ft_strnstr("","", i));
 			FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", i));
 		}
-	
-		return(1);
+
+		return (SUCCESS);
 	}
-
-

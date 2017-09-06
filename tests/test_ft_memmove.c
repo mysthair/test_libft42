@@ -14,45 +14,48 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 	origin = ft_memalloc(n);
 	memcpy(origin, src, n);
 
-	ft_putendl("\nft_memmove(dest, src, n)");
-	ft_putendl("src :");
-	ft_print_memory(src, n);
-	ft_putendl("dest :");
-	ft_print_memory(dest, n);
-	ft_putstr("n="); ft_putnbr(n); ft_putendl("\n");
 
 	if(dest <= src && src <= dest + n)
 	{
-		ft_putendl("\ncas 1\n");
+		//ft_putendl("\ncas 1\n");
 		ft_memcpy(dest, src, n);
 	}
 	else if (src <= dest && dest < src + n)
 	{
 		size_t	k = dest - src;
 
-		ft_putendl("\ncas 2\n");
+		//ft_putendl("\ncas 2\n");
 		s = ft_memalloc(n + k);
 		ft_memcpy(s, src, n + k);
 		d = s + k;
 		TEST(ft_strnequ(s, src, n));
 
-		ft_putendl("before ft_memmove(dest, src, n)");
+		/*ft_putendl("before ft_memmove(dest, src, n)");
 		ft_putendl("d :");
 		ft_print_memory(d, n);
 		ft_putendl("s :");
-		ft_print_memory(s, n); 
+		ft_print_memory(s, n); */
 
 		memmove(d, s, n);
 		ft_memmove(dest, src, n);
 
 		if(memcmp(d, dest, n) != 0)
 		{
+			ft_putendl("\nft_memmove(dest, src, n)");
+			ft_putendl("src :");
+			ft_print_memory(src, n);
+			ft_putendl("dest :");
+			ft_print_memory(dest, n);
+			ft_putstr("n="); ft_putnbr(n); ft_putendl("\n");
+
+
+			
 			ft_putendl("after  ft_memmove(dest, src, n)");
 			ft_putendl("d :");
 			ft_print_memory(d, n);
 			ft_putendl("dest :");
 			ft_print_memory(dest, n);
-		}	
+		}
 		TEST(memcmp(d, dest, n) == 0);
 
 		i = 0;
@@ -64,7 +67,7 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 
 		ft_strdel(&s);
 	}
-	else 
+	else
 	{
 		ft_putendl("\ncas 3\n");
 		d = ft_memalloc(n);
@@ -85,7 +88,7 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 		}
 		ft_strdel(&d);
 		ft_strdel(&s);
-	}		
+	}
 	ft_strdel(&origin);
 
 	return (1);
@@ -115,6 +118,6 @@ int main_test_ft_memmove()	{
 		FAIL_IF_NOT(ft_memcmp(abcdef___, "ababcdef", 8)==0);
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
 		FAIL_IF_NOT(test_ft_memmove(abcdef___ + 2 , abcdef___, 6));
-	
+
 		return(1);
-	}	
+	}

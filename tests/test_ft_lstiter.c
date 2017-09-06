@@ -8,12 +8,12 @@ static void	lst_show_elt(t_list *l)
 
 	elt = (char *)(l->content);
 	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	ft_putaddr(l); 
-	ft_putstr(":[content:");	ft_putaddr(elt); 
+	TRACE(ft_putaddr(l);
+	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
 	ft_putstr(", next:");		ft_putaddr(l->next);
-	ft_putstr("]\n");
+	ft_putstr("]\n"));
 }
 
 static void	lst_show_lst(t_list *l)
@@ -32,15 +32,15 @@ static void func_del_for_ft_lstdel(void* data, size_t size)
 	elt = (char *)data;
 	if (!elt)
 		ft_putstr("func_del_for_ft_lstdel *NULL !\n");
-	else	
-	{ 
-		ft_putstr("func_del_for_ft_lstdel ");
-		ft_putaddr(elt); 
-		if (elt) { 
-			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
-		} 
+	else
+	{
+		TRACE(ft_putstr("func_del_for_ft_lstdel ");
+		ft_putaddr(elt);
+		if (elt) {
+			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
+		}
 		ft_putstr(", size ");	ft_putnbr(size);
-		ft_putstr("\n");
+		ft_putstr("\n"));
 
 		ft_memdel(&data);
 	}
@@ -57,8 +57,7 @@ int main_test_ft_lstiter()	{
 
 		lst_show_lst(lst);
 		ft_lstdel(&lst, &func_del_for_ft_lstdel);
-	
+
   	FAIL_IF_NOT(lst == NULL);
 		return(1);
 	}
-

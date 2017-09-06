@@ -8,12 +8,12 @@ static void	lst_show_elt(t_list *l)
 
 	elt = (char *)(l->content);
 	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	ft_putaddr(l); 
-	ft_putstr(":[content:");	ft_putaddr(elt); 
+	TRACE(ft_putaddr(l);
+	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
 	ft_putstr(", next:");		ft_putaddr(l->next);
-	ft_putstr("]\n");
+	ft_putstr("]\n"));
 }
 
 static void	lst_show_lst(t_list *l)
@@ -41,7 +41,7 @@ static t_list *func_for_ft_lstnew(t_list *elem)
 		buffer[i] = s[l - 2 - i];
 	tmp->content = (void*)buffer;
 	tmp->next = NULL;
-	return (tmp); 
+	return (tmp);
 }
 
 
@@ -52,15 +52,15 @@ static void func_del_for_ft_lstnew(void* data, size_t size)
 	elt = (char *)data;
 	if (!elt)
 		ft_putstr("func_del_for_ft_lstnew *NULL !\n");
-	else	
-	{ 
-		ft_putstr("func_del_for_ft_lstnew ");
-		ft_putaddr(elt); 
-		if (elt) { 
-			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")"); 
-		} 
+	else
+	{
+		TRACE(ft_putstr("func_del_for_ft_lstnew ");
+		ft_putaddr(elt);
+		if (elt) {
+			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
+		}
 		ft_putstr(", size ");	ft_putnbr(size);
-		ft_putstr("\n");
+		ft_putstr("\n"));
 
 		ft_memdel(&data);
 	}
@@ -114,44 +114,44 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 
 			l = ft_strlen(z1);
 			lst = ft_lstnew(z1, l + 1);
-			ft_putendl("contenu de la liste z1:");
+			TRACE(ft_putendl("contenu de la liste z1:");
 			lst_show_lst(lst);
-			ft_print_memory(lst, sizeof(t_list));
+			ft_print_memory(lst, sizeof(t_list)));
 		}
 		{
 			size_t  l;
 
 			l = ft_strlen(z2);
 			elt = ft_lstnew(z2, l + 1);
-			ft_putstr("z2:");
+			TRACE(ft_putstr("z2:");
 			lst_show_elt(elt);
-			ft_print_memory(elt, sizeof(t_list));
+			ft_print_memory(elt, sizeof(t_list)));
 			ft_lstadd(&lst, elt);//ft_lstnew(z2, ft_strlen(z2)+1));
-			ft_putendl("contenu de la liste z1,z2:");
-			lst_show_lst(lst);
+			TRACE(ft_putendl("contenu de la liste z1,z2:");
+			lst_show_lst(lst));
 		}
 		elt = ft_lstnew(z3, ft_strlen(z3)+1);
-		ft_putstr("z3:");
-		lst_show_elt(elt);
+		TRACE(ft_putstr("z3:");
+		lst_show_elt(elt));
 		ft_lstadd(&lst, elt);//ft_lstnew(z3, ft_strlen(z3)+1));
-		ft_putendl("contenu de la liste z1-z3:");
-		lst_show_lst(lst);
+		TRACE(ft_putendl("contenu de la liste z1-z3:");
+		lst_show_lst(lst));
 
 		elt = ft_lstnew(z4, ft_strlen(z4)+1);
-		lst_show_elt(elt);
-		ft_putstr("z4:");
+		TRACE(lst_show_elt(elt);
+		ft_putstr("z4:"));
 		ft_lstadd(&lst, elt);//ft_lstnew(z4, ft_strlen(z4)+1));
-		ft_putendl("contenu de la liste z1-z4:");
-		lst_show_lst(lst);
+		TRACE(ft_putendl("contenu de la liste z1-z4:");
+		lst_show_lst(lst));
 
-		ft_putendl("ft_lstiter(l, &lst_show_elt);");
+		TRACE(ft_putendl("ft_lstiter(l, &lst_show_elt);"));
 		ft_lstiter(lst, &lst_show_elt);
 
-		ft_putendl("m0 = ft_lstmap(&l, &f)");
+		TRACE(ft_putendl("m0 = ft_lstmap(&l, &f)"));
 		t_list	*elt0 = ft_lstmap(lst, &func_for_ft_lstnew);
-		lst_show_lst(elt0); 
+		TRACE(lst_show_lst(elt0));
 
-		ft_putendl("ft_lstdel(&l, ..");
+		TRACE(ft_putendl("ft_lstdel(&l, .."));
 		ft_lstdel(&lst, &func_del_for_ft_lstnew);
 
 
@@ -161,7 +161,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 		t_list	*elt4 = (elt3 ? elt3->next : NULL);
 
 		if(elt0 && ft_memcmp(elt0->content, "! dlrow", 7) != 0)
-		{		
+		{
 			ft_putendl("elt0->content \"! dlrow\" ?");
 			ft_print_memory(elt0->content, 7);
 			ft_print_memory("! dlrow", 7);
@@ -169,7 +169,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 		FAIL_IF_NOT(elt0 && ft_memcmp(elt0->content, "! dlrow", 7)==0);
 
 		if(elt1 && ft_memcmp(elt1->content, "repus y", 7) != 0)
-		{		
+		{
 			ft_putendl("elt1->content \"repus y\" ?");
 			ft_print_memory(elt1->content, 7);
 			ft_print_memory("repus y", 7);
@@ -177,7 +177,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 		FAIL_IF_NOT(elt1 && ft_memcmp(elt1->content, "repus y", 7)==0);
 
 		if(elt2 && ft_memcmp(elt2->content, "!lufitu", 7) != 0)
-		{		
+		{
 			ft_putendl("elt2->content \"!lufitu\" ?");
 			ft_print_memory(elt2->content, 7);
 			ft_print_memory("!lufitu", 7);
@@ -185,7 +185,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 		FAIL_IF_NOT(elt2 && ft_memcmp(elt2->content, "!lufitu", 7)==0);
 
 		if(elt3 && ft_memcmp(elt3->content, "olleh", 5) != 0)
-		{		
+		{
 			ft_putendl("elt3->content \"olleh\" ?");
 			ft_print_memory(elt3->content, 5);
 			ft_print_memory("olleh", 5);
@@ -197,16 +197,15 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 
 		FAIL_IF_NOT(elt4 == NULL);
 
-		ft_putendl("ft_lstdel(&m, ..");
+		TRACE(ft_putendl("ft_lstdel(&m, .."));
 		ft_lstdel(&elt0, &func_del_for_ft_lstnew);
-	
+
 		return(1);
 	}
-	
-	
+
+
 
 
 int main_test_ft_lstnew(){
 	return (main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap());
 }
-

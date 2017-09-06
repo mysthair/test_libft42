@@ -26,9 +26,10 @@ LINKFT=link_libft
 LIBFT=$(LINKFT)/libft.a
 LIBS=-L$(LINKFT)-lft
 LIBFTH=libft.h
+DIRFTH=includes
 HEADERS=$(LIBFTH) test_libft.h tests.h
 
-INC=-I. -I$(LINKFT) -I$(LINKFT)/includes
+INC=-I. -I$(LINKFT)/$(DIRFTH)
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
@@ -61,15 +62,18 @@ $(LINKFT):
 	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then test -L $(LINKFT) || ln -s $(DIRLIBFT) $(LINKFT) ; \
 	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
-$(LIBFTH): $(LINKFT) $(LINKFT)/$(LIBFTH)
-	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/include/$(LIBFTH) $(LIBFTH)
+$(LIBFTH): $(LINKFT) $(LINKFT)/$(DIRFTH)/$(LIBFTH)
+	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/$(DIRFTH)/$(LIBFTH) $(LIBFTH)
 
 $(LIBFT): $(LINKFT) $(LIBFTH)
 	@echo "$(TITLE)"
+ifdef DEBUG
+	make -j -C $(LINKFT) DEBUG="$(DEBUG)"
+else
 	make -j -C $(LINKFT)
+endif
 	#&& cp -v $(LINKFT)/$(LIBFT) $(LIBFT)
 
-$(NAME) $(OBJS) $(MISSING_O): $(LINKFT) $(HEADERS)
 
 $(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
@@ -93,11 +97,28 @@ re:
 	make fclean
 	make all
 
-TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c test_ft_memccpy.c  test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c test_ft_strlen.c test_ft_strdup.c  test_ft_strcpy.c test_ft_strncpy.c test_ft_strcat.c test_ft_strncat.c test_ft_strlcat.c  test_ft_strchr.c test_ft_strrchr.c test_ft_strstr.c test_ft_strnstr.c test_ft_strcmp.c test_ft_strncmp.c test_ft_atoi.c test_ft_isalpha.c test_ft_isdigit.c test_ft_isalnum.c test_ft_isascii.c test_ft_isprint.c test_ft_toupper.c test_ft_tolower.c test_ft_memalloc.c test_ft_memdel.c test_ft_strnew.c test_ft_strdel.c test_ft_strclr.c test_ft_striter.c test_ft_striteri.c test_ft_strmap.c test_ft_strmapi.c test_ft_strequ.c test_ft_strnequ.c test_ft_strsub.c test_ft_strjoin.c test_ft_strtrim.c test_ft_strsplit.c test_ft_itoa.c test_ft_putchar.c test_ft_putstr.c test_ft_putendl.c test_ft_putnbr.c test_ft_putchar_fd.c test_ft_putstr_fd.c test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c test_ft_lstmap.c
+TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
+	test_ft_memccpy.c test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c \
+	test_ft_strlen.c test_ft_strdup.c  test_ft_strcpy.c test_ft_strncpy.c \
+	test_ft_strcat.c test_ft_strncat.c test_ft_strlcat.c  test_ft_strchr.c \
+	test_ft_strrchr.c test_ft_strstr.c test_ft_strnstr.c test_ft_strcmp.c \
+	test_ft_strncmp.c test_ft_atoi.c test_ft_isalpha.c test_ft_isdigit.c \
+	test_ft_isalnum.c test_ft_isascii.c test_ft_isprint.c test_ft_toupper.c \
+	test_ft_tolower.c test_ft_memalloc.c test_ft_memdel.c test_ft_strnew.c \
+	test_ft_strdel.c test_ft_strclr.c test_ft_striter.c test_ft_striteri.c \
+	test_ft_strmap.c test_ft_strmapi.c test_ft_strequ.c test_ft_strnequ.c \
+	test_ft_strsub.c test_ft_strjoin.c test_ft_strtrim.c test_ft_strsplit.c \
+	test_ft_itoa.c test_ft_putchar.c test_ft_putstr.c test_ft_putendl.c \
+	test_ft_putnbr.c test_ft_putchar_fd.c test_ft_putstr_fd.c \
+	test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c \
+	test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c \
+	test_ft_lstmap.c
 
 TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 
-$(DIRO)/test_libft.o:test_libft.c
+$(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(LINKFT) $(HEADERS) Makefile
+
+$(DIRO)/test_libft.o:test_libft.c $(HEADERS)
 	@echo "$(TITLE)"
 	@mkdir -p objs
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -114,6 +135,7 @@ $(NAME): $(DIRO)/test_libft.o $(LIBFT) $(OBJS) \
 ifeq ($(OS), Linux)
 	@echo "Linux OS detected :P"
 endif
+	@echo "$(TITLE)"
 	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
 		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 

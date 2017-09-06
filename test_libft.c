@@ -23,12 +23,114 @@
 
 #include <unistd.h>
 
+#if 1
+
+/* Pour les constantes EXIT_SUCCESS et EXIT_FAILURE */
+#include <stdlib.h>
+/* Pour fprintf() */
+#include <stdio.h>
+/* Pour fork() */
+#include <unistd.h>
+/* Pour perror() et errno */
+#include <errno.h>
+/* Pour le type pid_t */
+#include <sys/types.h>
+/* Pour wait() */
+#include <sys/wait.h>
+
+/* Pour faire simple, on déclare status en globale à la barbare */
+int status;
+
+/* La fonction create_process duplique le processus appelant et retourne
+   le PID du processus fils ainsi créé */
+pid_t create_process(void)
+{
+    /* On crée une nouvelle valeur de type pid_t */
+    pid_t pid;
+
+    /* On fork() tant que l'erreur est EAGAIN */
+    do {
+	pid = fork();
+    } while ((pid == -1) && (errno == EAGAIN));
+
+    /* On retourne le PID du processus ainsi créé */
+    return pid;
+}
+
+/* La fonction child_process effectue les actions du processus fils */
+void child_process(int (*f)())
+{
+    TRACE(printf(" Nous sommes dans le fils !\n"
+	   " Le PID du fils est %d.\n"
+	   " Le PPID du fils est %d.\n", (int) getpid(), (int) getppid()));
+     if ((*f)()){
+      TRACE(ft_putendl(" .. OK (1)"));
+ 			_exit(EXIT_SUCCESS);
+      // return(SUCCESS);
+ 		}else{
+ 			ft_putendl(" .. KO (2)");
+ 			_exit(EXIT_FAILURE);
+ 		}
+}
+
+/* La fonction father_process effectue les actions du processus père */
+void father_process(int child_pid)
+{
+    (void)child_pid;
+    TRACE(printf(" Nous sommes dans le père !\n"
+	   " Le PID du fils est %d.\n"
+	   " Le PID du père est %d.\n", (int) child_pid, (int) getpid()));
+
+    if (wait(&status) == -1) {
+	    perror("wait :");
+	    exit(EXIT_FAILURE);
+    }
+
+    if (WIFEXITED(status)) {
+	TRACE(printf(" Terminaison normale du processus fils.\n"
+	       " Code de retour : %d.\n", WEXITSTATUS(status)));
+         ft_putendl(!WEXITSTATUS(status) ? " .. OK (3)" : " .. KO (3)");
+    }
+
+    if (WIFSIGNALED(status)) {
+      ft_putstr(" .. KO (4) ");
+	    ft_putstr("  signal ");
+      ft_putnbr(WTERMSIG(status));
+      ft_putstr(" intercepted\n");
+  		TRACE(_exit(EXIT_FAILURE));
+	  }
+}
+
+int		fork_test(int (*f)())
+{
+    pid_t pid = create_process();
+
+    switch (pid) {
+	/* Si on a une erreur irrémédiable (ENOMEM dans notre cas) */
+      return 0;
+    case -1:
+    	perror("fork");
+    	return EXIT_FAILURE;
+  	break;
+    	/* Si on est dans le fils */
+    case 0:
+    	child_process(f);
+  	break;
+    	/* Si on est dans le père */
+    default:
+    	father_process(pid);
+  	break;
+    }
+    return 1;
+}
+#else
 #ifdef DEBUG
 int		fork_test(int (*f)())
 {
    	if ((*f)()){
 			ft_putendl(" .. OK");
-			_exit(EXIT_SUCCESS);
+			//_exit(EXIT_SUCCESS);
+      return(SUCCESS);
 		}else{
 			ft_putendl(" .. KO");
 			_exit(EXIT_FAILURE);
@@ -57,7 +159,7 @@ int		fork_test(int (*f)())
 	}else{
 		int status;
 		(void)waitpid(pid, &status, 0);
-		if(status == -1){
+		if(status == -1 ){
 			switch(errno){
 			case ECHILD:
 				ft_putendl("Fork : The calling process has no existing unwaited-for child processes");
@@ -87,11 +189,11 @@ int		fork_test(int (*f)())
 				_exit(-1);
 			}
 		}
-	}	
+	}
 }
 #endif
 
-
+#endif
 
 
 
@@ -103,7 +205,8 @@ int main()
 
 #if 0
 	FORK_TEST(main_test_ft_strnstr);
-	FORK_TEST(main_test_ft_strdup);
+	//FORK_TEST(main_test_ft_strdup);
+  FORK_TEST(main_test_ft_strcpy);
 #else
 	FORK_TEST(main_test_ft_memset);
 	FORK_TEST(main_test_ft_bzero);
@@ -156,7 +259,7 @@ int main()
 	FORK_TEST(main_test_ft_lstiter);
 	FORK_TEST(main_test_ft_strsub);
 	FORK_TEST(main_test_ft_lstmap);
-	
+
 #endif
 	ft_putendl("#############################################################");
 	ft_putendl("##############     ALL TESTS ARE OK       ###################");

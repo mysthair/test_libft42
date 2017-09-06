@@ -14,22 +14,22 @@ static int test_ft_strcpy(char *dest, char const *src)
 }
 
 
-int main_test_ft_strcpy()	
+int main_test_ft_strcpy()
 {//strcpy
-		char *s = "s";	
+		char *s = "s";
 		char *abcdefghi = "abcdefghi";
 		char buff100[100];
-		
+
 		ft_bzero(buff100, 100);
-		
+
+		//FAIL_IF_NOT(test_ft_strcpy(s, s));
+		FAIL_IF_NOT(test_ft_strcpy(buff100, s));
 		FAIL_IF_NOT(test_ft_strcpy(buff100 + 1, s));
-		FAIL_IF_NOT(test_ft_strcpy(s, s));
+		FAIL_IF_NOT(test_ft_strcpy(buff100, buff100));
 		FAIL_IF_NOT(test_ft_strcpy(buff100 + 2, abcdefghi));
 		FAIL_IF_NOT(test_ft_strcpy(buff100 + 2, ""));
 		FAIL_IF_NOT(test_ft_strcpy(buff100, abcdefghi));
-		FAIL_IF_NOT(test_ft_strcpy(abcdefghi, "lolmdr\n"));
-		
+		FAIL_IF_NOT(test_ft_strcpy(buff100, "lolmdr\n"));
+
 		return(1);
 }
-
-
