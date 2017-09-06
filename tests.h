@@ -16,6 +16,10 @@
 }*/
 
 
+#define GREEN_OK "\033[32mOK\033[0m"
+
+#define RED_KO "\033[31mKO\033[0m"
+
 #define TEST(cond) \
 	if(!(cond)) { \
 		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond \
@@ -45,7 +49,7 @@ TYPEDEF_SIZE_T;
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
-#if 1
+#ifndef WITHOUT_FORK
 #define FORK_TEST(t) {\
 	ft_putstr(#t " .. ");\
 	if(fork_test(&t)) {\

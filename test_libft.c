@@ -23,7 +23,8 @@
 
 #include <unistd.h>
 
-#if 1
+#ifndef DEBUG
+/* THX/seen at https://openclassrooms.com/courses/la-programmation-systeme-en-c-sous-unix/les-processus-1 */
 
 /* Pour les constantes EXIT_SUCCESS et EXIT_FAILURE */
 #include <stdlib.h>
@@ -64,11 +65,11 @@ void child_process(int (*f)())
 	   " Le PID du fils est %d.\n"
 	   " Le PPID du fils est %d.\n", (int) getpid(), (int) getppid()));
      if ((*f)()){
-      TRACE(ft_putendl(" .. OK (1)"));
+      TRACE(ft_putendl(GREEN_OK);)
  			_exit(EXIT_SUCCESS);
       // return(SUCCESS);
  		}else{
- 			ft_putendl(" .. KO (2)");
+ 			ft_putendl(RED_KO);
  			_exit(EXIT_FAILURE);
  		}
 }
@@ -89,11 +90,11 @@ void father_process(int child_pid)
     if (WIFEXITED(status)) {
 	TRACE(printf(" Terminaison normale du processus fils.\n"
 	       " Code de retour : %d.\n", WEXITSTATUS(status)));
-         ft_putendl(!WEXITSTATUS(status) ? " .. OK (3)" : " .. KO (3)");
+         ft_putendl(!WEXITSTATUS(status) ? GREEN_OK : RED_KO);
     }
 
     if (WIFSIGNALED(status)) {
-      ft_putstr(" .. KO (4) ");
+      ft_putstr(RED_KO);
 	    ft_putstr("  signal ");
       ft_putnbr(WTERMSIG(status));
       ft_putstr(" intercepted\n");
@@ -124,7 +125,6 @@ int		fork_test(int (*f)())
     return 1;
 }
 #else
-#ifdef DEBUG
 int		fork_test(int (*f)())
 {
    	if ((*f)()){
@@ -136,63 +136,6 @@ int		fork_test(int (*f)())
 			_exit(EXIT_FAILURE);
 		}
 }
-#else
-static void ft_perror(const char *msg)
-{
-	ft_putendl_fd(msg, 2);
-}
-
-int		fork_test(int (*f)())
-{
-	pid_t pid = fork();
-	if (pid == -1) {
-		ft_perror("fork failed");
-		_exit(EXIT_FAILURE);
-	}else if (pid == 0){
-        	if ((*f)()){
-			ft_putendl(" .. OK");
-			_exit(EXIT_SUCCESS);
-		}else{
-			ft_putendl(" .. KO");
-			_exit(EXIT_FAILURE);
-		}
-	}else{
-		int status;
-		(void)waitpid(pid, &status, 0);
-		if(status == -1 ){
-			switch(errno){
-			case ECHILD:
-				ft_putendl("Fork : The calling process has no existing unwaited-for child processes");
-				break;
-			case EFAULT:
-				ft_putendl("Fork : The status or rusage argument points to an illegal address (may not be detected before the exit of a child process).");
-				break;
-			case EINVAL:
-				ft_putendl("Fork : Invalid or undefined flags are passed in the options argument.");
-				break;
-			case EINTR:
-				ft_putendl("Fork : The call is interrupted by a caught signal or the signal does not have the SA_RESTART flag set.");
-				break;
-			default:
-				ft_putendl("Fork : unknow status");
-				break;
-			}
-			ft_putendl(" ... KO");
-			return (0);
-		}else{
-			int ret = WEXITSTATUS(status);
-			if(ret==EXIT_SUCCESS){
-				ft_putendl(" ... OK");
-				return (1);
-			}else{
-				ft_putendl(" ... KO");
-				_exit(-1);
-			}
-		}
-	}
-}
-#endif
-
 #endif
 
 
@@ -258,11 +201,14 @@ int main()
 	FORK_TEST(main_test_ft_lstdel);
 	FORK_TEST(main_test_ft_lstiter);
 	FORK_TEST(main_test_ft_strsub);
-	FORK_TEST(main_test_ft_lstmap);
+  FORK_TEST(main_test_ft_lstmap);
+
+  FORK_TEST(main_test_ft_putchar);
+
 
 #endif
-	ft_putendl("#############################################################");
-	ft_putendl("##############     ALL TESTS ARE OK       ###################");
-	ft_putendl("#############################################################");
+	/*ft_putendl("#############################################################");
+	ft_putendl("##############     ALL TESTS ARE "GREEN_OK"       ###################");
+	ft_putendl("#############################################################");*/
 	return (0);
 }

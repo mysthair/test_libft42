@@ -26,10 +26,10 @@ LINKFT=link_libft
 LIBFT=$(LINKFT)/libft.a
 LIBS=-L$(LINKFT)-lft
 LIBFTH=libft.h
-DIRFTH=includes
-HEADERS=$(LIBFTH) test_libft.h tests.h
+DIRFTH=$(LINKFT)/includes
+HEADERS=$(DIRFTH)/$(LIBFTH) test_libft.h tests.h
 
-INC=-I. -I$(LINKFT)/$(DIRFTH)
+INC=-I. -I$(DIRFTH)
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr.c ]; then echo putaddr ;fi)
@@ -55,24 +55,22 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
 
-
 all: $(LINKFT) $(NAME) $(LIBFT)
 
 $(LINKFT):
 	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then test -L $(LINKFT) || ln -s $(DIRLIBFT) $(LINKFT) ; \
 	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
-$(LIBFTH): $(LINKFT) $(LINKFT)/$(DIRFTH)/$(LIBFTH)
-	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/$(DIRFTH)/$(LIBFTH) $(LIBFTH)
+#$(LIBFTH): $(LINKFT) $(LINKFT)/$(DIRFTH)/$(LIBFTH)
+#	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/$(DIRFTH)/$(LIBFTH) $(LIBFTH)
 
-$(LIBFT): $(LINKFT) $(LIBFTH)
+$(LIBFT): $(LINKFT) $(DIRFTH)/$(LIBFTH)
 	@echo "$(TITLE)"
 ifdef DEBUG
 	make -j -C $(LINKFT) DEBUG="$(DEBUG)"
 else
 	make -j -C $(LINKFT)
 endif
-	#&& cp -v $(LINKFT)/$(LIBFT) $(LIBFT)
 
 
 $(DIRO)/%.o: $(DIRS)/%.s
