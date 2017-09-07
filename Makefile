@@ -55,6 +55,7 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
 
+.PHONY:all clean fclean re testnorm verif memcheck link link1 link2 link3 link4 link5 debug_version verbose_version nofork_version
 all: $(LINKFT) $(NAME) $(LIBFT)
 
 $(LINKFT):
@@ -144,7 +145,12 @@ testnorm:
 	norminette $(LINKFT)
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
 
-
+debug_version:
+	make DEBUG=-DDEBUG re
+verbose_version:
+	make DEBUG="-DDEBUG -DVERBOSE" re
+nofork_version:
+	make DEBUG="-DDEBUG -DVERBOSE -DWITHOUT_FORK" re
 
 #####################################################################################
 ###   WIP

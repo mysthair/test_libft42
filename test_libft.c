@@ -147,9 +147,11 @@ int main()
 //#define FORK_TEST(f) f()
 
 #if 0
-	FORK_TEST(main_test_ft_strnstr);
+  FORK_TEST(main_test_ft_memalloc);
+//FORK_TEST(main_test_ft_strnstr);
 	//FORK_TEST(main_test_ft_strdup);
   FORK_TEST(main_test_ft_strcpy);
+  FORK_TEST(main_test_ft_putchar);
 #else
 	FORK_TEST(main_test_ft_memset);
 	FORK_TEST(main_test_ft_bzero);
@@ -204,6 +206,7 @@ int main()
   FORK_TEST(main_test_ft_lstmap);
 
   FORK_TEST(main_test_ft_putchar);
+  FORK_TEST(main_test_ft_putstr);
 
 
 #endif

@@ -32,12 +32,11 @@
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond)
 
 
-#ifdef DEBUGERF
+#ifdef VERBOSE
 # define INFO(X) X
 #else
 # define INFO(X) {if(0){X;}}
 #endif
-
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
