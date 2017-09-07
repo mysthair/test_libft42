@@ -4,6 +4,8 @@
 
 #include <stdlib.h>
 
+#define BIG 0xc0000000
+
 static int    test_ft_memalloc(size_t size)
 {
 	void	*o;
