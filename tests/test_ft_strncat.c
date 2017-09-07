@@ -28,7 +28,7 @@ static int		test_ft_strncat(char *dest, char *src, size_t n)
 	}
 	ft_strdel(&buff);
 	TEST(t==0);
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_strncat()	{//strncat
@@ -53,6 +53,6 @@ int main_test_ft_strncat()	{//strncat
 		FAIL_IF_NOT(test_ft_strncat(dst, "X", 1));
 		FAIL_IF_NOT(ft_strequ(dst, "123456789abcX"));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

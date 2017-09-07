@@ -267,5 +267,5 @@ int main_test_ft_strsub()
 			ft_strdel(&r);
 		}
 
-		return(1);
+		return(SUCCESS);
 	}

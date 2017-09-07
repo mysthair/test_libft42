@@ -24,7 +24,7 @@ static int test_ft_bzero(void *buffer, size_t size)
 		TEST(data[i] == 0);
 		i++;
 	}
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -40,8 +40,8 @@ int	main_test_ft_bzero()
 	errors += (test_ft_bzero(buffer, 1024) ? 0 :1);
 	errors += (test_ft_bzero(buffer, 0) ? 0 :1);
 	errors += (test_ft_bzero(NULL, 0) ? 0 :1);
-	//errors += (test_ft_bzero(NULL, 1) ? 0 :1);  // --> signal 11
-	//errors += (test_ft_bzero(NULL, -1) ? 0 :1);  // --> signal 11
+	// errors += (test_ft_bzero(NULL, 1) ? 0 :1);  // --> signal 11
+	// errors += (test_ft_bzero(NULL, -1) ? 0 :1);  // --> signal 11
 
 	return (errors == 0 ? 1 : 0);
 }

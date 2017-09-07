@@ -41,6 +41,7 @@
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
+//#define WITHOUT_FORK
 #ifndef WITHOUT_FORK
 #define FORK_TEST(t) {\
 	ft_putstr(#t " .. ");\
@@ -52,7 +53,7 @@
 	}\
 }
 #else
-#define FORK_TEST(t) fork_test(t)
+#define FORK_TEST(t) t()
 #endif
 
 

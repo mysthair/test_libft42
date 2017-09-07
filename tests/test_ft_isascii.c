@@ -6,7 +6,7 @@
 static int     test_ft_isascii(int c)
 {
 	TEST(!!isascii(c) == !!ft_isascii(c));
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_isascii()
@@ -17,6 +17,6 @@ int main_test_ft_isascii()
 		FAIL_IF_NOT( test_ft_isascii(i));
 	}
 
-	return (1);
+	return(SUCCESS);
 }
 

@@ -14,7 +14,7 @@ int main_test_ft_strclr()
 		ft_memdel(&null7);
 		ft_strdel(&ft_strclr_of_abcdef);
 	
-		return(1);
+		return(SUCCESS);
 	}
 
 	{//ft_strclr
@@ -25,7 +25,7 @@ int main_test_ft_strclr()
 		ft_memdel(&null1);
 		ft_strdel(&ft_strclr_of_vide);
 	
-		return(1);
+		return(SUCCESS);
 	}
 }
 

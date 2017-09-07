@@ -26,7 +26,7 @@ static int    test_ft_memalloc(size_t size)
 	o = malloc(size);
 	free(o);
 	TEST(size == 0 || (m && o) || (!m && !o));
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -44,7 +44,7 @@ static int main_test_ft_memalloc1()
 #ifdef DEBUG
 	FAIL_IF_NOT(test_ft_memalloc(BIG));
 #endif
-	return(1);
+	return(SUCCESS);
 }
 
 static int main_test_ft_memalloc2()
@@ -63,7 +63,7 @@ static int main_test_ft_memalloc2()
 	buffer[255] = '\0';
 
 	ft_strdel(&buffer);
-	return(1);
+	return(SUCCESS);
 }
 
 int main_test_ft_memalloc()

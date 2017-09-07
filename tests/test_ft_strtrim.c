@@ -34,6 +34,6 @@ int main_test_ft_strtrim()
 		FAIL_IF_NOT(ft_strequ((s=ft_strtrim(strange)), strange));
 		ft_strdel(&s);
 	
-		return(1);
+		return(SUCCESS);
 	}
 

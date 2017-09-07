@@ -31,7 +31,7 @@ int main_test_ft_strncpy()	{//strncpy
 		FAIL_IF_NOT(test_ft_strncpy(dst, src, 8));
 		FAIL_IF_NOT(test_ft_strncpy(dst, src, 12));
 	
-		return(1);
+		return(SUCCESS);
 	}
 
 

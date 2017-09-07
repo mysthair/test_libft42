@@ -16,7 +16,7 @@ static int	test_ft_strnequ(const char *s1, const char *s2, size_t n)
 		TEST((s1 && s2 ) 
 			|| (ft_strnequ(s1, s2, n) == ((s1 == s2) ? 1 : 0)));
 	}
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -43,6 +43,6 @@ int main_test_ft_strnequ()
 			i--;
 		}
 	
-		return(1);
+		return(SUCCESS);
 	}
 

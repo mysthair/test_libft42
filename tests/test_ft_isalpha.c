@@ -7,7 +7,7 @@
 static int     test_ft_isalpha(int c)
 {
 	TEST(!!isalpha(c) == !!ft_isalpha(c));
-	return (1);
+	return(SUCCESS);
 }
 
 

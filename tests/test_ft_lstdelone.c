@@ -59,5 +59,5 @@ int main_test_ft_lstdelone()	{
 		ft_lstadd(&lst, NULL);
 #endif
 
-		return(1);
+		return(SUCCESS);
 	}

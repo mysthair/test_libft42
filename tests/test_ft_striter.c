@@ -37,5 +37,5 @@ int main_test_ft_striter()
 		ft_strdel(&ft_stirter_upper_txtaz123HAHZ);
 		ft_strdel(&ft_stirter_lower_txtaz123HAHZ);
 
-		return(1);
+		return(SUCCESS);
 	}

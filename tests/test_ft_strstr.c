@@ -18,7 +18,7 @@ static int		test_ft_strstr(const char *big, const char *little)
 			|| ((o!=NULL) && (m!=NULL) 
 				&& strncmp(o, little, l) == 0 
 				&& ft_strncmp(m, little, l) == 0));
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -31,7 +31,7 @@ int main_test_ft_strstr()
 		FAIL_IF_NOT(test_ft_strstr("","Bat"));
 		FAIL_IF_NOT(test_ft_strstr("",""));
 	
-		return(1);
+		return(SUCCESS);
 	}
 
 

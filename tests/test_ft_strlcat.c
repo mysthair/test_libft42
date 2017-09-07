@@ -38,7 +38,7 @@ static int		test_ft_strlcat(char *dst, const char *src, size_t size)
 	TEST(r1 == r2);
 
 	ft_strdel(&d);
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_strlcat()
@@ -146,6 +146,6 @@ int main_test_ft_strlcat()
 		ft_bzero(abcde31, 31); strcpy(abcde31, "abcde");
 		FAIL_IF_NOT(test_ft_strlcat(abcde31, "123456789012", 10));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

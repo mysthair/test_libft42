@@ -31,7 +31,7 @@ static int	test_ft_memchr(const void *src, int c, size_t n)
 			i++;
 		}
 	}
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_memchr()	{//memchr
@@ -48,6 +48,6 @@ int main_test_ft_memchr()	{//memchr
 		FAIL_IF_NOT(test_ft_memchr(buffer , '8', 10));
 		FAIL_IF_NOT(test_ft_memchr(buffer , '9', 10));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

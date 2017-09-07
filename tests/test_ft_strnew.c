@@ -34,6 +34,6 @@ int main_test_ft_strnew()
 			ft_putendl("OK");
 		}*/
 	
-		return(1);
+		return(SUCCESS);
 	}
 

@@ -18,7 +18,7 @@ int     test_ft_atoi(char *str)
 		ft_putnbr(o); ft_putstr("\n");
 	}
 	TEST(atoi(str) == ft_atoi(str));
-	return (1);
+	return(SUCCESS);
 }
 
 

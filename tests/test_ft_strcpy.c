@@ -31,5 +31,5 @@ int main_test_ft_strcpy()
 		FAIL_IF_NOT(test_ft_strcpy(buff100, abcdefghi));
 		FAIL_IF_NOT(test_ft_strcpy(buff100, "lolmdr\n"));
 
-		return(1);
+		return(SUCCESS);
 }

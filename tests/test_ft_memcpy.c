@@ -30,7 +30,7 @@ static int    test_ft_memcpy(void *dest, const void *src, size_t n)
 		i++;
 	}
 	ft_strdel(&s);
-	return (1);
+	return(SUCCESS);
 }
 
 	//ft_memcpy
@@ -55,5 +55,5 @@ int main_test_ft_memcpy()
 		FAIL_IF_NOT(test_ft_memcpy(NULL, buffer, 0));
 		FAIL_IF_NOT(test_ft_memcpy(NULL, NULL, 0));
 
-		return(1);
+		return(SUCCESS);
 	}

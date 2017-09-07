@@ -36,5 +36,5 @@ int main_test_ft_strmap()
 		FAIL_IF_NOT(ft_strequ(ft_strmap_of_vide, ""));
 		ft_strdel(&ft_strmap_of_vide);
 	}
-	return(1);
+	return(SUCCESS);
 }

@@ -21,5 +21,5 @@ int main_test_ft_lstadd()
 		FAIL_IF_NOT(lst == &b && lst->content == str2 && lst->next == &a);
 		FAIL_IF_NOT(lst->next == &a && lst->next->content == str1 && lst->next->next == NULL);
 
-		return(1);
+		return(SUCCESS);
 	}

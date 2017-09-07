@@ -18,7 +18,7 @@ static int     test_ft_strcmp(char const *s1, char const *s2)
 		ft_putstr("ft_strcmp(s1, s2) = "); ft_putnbr(ft_strcmp(s1, s2)); ft_putstr("\n");
 	}
 	TEST(sign(strcmp(s1, s2)) == sign(ft_strcmp(s1, s2)));
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_strcmp()
@@ -41,6 +41,6 @@ int main_test_ft_strcmp()
 		FAIL_IF_NOT(test_ft_strcmp("\x80", "\x7F"));
 
 	
-		return(1);
+		return(SUCCESS);
 	}
 

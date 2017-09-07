@@ -37,5 +37,5 @@ int main_test_ft_strmapi()
 		ft_strdel(&ft_strmapi_upper_txtaz123HAHZ);
 		ft_strdel(&ft_strmapi_lower_txtaz123HAHZ);
 
-		return(1);
+		return(SUCCESS);
 	}

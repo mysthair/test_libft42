@@ -17,7 +17,7 @@ static int     test_ft_tolower(int c)
 		ft_putstr("ft_tolower("); ft_putnbr(c); ft_putstr(") = '"); ft_putchar(m); ft_putstr("'\n");
 	}
 	TEST(o == m);
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_tolower()
@@ -40,7 +40,7 @@ int main_test_ft_tolower()
 		}
 #endif
 	
-		return(1);
+		return(SUCCESS);
 	}
 
 

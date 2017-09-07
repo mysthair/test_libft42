@@ -122,7 +122,7 @@ static int test_44()
 		ft_lstdel(&list, &func_del_for_ft_lstmap);
 		ft_lstdel(&map, &func_del_for_ft_lstmap);
 
-		return(1);
+		return(SUCCESS);
 	}
 
 int main_test_ft_lstmap()

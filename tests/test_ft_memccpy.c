@@ -31,7 +31,7 @@ static int    test_ft_memccpy(void *dest, const void *src, int c, size_t n)
 	}
 	TEST((size_t)(r - dest) == (i + 1));
 	ft_strdel(&s);
-	return (1);
+	return(SUCCESS);
 }
 
 static int main_test_ft_memccpy_test1()

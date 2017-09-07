@@ -21,7 +21,7 @@ int main_test_ft_strlen()	{//ft_strlen
 		FAIL_IF_NOT(test_ft_strlen(b));
 		FAIL_IF_NOT(test_ft_strlen(c));
 	
-		return(1);
+		return(SUCCESS);
 	}
 	
 

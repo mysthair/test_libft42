@@ -11,7 +11,7 @@ static int		test_ft_strchr(const char *s, int c)
 	o = strchr(s,c);
 	m = ft_strchr(s, c);
 	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_strchr()
@@ -24,6 +24,6 @@ int main_test_ft_strchr()
 		/*failed !!	FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '\0')); */
 		FAIL_IF_NOT(test_ft_strchr("12345678901234567890", '\0'));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

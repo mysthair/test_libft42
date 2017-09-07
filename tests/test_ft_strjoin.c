@@ -33,6 +33,6 @@ int main_test_ft_strjoin()
 		ft_strdel(&s);
 #endif
 	
-		return(1);
+		return(SUCCESS);
 	}
 

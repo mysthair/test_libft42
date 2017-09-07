@@ -200,7 +200,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 		INFO(ft_putendl("ft_lstdel(&m, .."));
 		ft_lstdel(&elt0, &func_del_for_ft_lstnew);
 
-		return(1);
+		return(SUCCESS);
 	}
 
 

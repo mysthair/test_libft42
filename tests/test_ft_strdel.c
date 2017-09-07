@@ -10,7 +10,7 @@ static int	test_ft_strdel(size_t size)
 
 	ft_strdel(&t);
 	TEST(t == NULL);
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -21,6 +21,6 @@ int main_test_ft_strdel()
 		FAIL_IF_NOT(test_ft_strdel(1));
 		FAIL_IF_NOT(test_ft_strdel(0));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

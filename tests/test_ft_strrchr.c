@@ -21,7 +21,7 @@ static int 	test_ft_strrchr(const char *s, int c)
 	}
 	TEST(((o==NULL) && (m==NULL)) || ((o!=NULL) && (m!=NULL) && ft_strcmp(o, m) == 0));
 	TEST(strrchr(s,c) == ft_strrchr(s, c)); //?
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_strrchr()
@@ -38,6 +38,6 @@ int main_test_ft_strrchr()
 		FAIL_IF_NOT(ft_strrchr(abcd, 'X') == NULL);
 		FAIL_IF_NOT(ft_strrchr(abcd, '\0') == abcd + 4);
 	
-		return(1);
+		return(SUCCESS);
 	}
 

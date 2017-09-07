@@ -33,6 +33,6 @@ int main_test_ft_strcat()	{//strcat
 		FAIL_IF_NOT(test_ft_strcat(dst, "X"));
 		FAIL_IF_NOT(ft_strequ(dst, "12345abcdX"));
 	
-		return(1);
+		return(SUCCESS);
 	}
 

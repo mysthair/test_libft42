@@ -33,7 +33,7 @@ int main_test_ft_strdup()	{ // ft_strdup
 		FAIL_IF_NOT(test_ft_strdup("&AFsd1''2\t3\n4+-{}5\0""67890"));
 		FAIL_IF_NOT(test_ft_strdup(""));
 	
-		return(1);
+		return(SUCCESS);
 	}
 
 

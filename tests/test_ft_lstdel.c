@@ -58,5 +58,5 @@ int main_test_ft_lstdel()	{
 		ft_lstdel(&lst, &func_del_for_ft_lstdel);
 
   	FAIL_IF_NOT(lst == NULL);
-		return(1);
+		return(SUCCESS);
 	}
