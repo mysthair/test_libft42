@@ -6,7 +6,7 @@
 static int     test_ft_isprint(int c)
 {
 	TEST(!!isprint(c) == !!ft_isprint(c));
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_isprint()
@@ -58,5 +58,5 @@ int main_test_ft_isprint()
 		}
 #endif
 
-		return(1);
+		return(SUCCESS);
 	}

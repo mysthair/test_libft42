@@ -119,5 +119,5 @@ int main_test_ft_memmove()	{
 		ft_strcpy(abcdef___, "abcdef\0\0\0");
 		FAIL_IF_NOT(test_ft_memmove(abcdef___ + 2 , abcdef___, 6));
 
-		return(1);
+		return(SUCCESS);
 	}

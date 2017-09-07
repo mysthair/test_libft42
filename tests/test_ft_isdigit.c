@@ -8,7 +8,7 @@
 int     test_ft_isdigit(int c)
 {
 	TEST(!!isdigit(c) == !!ft_isdigit(c));
-	return (1);
+	return(SUCCESS);
 }
 
 
@@ -32,5 +32,5 @@ int main_test_ft_isdigit()
 		while (c < 0xFF)
 			FAIL_IF_NOT(test_ft_isdigit(c++));
 
-		return(1);
+		return(SUCCESS);
 	}

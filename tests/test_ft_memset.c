@@ -11,7 +11,7 @@ int test_ft_memset(void* buffer, int value, size_t size)
 	data = (char*)buffer;
 	i = 0;
 	while(i < size)
-	{	
+	{
 	  if (!(data[i] == (char)value))
 	  {
 	    ft_putstr("in test_ft_memset(void* buffer, int value=");
@@ -31,7 +31,7 @@ int test_ft_memset(void* buffer, int value, size_t size)
 		TEST(data[i] == (char)value);
 		i++;
 	}
-	return (1);
+	return (SUCCESS);
 }
 
 int main_test_ft_memset()
@@ -39,7 +39,7 @@ int main_test_ft_memset()
 
 	char	*buffer;
 	int		i;
-	
+
 	buffer = ft_memalloc(256);
 	FAIL_IF_NOT(buffer != NULL);
 	for (i = 0; i < 255; i++)
@@ -76,5 +76,5 @@ int main_test_ft_memset()
 
 	ft_strdel(&buffer);
 
-	return(1);
+	return(SUCCESS);
 }

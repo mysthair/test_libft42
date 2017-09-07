@@ -24,7 +24,6 @@ int main_test_ft_isalpha()	{//isalpha
 		FAIL_IF_NOT(test_ft_isalpha('&'));
 		FAIL_IF_NOT(test_ft_isalpha('\n'));
 		FAIL_IF_NOT(test_ft_isalpha('\0'));
-	
-		return(1);
-	}
 
+		return(SUCCESS);
+	}

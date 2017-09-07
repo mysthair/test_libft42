@@ -13,7 +13,7 @@ static int     test_ft_isalnum(int c)
 	}
 
 	TEST((!!isalnum(c)) == (!!ft_isalnum(c)));
-	return (1);
+	return(SUCCESS);
 }
 
 int main_test_ft_isalnum()
@@ -32,11 +32,10 @@ int main_test_ft_isalnum()
 		FAIL_IF_NOT(test_ft_isalnum('\n'));
 		FAIL_IF_NOT(test_ft_isalnum('\t'));
 		FAIL_IF_NOT(test_ft_isalnum('\0'));
-	
+
 		int i;
 		for (i = -255; i<=256; i++)
 			FAIL_IF_NOT(test_ft_isalnum(i));
-	
-		return(1);
-	}
 
+		return(SUCCESS);
+	}
