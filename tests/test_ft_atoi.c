@@ -18,7 +18,7 @@ int     test_ft_atoi(char *str)
 		ft_putnbr(o); ft_putstr("\n");
 	}
 	TEST(atoi(str) == ft_atoi(str));
-	return(SUCCESS);
+	return (1);
 }
 
 
@@ -55,7 +55,8 @@ int main_test_ft_atoi()
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775807"));// == 1);
 		FAIL_IF_NOT(test_ft_atoi("-9223372036854775808"));// == 0);
 #endif
-		/* uncomment this lines to compare with the real atoi !
+		// uncomment this lines to compare with the real atoi ! *
+#if 0
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775808"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775809"));//  == -1);
 		   FAIL_IF_NOT(test_ft_atoi("9223372036854775810"));//  == -1);
@@ -63,7 +64,7 @@ int main_test_ft_atoi()
 		   FAIL_IF_NOT(test_ft_atoi("-9223372036854775809"));// == 0);
 		   FAIL_IF_NOT(test_ft_atoi("-9223372036854775810"));// == 0);
 		   FAIL_IF_NOT(test_ft_atoi("-1000000000000000000000000"));//  == 0);
-		   */
+#endif
 
 		return(SUCCESS);
 	}
