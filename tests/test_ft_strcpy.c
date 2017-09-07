@@ -31,5 +31,19 @@ int main_test_ft_strcpy()
 		FAIL_IF_NOT(test_ft_strcpy(buff100, abcdefghi));
 		FAIL_IF_NOT(test_ft_strcpy(buff100, "lolmdr\n"));
 
+
+		FAIL_IF_NOT(test_ft_strcpy(buff100, "000000000X"));
+		FAIL_IF_NOT(test_ft_strcpy(buff100 + 1, "1111111"));
+		FAIL_IF_NOT(test_ft_strcpy(buff100 + 2, "22222"));
+		FAIL_IF_NOT(test_ft_strcpy(buff100 + 3, "333"));
+		FAIL_IF_NOT(test_ft_strcpy(buff100 + 4, "4"));
+		if(ft_memcmp(buff100, "01234\0\0\0\0X\0", 12)!=0)
+		{
+			ft_putendl("needed:");
+			ft_print_memory("01234\0\0\0\0\0X\0",12);
+			ft_putendl("result:");
+			ft_print_memory(buff100,12);
+		}
+		FAIL_IF_NOT(ft_memcmp(buff100, "01234\0\0\0\0X\0", 12)==0);
 		return(SUCCESS);
 }
