@@ -6,9 +6,9 @@ static void	lst_show_elt(t_list *l)
 {
 	char *	elt;
 
-	elt = (char *)(l->content);
-	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	TRACE(ft_putaddr(l);
+	elt = l ? (char *)(l->content) : NULL;
+	//INFO(printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);)
+	INFO(ft_putaddr(l);
 	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
@@ -34,7 +34,7 @@ static void func_del_for_ft_lstdel(void* data, size_t size)
 		ft_putstr("func_del_for_ft_lstdel *NULL !\n");
 	else
 	{
-		TRACE(ft_putstr("func_del_for_ft_lstdel ");
+		INFO(ft_putstr("func_del_for_ft_lstdel ");
 		ft_putaddr(elt);
 		if (elt) {
 			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
@@ -59,5 +59,5 @@ int main_test_ft_lstiter()	{
 		ft_lstdel(&lst, &func_del_for_ft_lstdel);
 
   	FAIL_IF_NOT(lst == NULL);
-		return(1);
+		return(SUCCESS);
 	}

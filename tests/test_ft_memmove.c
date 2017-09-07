@@ -17,24 +17,24 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 
 	if(dest <= src && src <= dest + n)
 	{
-		//ft_putendl("\ncas 1\n");
+		INFO(ft_putendl("\ncas 1\n");)
 		ft_memcpy(dest, src, n);
 	}
 	else if (src <= dest && dest < src + n)
 	{
 		size_t	k = dest - src;
 
-		//ft_putendl("\ncas 2\n");
+		INFO(ft_putendl("\ncas 2\n");)
 		s = ft_memalloc(n + k);
 		ft_memcpy(s, src, n + k);
 		d = s + k;
 		TEST(ft_strnequ(s, src, n));
 
-		/*ft_putendl("before ft_memmove(dest, src, n)");
+		INFO(ft_putendl("before ft_memmove(dest, src, n)");
 		ft_putendl("d :");
 		ft_print_memory(d, n);
 		ft_putendl("s :");
-		ft_print_memory(s, n); */
+		ft_print_memory(s, n);)
 
 		memmove(d, s, n);
 		ft_memmove(dest, src, n);
@@ -49,7 +49,7 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 			ft_putstr("n="); ft_putnbr(n); ft_putendl("\n");
 
 
-			
+
 			ft_putendl("after  ft_memmove(dest, src, n)");
 			ft_putendl("d :");
 			ft_print_memory(d, n);
@@ -69,7 +69,7 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 	}
 	else
 	{
-		ft_putendl("\ncas 3\n");
+		INFO(ft_putendl("\ncas 3\n");)
 		d = ft_memalloc(n);
 		s = ft_memalloc(n);
 		ft_memcpy(s, src, n);
@@ -91,7 +91,7 @@ static int	test_ft_memmove(void *dest, const void *src, size_t n)
 	}
 	ft_strdel(&origin);
 
-	return (1);
+	return (SUCCESS);
 }
 
 	//ft_memmove

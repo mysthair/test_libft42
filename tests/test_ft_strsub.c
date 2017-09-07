@@ -53,7 +53,7 @@ int main_test_ft_strsub()
 			ft_strsub_abcde_10_10 = ft_strsub(abcde, 10, 10);
 			if(!(ft_strsub_abcde_10_10 == NULL || ft_strequ(ft_strsub_abcde_10_10, "")))
 			{
-				TRACE(ft_putstr("WARNING : ft_strsub(abcde, 10, 10) = ");
+				INFO(ft_putstr("WARNING : ft_strsub(abcde, 10, 10) = ");
 				ft_putendl(ft_strsub_abcde_10_10 ? ft_strsub_abcde_10_10 : "NULL"));
 			}
 			//WARNING_IF_NOT(ft_strsub_abcde_10_10 == NULL || ft_strequ(ft_strsub_abcde_10_10, ""));
@@ -65,7 +65,7 @@ int main_test_ft_strsub()
 			ft_strsub_vide_10_10 = ft_strsub(vide, 10, 10);
 			if(!(ft_strsub_vide_10_10 == NULL || ft_strequ(ft_strsub_vide_10_10, "")))
 			{
-				TRACE(ft_putstr("WARNING : ft_strsub(vide, 10, 10) = ");
+				INFO(ft_putstr("WARNING : ft_strsub(vide, 10, 10) = ");
 				ft_putendl(ft_strsub_vide_10_10 ? ft_strsub_vide_10_10 : "NULL"));
 			}
 			//FAIL_IF_NOT(ft_strsub_vide_10_10 == NULL || ft_strequ(ft_strsub_vide_10_10, ""));
@@ -120,7 +120,7 @@ int main_test_ft_strsub()
 			}
 			else
 			{
-				TRACE(ft_putendl("  .. OK (7)");)
+				INFO(ft_putendl("  .. OK (7)");)
 			}
 		}
 
@@ -220,7 +220,7 @@ int main_test_ft_strsub()
 
 			char	* r1 = ft_strsub(str, 0, (size_t)-10);
 			//			char	* r2 = ft_strsub2(str, 0, (size_t)-10);
-			TRACE(if (r1 == NULL)
+			INFO(if (r1 == NULL)
 				ft_putstr("ft_strsub(str, 0, (size_t)-10) == NULL)\n");
 			else
 			{
@@ -235,7 +235,7 @@ int main_test_ft_strsub()
 			char 	*str = "Un jour je serai, le meilleur codeur ! ^^";
 
 			char	*result = ft_strsub(str, 0, 0);
-			TRACE(if (result == NULL)
+			INFO(if (result == NULL)
 				ft_putstr("ft_strsub(str, 0, 0) == NULL)\n");
 			else
 			{
@@ -250,7 +250,7 @@ int main_test_ft_strsub()
 		  char *str = "Un jour je serai, le meilleur codeur ! ^^";
 		  char	* r = ft_strsub(str, 19, (size_t)-10);
 
-		  TRACE(if (r == NULL)
+		  INFO(if (r == NULL)
 		 	 ft_putstr("ft_strsub(str, 19, (size_t)-10) == NULL)\n");
 		  else
 		  {

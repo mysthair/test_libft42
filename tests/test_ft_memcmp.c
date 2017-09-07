@@ -17,9 +17,6 @@ int main_test_ft_memcmp()	{// ft_memcmp
 		FAIL_IF_NOT(test_ft_memcmp(a+1,b,6));
 		FAIL_IF_NOT(test_ft_memcmp(a,c,6));
 		FAIL_IF_NOT(test_ft_memcmp(c,a,6));
-	
+
 		return(1);
 	}
-
-
-

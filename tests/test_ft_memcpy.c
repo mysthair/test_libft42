@@ -39,7 +39,7 @@ int main_test_ft_memcpy()
 		int i;
 		char buffer[256];
 		char buffer2[256];
-		
+
 		ft_memset(buffer, 'X', 255);
 		buffer[255] = '\0';
 		for (i=0; i<10; i++)
@@ -48,8 +48,12 @@ int main_test_ft_memcpy()
 			buffer[10 + i] = 'a' + i;
 		FAIL_IF_NOT(test_ft_memcpy(buffer2, buffer, 255));
 		FAIL_IF_NOT(test_ft_memcpy(buffer + 5, buffer + 10, 10));
-		FAIL_IF_NOT(test_ft_memcpy(buffer, buffer + 26, 10));
-	
+
+		FAIL_IF_NOT(test_ft_memcpy(buffer, buffer, 256));
+		FAIL_IF_NOT(test_ft_memcpy(buffer, buffer, 0));
+		FAIL_IF_NOT(test_ft_memcpy(buffer, NULL, 0));
+		FAIL_IF_NOT(test_ft_memcpy(NULL, buffer, 0));
+		FAIL_IF_NOT(test_ft_memcpy(NULL, NULL, 0));
+
 		return(1);
 	}
-

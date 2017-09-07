@@ -32,49 +32,42 @@ static int    test_ft_memalloc(size_t size)
 
 
 static int main_test_ft_memalloc1()
-	{//ft_memalloc
-		FAIL_IF_NOT(test_ft_memalloc(10));
-		FAIL_IF_NOT(test_ft_memalloc(0));
-		FAIL_IF_NOT(test_ft_memalloc(-1));
-		//FAIL_IF_NOT(test_ft_memalloc(BIG));
-	
-		return(1);
-	}
+{//ft_memalloc
+	FAIL_IF_NOT(test_ft_memalloc(1));
+	FAIL_IF_NOT(test_ft_memalloc(10));
+	FAIL_IF_NOT(test_ft_memalloc(1234));
+	FAIL_IF_NOT(test_ft_memalloc(16*1024));
+
+	FAIL_IF_NOT(test_ft_memalloc(0));
+	FAIL_IF_NOT(test_ft_memalloc(-1));
+
+#ifdef DEBUG
+	FAIL_IF_NOT(test_ft_memalloc(BIG));
+#endif
+	return(1);
+}
 
 static int main_test_ft_memalloc2()
-	{	//ft_memalloc
-		char    *buffer;
-		int		i;
+{	//ft_memalloc
+	char    *buffer;
+	int		i;
 
-		buffer = NULL;
-		FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
-		ft_strdel(&buffer);
-		/*buffer = malloc(BIG);
-		if(buffer)
-		{
-			ft_strdel(&buffer);
-			buffer = ft_memalloc(BIG);
-			FAIL_IF_NOT(buffer != NULL);
-			for (i = 0; i < BIG; i++)
-				buffer[i] = (char)(i+1);
-		}
-		ft_strdel(&buffer);*/
-		buffer = ft_memalloc(256);
-		FAIL_IF_NOT(buffer != NULL);
-		for (i = 0; i < 255; i++)
-			buffer[i] = (char)('0' + (i%10));
-		buffer[255] = '\0';
+	buffer = NULL;
+	FAIL_IF_NOT((buffer = ft_memalloc(0)) != NULL);
+	ft_strdel(&buffer);
 
-		//ft_bzero
-		//FAIL_IF_NOT(test_ft_bzero(buffer+2, 20));
+	buffer = ft_memalloc(256);
+	FAIL_IF_NOT(buffer != NULL);
+	for (i = 0; i < 255; i++)
+		buffer[i] = (char)('0' + (i%10));
+	buffer[255] = '\0';
 
-		ft_strdel(&buffer);
-		return(1);
-	}	
+	ft_strdel(&buffer);
+	return(1);
+}
 
 int main_test_ft_memalloc()
 {
-	return (main_test_ft_memalloc1() 
+	return (main_test_ft_memalloc1()
 		&& main_test_ft_memalloc2());
 }
-

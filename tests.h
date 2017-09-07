@@ -24,26 +24,18 @@
 	if(!(cond)) { \
 		ft_putstr(__FILE__ ":" STRINGIFY(__LINE__) ": (" #cond \
 	")   FAILED! :(  KO\n"); \
-		return (0); \
+		return (FAILED); \
 	}
 
 #define FT_ASSERT(cond) TEST(cond)
+
 # define FAIL_IF_NOT(cond) FT_ASSERT(cond)
-// ft_putstr(STRINGIFY(cond) " .. OK\n");
-
-
-/*# ifndef NULL
-#  define NULL 0
-#  define TYPEDEF_SIZE_T typedef unsigned long size_t
-TYPEDEF_SIZE_T;
-# endif
-*/
 
 
 #ifdef DEBUGERF
-# define TRACE(X) X
+# define INFO(X) X
 #else
-# define TRACE(X) {if(0){X;}}
+# define INFO(X) {if(0){X;}}
 #endif
 
 
@@ -53,9 +45,9 @@ TYPEDEF_SIZE_T;
 #define FORK_TEST(t) {\
 	ft_putstr(#t " .. ");\
 	if(fork_test(&t)) {\
-		TRACE(ft_putendl(#t " .. OK (0)"));\
+		INFO(ft_putendl(#t " .. OK (0)"));\
 	}else{\
-		TRACE(ft_putendl(#t " .. KO (0)"));\
+		INFO(ft_putendl(#t " .. KO (0)"));\
 		_exit(-1);\
 	}\
 }

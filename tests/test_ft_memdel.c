@@ -12,16 +12,18 @@ static int		test_ft_memdel(size_t size)
 		ft_memdel(&ft_memdel_parameter_after_call);
 		TEST(ft_memdel_parameter_after_call == NULL);
 	}
-	return (1);
+	return (SUCCESS);
 }
 
 
 int main_test_ft_memdel()
 	{ //ft_memdel
-		FAIL_IF_NOT(test_ft_memdel(1024));
+		FAIL_IF_NOT(test_ft_memdel(1));
+		FAIL_IF_NOT(test_ft_memdel(123));
+		FAIL_IF_NOT(test_ft_memdel(16 * 1024));
 		FAIL_IF_NOT(test_ft_memdel(0));
+		FAIL_IF_NOT(test_ft_memdel(-1));
 	//n	FAIL_IF_NOT(test_ft_memdel(BIG));
-	
-		return(1);
-	}	
 
+		return(SUCCESS);
+	}

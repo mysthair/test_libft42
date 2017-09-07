@@ -34,9 +34,8 @@ static int    test_ft_memccpy(void *dest, const void *src, int c, size_t n)
 	return (1);
 }
 
-
-int main_test_ft_memccpy()
-{//ft_memccpy
+static int main_test_ft_memccpy_test1()
+{
 	int i;
 	char buffer[256];
 	char buffer2[255];
@@ -46,13 +45,34 @@ int main_test_ft_memccpy()
 		buffer[i] = '0' + i;
 	for (i=0; i<26; i++)
 		buffer[10+i] = 'a' + i;
-	FAIL_IF_NOT(test_ft_memccpy(buffer2, buffer + 6, '7', 10));
-	FAIL_IF_NOT(test_ft_memccpy(buffer2, buffer + 4, '7', 10));
-	FAIL_IF_NOT(test_ft_memccpy(buffer2, buffer + 2, '7', 10));
-	FAIL_IF_NOT(test_ft_memccpy(buffer2, buffer + 3, '7', 10));
-	FAIL_IF_NOT(test_ft_memccpy(buffer + 20, buffer + 5, '7', 10));
-	FAIL_IF_NOT(test_ft_memccpy(buffer + 20, buffer + 5, '7' , 10));
+	TEST(test_ft_memccpy(buffer2, buffer + 6, '7', 10));
+	TEST(test_ft_memccpy(buffer2, buffer + 4, '7', 10));
+	TEST(test_ft_memccpy(buffer2, buffer + 2, '7', 10));
+	TEST(test_ft_memccpy(buffer2, buffer + 3, '7', 10));
+	TEST(test_ft_memccpy(buffer + 20, buffer + 5, '7', 10));
+	TEST(test_ft_memccpy(buffer + 20, buffer + 5, '7' , 10));
 
-	return (1);
+	return (SUCCESS);
 }
 
+static int main_test_ft_memccpy_test2()
+{
+			char buffer[1024];
+			char *txt = "Ceci est un texte pour le test memccpy...";
+
+			for (size_t i=0; i<strlen(txt); i++){
+				FAIL_IF_NOT(memccpy(buffer, txt, ' ', i) == ft_memccpy(buffer, txt, ' ', i))
+			}
+			FAIL_IF_NOT(memccpy(buffer, txt, ' ', 0) == ft_memccpy(buffer, txt, ' ', 0))
+			FAIL_IF_NOT(memccpy(NULL, txt, ' ', 0) == ft_memccpy(NULL, txt, ' ', 0))
+			FAIL_IF_NOT(memccpy(buffer, buffer, ' ', 0) == ft_memccpy(buffer, buffer, ' ', 0))
+			return SUCCESS;
+}
+
+int main_test_ft_memccpy()
+{//ft_memccpy
+		return ( main_test_ft_memccpy_test1() == SUCCESS
+			&& main_test_ft_memccpy_test2() == SUCCESS
+			? SUCCESS
+			: FAILED );
+}

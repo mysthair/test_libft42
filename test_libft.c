@@ -61,11 +61,11 @@ pid_t create_process(void)
 /* La fonction child_process effectue les actions du processus fils */
 void child_process(int (*f)())
 {
-    TRACE(printf(" Nous sommes dans le fils !\n"
+    INFO(printf(" Nous sommes dans le fils !\n"
 	   " Le PID du fils est %d.\n"
 	   " Le PPID du fils est %d.\n", (int) getpid(), (int) getppid()));
      if ((*f)()){
-      TRACE(ft_putendl(GREEN_OK);)
+      INFO(ft_putendl(GREEN_OK);)
  			_exit(EXIT_SUCCESS);
       // return(SUCCESS);
  		}else{
@@ -78,7 +78,7 @@ void child_process(int (*f)())
 void father_process(int child_pid)
 {
     (void)child_pid;
-    TRACE(printf(" Nous sommes dans le père !\n"
+    INFO(printf(" Nous sommes dans le père !\n"
 	   " Le PID du fils est %d.\n"
 	   " Le PID du père est %d.\n", (int) child_pid, (int) getpid()));
 
@@ -88,7 +88,7 @@ void father_process(int child_pid)
     }
 
     if (WIFEXITED(status)) {
-	TRACE(printf(" Terminaison normale du processus fils.\n"
+	INFO(printf(" Terminaison normale du processus fils.\n"
 	       " Code de retour : %d.\n", WEXITSTATUS(status)));
          ft_putendl(!WEXITSTATUS(status) ? GREEN_OK : RED_KO);
     }
@@ -98,7 +98,7 @@ void father_process(int child_pid)
 	    ft_putstr("  signal ");
       ft_putnbr(WTERMSIG(status));
       ft_putstr(" intercepted\n");
-  		TRACE(_exit(EXIT_FAILURE));
+  		INFO(_exit(EXIT_FAILURE));
 	  }
 }
 

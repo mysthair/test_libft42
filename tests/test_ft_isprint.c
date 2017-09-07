@@ -47,13 +47,16 @@ int main_test_ft_isprint()
 		FAIL_IF_NOT(test_ft_isprint(-255));
 		FAIL_IF_NOT(test_ft_isprint(256));
 		FAIL_IF_NOT(test_ft_isprint(512));
+		for(int c=0; c<=0xFF; c++)
+		{
+			FAIL_IF_NOT(test_ft_isprint(c));
+		}
 #ifdef DEBUG
 		for(int c=-256; c<=512; c++)
 		{
 			FAIL_IF_NOT(test_ft_isprint(c));
 		}
 #endif
-	
+
 		return(1);
 	}
-

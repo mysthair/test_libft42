@@ -20,9 +20,9 @@ int main_test_ft_strmap()
 		char	*ft_strmap_lower_txtaz123HAHZ;
 
 		ft_strmap_upper_txtaz123HAHZ = ft_strmap("txtaz123HAHZ", &strmap_func_upper);
-		TRACE(SHOW_STRING("before ", ft_strmap_upper_txtaz123HAHZ));
+		INFO(SHOW_STRING("before ", ft_strmap_upper_txtaz123HAHZ));
 		ft_strmap_lower_txtaz123HAHZ = ft_strmap("txtaz123HAHZ", &strmap_func_lower);
-		TRACE(SHOW_STRING("after  ", ft_strmap_lower_txtaz123HAHZ));
+		INFO(SHOW_STRING("after  ", ft_strmap_lower_txtaz123HAHZ));
 
 		FAIL_IF_NOT(ft_strequ(ft_strmap_upper_txtaz123HAHZ, "TXTAZ123HAHZ"));
 		FAIL_IF_NOT(ft_strequ(ft_strmap_lower_txtaz123HAHZ, "txtaz123hahz"));

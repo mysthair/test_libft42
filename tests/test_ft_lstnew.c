@@ -8,7 +8,7 @@ static void	lst_show_elt(t_list *l)
 
 	elt = (char *)(l->content);
 	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	TRACE(ft_putaddr(l);
+	INFO(ft_putaddr(l);
 	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
@@ -54,7 +54,7 @@ static void func_del_for_ft_lstnew(void* data, size_t size)
 		ft_putstr("func_del_for_ft_lstnew *NULL !\n");
 	else
 	{
-		TRACE(ft_putstr("func_del_for_ft_lstnew ");
+		INFO(ft_putstr("func_del_for_ft_lstnew ");
 		ft_putaddr(elt);
 		if (elt) {
 			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
@@ -114,7 +114,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 
 			l = ft_strlen(z1);
 			lst = ft_lstnew(z1, l + 1);
-			TRACE(ft_putendl("contenu de la liste z1:");
+			INFO(ft_putendl("contenu de la liste z1:");
 			lst_show_lst(lst);
 			ft_print_memory(lst, sizeof(t_list)));
 		}
@@ -123,35 +123,35 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 
 			l = ft_strlen(z2);
 			elt = ft_lstnew(z2, l + 1);
-			TRACE(ft_putstr("z2:");
+			INFO(ft_putstr("z2:");
 			lst_show_elt(elt);
 			ft_print_memory(elt, sizeof(t_list)));
 			ft_lstadd(&lst, elt);//ft_lstnew(z2, ft_strlen(z2)+1));
-			TRACE(ft_putendl("contenu de la liste z1,z2:");
+			INFO(ft_putendl("contenu de la liste z1,z2:");
 			lst_show_lst(lst));
 		}
 		elt = ft_lstnew(z3, ft_strlen(z3)+1);
-		TRACE(ft_putstr("z3:");
+		INFO(ft_putstr("z3:");
 		lst_show_elt(elt));
 		ft_lstadd(&lst, elt);//ft_lstnew(z3, ft_strlen(z3)+1));
-		TRACE(ft_putendl("contenu de la liste z1-z3:");
+		INFO(ft_putendl("contenu de la liste z1-z3:");
 		lst_show_lst(lst));
 
 		elt = ft_lstnew(z4, ft_strlen(z4)+1);
-		TRACE(lst_show_elt(elt);
+		INFO(lst_show_elt(elt);
 		ft_putstr("z4:"));
 		ft_lstadd(&lst, elt);//ft_lstnew(z4, ft_strlen(z4)+1));
-		TRACE(ft_putendl("contenu de la liste z1-z4:");
+		INFO(ft_putendl("contenu de la liste z1-z4:");
 		lst_show_lst(lst));
 
-		TRACE(ft_putendl("ft_lstiter(l, &lst_show_elt);"));
+		INFO(ft_putendl("ft_lstiter(l, &lst_show_elt);"));
 		ft_lstiter(lst, &lst_show_elt);
 
-		TRACE(ft_putendl("m0 = ft_lstmap(&l, &f)"));
+		INFO(ft_putendl("m0 = ft_lstmap(&l, &f)"));
 		t_list	*elt0 = ft_lstmap(lst, &func_for_ft_lstnew);
-		TRACE(lst_show_lst(elt0));
+		INFO(lst_show_lst(elt0));
 
-		TRACE(ft_putendl("ft_lstdel(&l, .."));
+		INFO(ft_putendl("ft_lstdel(&l, .."));
 		ft_lstdel(&lst, &func_del_for_ft_lstnew);
 
 
@@ -197,7 +197,7 @@ static int main_test_ft_lstnew_stdelone_lstadd_lstdel_lstmap()
 
 		FAIL_IF_NOT(elt4 == NULL);
 
-		TRACE(ft_putendl("ft_lstdel(&m, .."));
+		INFO(ft_putendl("ft_lstdel(&m, .."));
 		ft_lstdel(&elt0, &func_del_for_ft_lstnew);
 
 		return(1);

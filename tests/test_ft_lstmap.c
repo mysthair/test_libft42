@@ -11,7 +11,7 @@ static void	lst_show_elt(t_list *l)
 
 	elt = (char *)(l->content);
 	//printf("%p:[content:%p(\"%s\"), size:%zu, next:%p]\n", l, elt, l->content_size ? (elt?elt:""):"(O-sized)", l->content_size, l->next);
-	TRACE(ft_putaddr(l);
+	INFO(ft_putaddr(l);
 	ft_putstr(":[content:");	ft_putaddr(elt);
 	ft_putstr("(\"");			ft_putstr(l->content_size>0 ? elt : "");
 	ft_putstr("\"), size:");	ft_putnbr(l->content_size);
@@ -76,9 +76,9 @@ static void func_del_for_ft_lstmap(void* data, size_t size)
 		ft_putstr("func_del_for_ft_lstmap *NULL !\n");
 	else
 	{
-		TRACE(ft_putstr("func_del_for_ft_lstmap ");
+		INFO(ft_putstr("func_del_for_ft_lstmap ");
 		ft_putaddr(elt));
-		TRACE(if (elt) {
+		INFO(if (elt) {
 			ft_putstr("(\""); ft_putstr(size > 0 ? elt : ""); ft_putstr("\")");
 		}
 		ft_putstr(", size ");	ft_putnbr(size);
@@ -142,7 +142,7 @@ int main_test_ft_lstmap()
 
 		for (i=0; i < 10; i++)
 			ft_lstadd(&lst, ft_lstnew(tab[9 - i], 1 + ft_strlen(tab[9 - i])));
-		TRACE(lst_show_lst(lst));
+		INFO(lst_show_lst(lst));
 
 		t_list *lst2;
 		lst2 = ft_lstmap(lst, &func2_for_lstmap);

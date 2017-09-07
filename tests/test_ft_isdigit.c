@@ -16,6 +16,8 @@ int     test_ft_isdigit(int c)
 
 int main_test_ft_isdigit()
 	{//ft_isdigit
+		int c;
+
 		FAIL_IF_NOT(test_ft_isdigit('a'));
 		FAIL_IF_NOT(test_ft_isdigit('A'));
 		FAIL_IF_NOT(test_ft_isdigit('Z'));
@@ -25,8 +27,10 @@ int main_test_ft_isdigit()
 		FAIL_IF_NOT(test_ft_isdigit('0'));
 		FAIL_IF_NOT(test_ft_isdigit('3'));
 		FAIL_IF_NOT(test_ft_isdigit('9'));
-	
+
+		c = 0;
+		while (c < 0xFF)
+			FAIL_IF_NOT(test_ft_isdigit(c++));
+
 		return(1);
 	}
-
-

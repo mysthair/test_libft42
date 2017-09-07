@@ -25,14 +25,14 @@ int main_test_ft_striteri()
 		char	*ft_stirteri_upper_txtaz123HAHZ = ft_strdup(t);
 		char	*ft_stirteri_lower_txtaz123HAHZ = ft_strdup(t);
 
-		TRACE(SHOW_STRING("before ", ft_stirteri_upper_txtaz123HAHZ));
+		INFO(SHOW_STRING("before ", ft_stirteri_upper_txtaz123HAHZ));
 		ft_striteri(ft_stirteri_upper_txtaz123HAHZ, &strtteri_func_upper);
-		TRACE(SHOW_STRING("after  ", ft_stirteri_upper_txtaz123HAHZ));
+		INFO(SHOW_STRING("after  ", ft_stirteri_upper_txtaz123HAHZ));
 		FAIL_IF_NOT(ft_strequ(ft_stirteri_upper_txtaz123HAHZ, "TXTAZ123HAHZ"));
 
-		TRACE(SHOW_STRING("before ", ft_stirteri_lower_txtaz123HAHZ));
+		INFO(SHOW_STRING("before ", ft_stirteri_lower_txtaz123HAHZ));
 		ft_striteri(ft_stirteri_lower_txtaz123HAHZ, &strtteri_func_lower);
-		TRACE(SHOW_STRING("after  ", ft_stirteri_lower_txtaz123HAHZ));
+		INFO(SHOW_STRING("after  ", ft_stirteri_lower_txtaz123HAHZ));
 		FAIL_IF_NOT(ft_strequ(ft_stirteri_lower_txtaz123HAHZ, "txtaz123hahz"));
 
 		ft_strdel(&ft_stirteri_upper_txtaz123HAHZ);
