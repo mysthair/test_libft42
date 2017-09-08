@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2017/08/07 19:00:44 by jleblanc         ###   ########.fr        #
+#    Updated: 2017/09/08 13:27:43 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,10 +25,12 @@ DIRTESTS=tests
 LINKFT=link_libft
 LIBFT=$(LINKFT)/libft.a
 LIBS=-L$(LINKFT)-lft
-LIBFTH=libft.h
-DIRFTH=$(LINKFT)/includes
-HEADERS=$(DIRFTH)/$(LIBFTH) test_libft.h tests.h
 
+LIBFTH=libft.h
+#DIRFTH:= $(shell if [ -d $(LINKFT)/includes ]; then echo "$(LINKFT)/includes"; else echo "$(LINKFT)"; fi)
+DIRFTH=$(LINKFT)
+#DIRFTH=$(LINKFT)/includes
+HEADERS=$(DIRFTH)/$(LIBFTH) test_libft.h tests.h
 INC=-I. -I$(DIRFTH)
 
 MISSFT:=$(MISSFT) $(shell if [ ! -f $(LINKFT)/ft_putaddr_fd.c ]; then echo putaddr_fd ;fi)
@@ -200,6 +202,11 @@ link5:
 #lst_tests:
 #	rm tests.h
 #	for f in $(listoffunc) ; do echo "int $$f();" >> tests.h ; done
+
+#replace_truc:
+#	mkdir -p tmp
+#	for f in tests/*.c; do sed -E 's/return\(0\)/return\(FAILED\)/' $f > $f.tmp; cat $f.tmp > $f && rm $f.tmp ; done
+#	for f in tests/*.c; do sed -E 's/return\(1\)/return\(SUCCESS\)/' $f; done
 
 #####################################################################################
 #####################################################################################
