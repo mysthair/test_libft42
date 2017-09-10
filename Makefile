@@ -64,9 +64,6 @@ $(LINKFT):
 	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then test -L $(LINKFT) || ln -s $(DIRLIBFT) $(LINKFT) ; \
 	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
-#$(LIBFTH): $(LINKFT) $(LINKFT)/$(DIRFTH)/$(LIBFTH)
-#	cp $(LINKFT)/$(LIBFTH) $(LIBFTH) || cp $(LINKFT)/$(DIRFTH)/$(LIBFTH) $(LIBFTH)
-
 $(LIBFT): $(LINKFT) $(DIRFTH)/$(LIBFTH)
 	@echo "$(TITLE)"
 ifdef DEBUG
@@ -89,7 +86,7 @@ clean:
 
 fclean: clean
 	@echo "$(TITLE)"
-	rm -f $(LIBFT) $(LIBFTH)
+	rm -f $(LIBFT)
 	rm -f *.e $(NAME)
 	@rm -rf *.dSYM
 	if [ -L $(LINKFT) ]; then make -C $(LINKFT) fclean ; fi
