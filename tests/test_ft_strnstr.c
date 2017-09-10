@@ -72,7 +72,9 @@ int main_test_ft_strnstr()
 			FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","", i));
 			FAIL_IF_NOT(test_ft_strnstr("","Bar", i));
 			FAIL_IF_NOT(test_ft_strnstr("","", i));
-			FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Bar", i));
+			FAIL_IF_NOT(test_ft_strnstr("Foo Bar Baz","Tik", i));
+			FAIL_IF_NOT(test_ft_strnstr("Foo", "Foo Bar Baz", i));
+			FAIL_IF_NOT(test_ft_strnstr("Bar", "Foo Bar Baz", i));
 		}
 
 		return (SUCCESS);
