@@ -61,11 +61,23 @@ static int main_test_ft_memccpy_test2()
 			char *txt = "Ceci est un texte pour le test memccpy...";
 
 			for (size_t i=0; i<strlen(txt); i++){
-				FAIL_IF_NOT(memccpy(buffer, txt, ' ', i) == ft_memccpy(buffer, txt, ' ', i))
+				FAIL_IF_NOT(memccpy(buffer, txt, ' ', i) == ft_memccpy(buffer, txt, ' ', i));
 			}
-			FAIL_IF_NOT(memccpy(buffer, txt, ' ', 0) == ft_memccpy(buffer, txt, ' ', 0))
-			FAIL_IF_NOT(memccpy(NULL, txt, ' ', 0) == ft_memccpy(NULL, txt, ' ', 0))
-			FAIL_IF_NOT(memccpy(buffer, buffer, ' ', 0) == ft_memccpy(buffer, buffer, ' ', 0))
+			FAIL_IF_NOT(memccpy(buffer, txt, ' ', 0) == ft_memccpy(buffer, txt, ' ', 0));
+//			int t = memccpy(0, txt, ' ', 0) == ft_memccpy(NULL, txt, ' ', 0);
+/*[ objs/test_ft_memccpy.o : tests/test_ft_memccpy.c ] ------------------------------------------------------
+gcc -Wall -Wextra -Werror -I. -Ilink_libft -DDONT_HAVE_STRLCPY  -o objs/test_ft_memccpy.o -c tests/test_ft_memccpy.c
+tests/test_ft_memccpy.c: In function ‘main_test_ft_memccpy_test2’:
+tests/test_ft_memccpy.c:67:12: error: null argument where non-null required (argument 1) [-Werror=nonnull]
+    int t = memccpy(0, txt, ' ', 0) == ft_memccpy(NULL, txt, ' ', 0);
+            ^~~~~~~
+cc1: all warnings being treated as errors
+Makefile:127 : la recette pour la cible « objs/test_ft_memccpy.o » a échouée
+make: *** [objs/test_ft_memccpy.o] Erreur 1
+*/
+      //FAIL_IF_NOT(t);
+      //FAIL_IF_NOT(memccpy(NULL, txt, ' ', 0) == ft_memccpy(NULL, txt, ' ', 0));
+			FAIL_IF_NOT(memccpy(buffer, buffer, ' ', 0) == ft_memccpy(buffer, buffer, ' ', 0));
 			return SUCCESS;
 }
 
