@@ -43,5 +43,5 @@ int	main_test_ft_bzero()
 	// errors += (test_ft_bzero(NULL, 1) ? 0 :1);  // --> signal 11
 	// errors += (test_ft_bzero(NULL, -1) ? 0 :1);  // --> signal 11
 
-	return (errors == 0 ? 1 : 0);
+	return (errors == 0 ? SUCCESS : FAILED);
 }
