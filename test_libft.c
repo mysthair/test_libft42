@@ -154,12 +154,14 @@ int		fork_test(int (*f)())
 int		fork_test(int (*f)())
 {
    	if ((*f)()){
-			ft_putendl(" .. OK");
+			ft_putendl(GREEN_OK);
 			//_exit(EXIT_SUCCESS);
       return(SUCCESS);
 		}else{
-			ft_putendl(" .. KO");
+      errors += 1;
+			ft_putendl(RED_KO);
 			INFO(_exit(EXIT_FAILURE));
+      return(FAILED);
 		}
 }
 #endif
