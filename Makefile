@@ -44,12 +44,14 @@ CPU:=$(shell uname -m)
 MISSING_O=$(addprefix $(DIRO)/ft_, $(addsuffix _$(OS)_$(CPU).o, $(MISSFT)))
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
+  DEBUG=-DLinux
 MISSING_O:=$(MISSING_O) $(DIRO)/strlcat_$(CPU).o $(DIRO)/strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
 endif
 
-TITLE="[ $@ : $? ] ------------------------------------------------------ "
+#TITLE="[ $@ : $? ] ------------------------------------------------------ "
+TITLE="[ $@ : $? ]"
 
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
@@ -61,39 +63,39 @@ CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
 all: $(LINKFT) $(NAME) $(LIBFT)
 
 $(LINKFT):
+	@echo "$(TITLE)"
 	if [ -d $(DIRLIBFT) -o -L $(DIRLIBFT) ]; then test -L $(LINKFT) || ln -s $(DIRLIBFT) $(LINKFT) ; \
 	else echo "error $(DIRLIBFT) not exist/valid"; fi
 
 $(LIBFT): $(LINKFT) $(DIRFTH)/$(LIBFTH)
 	@echo "$(TITLE)"
 ifdef DEBUG
-	make -j -C $(LINKFT) DEBUG="$(DEBUG)"
+	@make -s -j -C $(LINKFT) DEBUG="$(DEBUG)"
 else
-	make -j -C $(LINKFT)
+	@make -s -j -C $(LINKFT)
 endif
 
 
 $(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	@echo "$(TITLE)"
-	rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
-	rm -rf $(DIRO)
-	if [ -L $(LINKFT) -o -d $(LINKFT) ]; then make -C $(LINKFT) clean  ; fi
+	@rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
+	@rm -rf $(DIRO)
+	@if [ -L $(LINKFT) -o -d $(LINKFT) ]; then make -s -C $(LINKFT) clean  ; fi
 
 fclean: clean
 	@echo "$(TITLE)"
-	rm -f $(LIBFT)
-	rm -f *.e $(NAME)
+	@rm -f $(LIBFT)
+	@rm -f *.e $(NAME)
 	@rm -rf *.dSYM
-	if [ -L $(LINKFT) ]; then make -C $(LINKFT) fclean ; fi
+	@if [ -L $(LINKFT) ]; then make -s -C $(LINKFT) fclean ; fi
 re:
 	@echo "$(TITLE)"
-	make fclean
-	make all
+	@make -s fclean && make -s -j all
 
 TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
 	test_ft_memccpy.c test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c \
@@ -115,27 +117,27 @@ TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
 
 TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 
-$(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(LINKFT) $(HEADERS) Makefile
+$(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(LIBFT) $(HEADERS) Makefile
 
-$(DIRO)/test_libft.o:test_libft.c $(HEADERS)
+$(DIRO)/test_libft.o:test_libft.c $(LIBFT) $(HEADERS) Makefile
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $<
 $(DIRO)/%.o:$(DIRTESTS)/%.c
 	@echo "$(TITLE)"
 	@mkdir -p objs
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 verif:
 	echo $(TESTS_OBJ)
 
 $(NAME): $(DIRO)/test_libft.o $(LIBFT) $(OBJS) \
 		$(HEADERS) $(MISSING_O) $(TESTS_OBJ)
-ifeq ($(OS), Linux)
-	@echo "Linux OS detected :P"
-endif
+#ifeq ($(OS), Linux)
+#	@echo "Linux OS detected :P"
+#endif
 	@echo "$(TITLE)"
-	$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
+	@$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
 		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: $(NAME)
