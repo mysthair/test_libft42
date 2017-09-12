@@ -111,6 +111,7 @@ TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
 	test_ft_putendl_fd.c test_ft_putnbr_fd.c test_ft_lstnew.c \
 	test_ft_lstdelone.c test_ft_lstdel.c test_ft_lstadd.c test_ft_lstiter.c \
 	test_ft_lstmap.c
+#	test_ft_putaddr.c
 
 TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 

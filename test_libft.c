@@ -23,6 +23,23 @@
 
 #include <unistd.h>
 
+//#define WITHOUT_FORK
+#ifndef WITHOUT_FORK
+#define FORK_TEST(t) {\
+	ft_putstr(#t " .. ");\
+	if(fork_test(&t)) {\
+		INFO(ft_putendl(#t " .. OK (0)"));\
+	}else{\
+		INFO(ft_putendl(#t " .. KO (0)"));\
+		/*_exit(-1);*/\
+	}\
+}
+#else
+#define FORK_TEST(t) t()
+#endif
+
+static int errors = 0;
+
 #ifndef DEBUG
 /* THX/seen at https://openclassrooms.com/courses/la-programmation-systeme-en-c-sous-unix/les-processus-1 */
 
@@ -75,7 +92,7 @@ void child_process(int (*f)())
 }
 
 /* La fonction father_process effectue les actions du processus père */
-void father_process(int child_pid)
+int father_process(int child_pid)
 {
     (void)child_pid;
     INFO(printf(" Nous sommes dans le père !\n"
@@ -88,9 +105,10 @@ void father_process(int child_pid)
     }
 
     if (WIFEXITED(status)) {
-	INFO(printf(" Terminaison normale du processus fils.\n"
+	     INFO(printf(" Terminaison normale du processus fils.\n"
 	       " Code de retour : %d.\n", WEXITSTATUS(status)));
          ft_putendl(!WEXITSTATUS(status) ? GREEN_OK : RED_KO);
+         return (!WEXITSTATUS(status) ? SUCCESS : FAILED);
     }
 
     if (WIFSIGNALED(status)) {
@@ -99,7 +117,9 @@ void father_process(int child_pid)
       ft_putnbr(WTERMSIG(status));
       ft_putstr(" intercepted\n");
   		INFO(_exit(EXIT_FAILURE));
+      return FAILED;
 	  }
+    return -1;
 }
 
 int		fork_test(int (*f)())
@@ -111,6 +131,7 @@ int		fork_test(int (*f)())
       return 0;
     case -1:
     	perror("fork");
+      errors += 1;
     	return EXIT_FAILURE;
   	break;
     	/* Si on est dans le fils */
@@ -119,10 +140,15 @@ int		fork_test(int (*f)())
   	break;
     	/* Si on est dans le père */
     default:
-    	father_process(pid);
+      if (!father_process(pid))
+      {
+        errors += 1;
+        return (FAILED);
+      }
+      return (SUCCESS);
   	break;
     }
-    return 1;
+    return -1;
 }
 #else
 int		fork_test(int (*f)())
@@ -133,7 +159,7 @@ int		fork_test(int (*f)())
       return(SUCCESS);
 		}else{
 			ft_putendl(" .. KO");
-			_exit(EXIT_FAILURE);
+			INFO(_exit(EXIT_FAILURE));
 		}
 }
 #endif
@@ -147,11 +173,13 @@ int main()
 //#define FORK_TEST(f) f()
 
 #if 0
-  FORK_TEST(main_test_ft_memalloc);
-//FORK_TEST(main_test_ft_strnstr);
-	//FORK_TEST(main_test_ft_strdup);
-  FORK_TEST(main_test_ft_strcpy);
-  FORK_TEST(main_test_ft_putchar);
+  FORK_TEST(main_test_ft_putaddr);
+
+//   FORK_TEST(main_test_ft_memalloc);
+// //FORK_TEST(main_test_ft_strnstr);
+// 	//FORK_TEST(main_test_ft_strdup);
+//   FORK_TEST(main_test_ft_strcpy);
+//   FORK_TEST(main_test_ft_putchar);
 #else
 	FORK_TEST(main_test_ft_memset);
 	FORK_TEST(main_test_ft_bzero);
@@ -208,10 +236,17 @@ int main()
   FORK_TEST(main_test_ft_putchar);
   FORK_TEST(main_test_ft_putstr);
 
-
 #endif
-	/*ft_putendl("#############################################################");
-	ft_putendl("##############     ALL TESTS ARE "GREEN_OK"       ###################");
-	ft_putendl("#############################################################");*/
-	return (0);
+	ft_putendl("#############################################################");
+  if (errors == 0)
+    ft_putendl("##############   TEST_LIBFT42 is "GREEN_OK" :)   ###################");
+  else
+    ft_putendl("##############   TEST_LIBFT42 is "RED_KO" :(   ###################");
+	ft_putendl("#############################################################");
+  if (errors)
+  {
+    ft_putnbr(errors);
+    ft_putendl(" error(s) detected !");
+  }
+	return (errors);
 }

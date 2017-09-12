@@ -40,22 +40,6 @@
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }
 
-//#define WITHOUT_FORK
-#ifndef WITHOUT_FORK
-#define FORK_TEST(t) {\
-	ft_putstr(#t " .. ");\
-	if(fork_test(&t)) {\
-		INFO(ft_putendl(#t " .. OK (0)"));\
-	}else{\
-		INFO(ft_putendl(#t " .. KO (0)"));\
-		_exit(-1);\
-	}\
-}
-#else
-#define FORK_TEST(t) t()
-#endif
-
-
 int main_test_ft_memset();
 int main_test_ft_bzero();
 int main_test_ft_memcpy();
@@ -114,5 +98,7 @@ int main_test_ft_lstdel();
 int main_test_ft_lstadd();
 int main_test_ft_lstiter();
 int main_test_ft_lstmap();
+
+// int main_test_ft_putaddr();
 
 #endif
