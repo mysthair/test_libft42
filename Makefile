@@ -50,7 +50,7 @@ else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
 endif
 
-#TITLE="[ $@ : $? ] ------------------------------------------------------ "
+TITLE="[ $@ : $? ] ------------------------------------------------------ "
 TITLE="[ $@ : $? ]"
 
 CC=gcc
@@ -70,9 +70,9 @@ $(LINKFT):
 $(LIBFT): $(DIRFTH)/$(LIBFTH) $(DIRFTH)/*.c
 	@echo "$(TITLE)"
 ifdef DEBUG
-	@make -s -j -C $(LINKFT) DEBUG="$(DEBUG)"
+	@make -s -C $(LINKFT) DEBUG="$(DEBUG)"
 else
-	@make -s -j -C $(LINKFT)
+	@make -s -C $(LINKFT)
 endif
 
 
@@ -117,7 +117,7 @@ TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
 
 TESTS_OBJ:=$(addprefix $(DIRO)/, $(TESTS_FILES:.c=.o))
 
-$(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(LIBFT) $(HEADERS) Makefile
+$(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(HEADERS) Makefile
 
 $(DIRO)/test_libft.o:test_libft.c $(LIBFT) $(HEADERS) Makefile
 	@echo "$(TITLE)"
