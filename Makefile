@@ -6,7 +6,7 @@
 #    By: jleblanc <jleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/12 15:27:19 by jleblanc          #+#    #+#              #
-#    Updated: 2017/09/08 13:27:43 by jleblanc         ###   ########.fr        #
+#    Updated: 2017/09/13 11:41:10 by jleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -140,8 +140,11 @@ $(NAME): $(DIRO)/test_libft.o $(LIBFT) $(OBJS) \
 	@$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
 		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
-test: $(NAME)
-	( ./$(NAME) && echo "OK" ) || echo "KO"
+test: test.log
+	cat test.log
+
+test.log: $(NAME)
+	( ./$(NAME) && echo "OK"  || echo "KO" ) > test.log
 
 testnorm:
 	norminette $(LINKFT)
