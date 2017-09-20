@@ -27,15 +27,12 @@
 		return (FAILED); \
 	}
 
-#define FT_ASSERT(cond) TEST(cond)
-
-# define FAIL_IF_NOT(cond) FT_ASSERT(cond)
-
-
 #ifdef VERBOSE
 # define INFO(X) X
+# define FAIL_IF_NOT(cond) {ft_putendl(#cond); TEST(cond); }
 #else
 # define INFO(X) {if(0){X;}}
+# define FAIL_IF_NOT(cond) TEST(cond)
 #endif
 
 #define SHOW_STRING(msg, v) { ft_putstr(msg); ft_putstr(": " #v " = \""); ft_putstr(v); ft_putendl("\""); }

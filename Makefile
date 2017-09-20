@@ -14,7 +14,14 @@ NAME=test_libft
 
 DIRLIBFT=../libft
 
-#DEBUG=-g3 -O0 -DDEBUG
+#DEBUG=-g3 -O0 -DDEBUG -DVERBOSE -DWITHOUT_FORK
+
+ifdef DEBUG
+	VERBOSE=-DVERBOSE
+	V=
+else
+	V=@
+endif
 
 DIRH=./
 DIRC=
@@ -44,13 +51,13 @@ CPU:=$(shell uname -m)
 MISSING_O=$(addprefix $(DIRO)/ft_, $(addsuffix _$(OS)_$(CPU).o, $(MISSFT)))
 ifeq ($(OS),Linux)
   HAVE_STRLCPY:=-DDONT_HAVE_STRLCPY
-  DEBUG=-DLinux
+  DEBUG+=-DLinux
 MISSING_O:=$(MISSING_O) $(DIRO)/strlcat_$(CPU).o $(DIRO)/strnstr_$(CPU).o
 else
   HAVE_STRLCPY:=-DHAVE_STRLCPY
 endif
 
-TITLE="[ $@ : $? ] ------------------------------------------------------ "
+#TITLE="[ $@ : $? ] ------------------------------------------------------ "
 TITLE="[ $@ : $? ]"
 
 CC=gcc
@@ -70,32 +77,32 @@ $(LINKFT):
 $(LIBFT): $(DIRFTH)/$(LIBFTH) $(DIRFTH)/*.c
 	@echo "$(TITLE)"
 ifdef DEBUG
-	@make -s -C $(LINKFT) DEBUG="$(DEBUG)"
+	${V}make DEBUG="$(DEBUG)" VERBOSE="$(VERBOSE)" -s -C $(LINKFT)
 else
-	@make -s -C $(LINKFT)
+	${V}make -s -C $(LINKFT)
 endif
 
 
 $(DIRO)/%.o: $(DIRS)/%.s
 	@echo "$(TITLE)"
-	@mkdir -p objs
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@if [ ! -d objs ]; then mkdir -p objs ; fi
+	${V}$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	@echo "$(TITLE)"
-	@rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
-	@rm -rf $(DIRO)
+	${V}rm -rf $(OBJS) $(MISSING_O) $(DIRO)/test_libft.o
+	${V}rm -rf $(DIRO)
 	@if [ -L $(LINKFT) -o -d $(LINKFT) ]; then make -s -C $(LINKFT) clean  ; fi
 
 fclean: clean
 	@echo "$(TITLE)"
-	@rm -f $(LIBFT)
-	@rm -f *.e $(NAME)
-	@rm -rf *.dSYM
+	${V}rm -f $(LIBFT)
+	${V}rm -f *.e $(NAME)
+	${V}rm -rf *.dSYM
 	@if [ -L $(LINKFT) ]; then make -s -C $(LINKFT) fclean ; fi
-re:
-	@echo "$(TITLE)"
-	@make -s fclean && make -s -j all
+re: fclean | all
+#	@echo "$(TITLE)"
+#	${V}make -s fclean && make -s -j all
 
 TESTS_FILES:=test_ft_memset.c test_ft_bzero.c test_ft_memcpy.c \
 	test_ft_memccpy.c test_ft_memmove.c test_ft_memchr.c test_ft_memcmp.c \
@@ -121,12 +128,12 @@ $(NAME) $(OBJS) $(MISSING_O) $(TESTS_OBJ): $(HEADERS) Makefile
 
 $(DIRO)/test_libft.o:test_libft.c $(LIBFT) $(HEADERS) Makefile
 	@echo "$(TITLE)"
-	@mkdir -p objs
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@if [ ! -d objs ]; then mkdir -p objs ; fi
+	${V}$(CC) $(CFLAGS) -o $@ -c $<
 $(DIRO)/%.o:$(DIRTESTS)/%.c
 	@echo "$(TITLE)"
-	@mkdir -p objs
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@if [ ! -d objs ]; then mkdir -p objs ; fi
+	${V}$(CC) $(CFLAGS) -o $@ -c $<
 
 verif:
 	echo $(TESTS_OBJ)
@@ -137,7 +144,7 @@ $(NAME): $(DIRO)/test_libft.o $(LIBFT) $(OBJS) \
 #	@echo "Linux OS detected :P"
 #endif
 	@echo "$(TITLE)"
-	@$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
+	${V}$(CC) $(CFLAGS) $(HAVE_STRLCPY) -o test_libft $(DIRO)/test_libft.o \
 		$(MISSING_O) -D__$(OS)__ -D__$(CPU)__ $(OBJS) $(TESTS_OBJ) $(LIBFT)
 
 test: test.log
@@ -151,7 +158,7 @@ testnorm:
 	norminette $(DIRC)ft_*.c $(DIRH)*.h
 
 debug_version:
-	make DEBUG=-DDEBUG re
+	make DEBUG="-DDEBUG" re
 verbose_version:
 	make DEBUG="-DDEBUG -DVERBOSE" re
 nofork_version:
