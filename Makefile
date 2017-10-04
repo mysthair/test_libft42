@@ -61,7 +61,7 @@ endif
 TITLE="[ $@ : $? ]"
 
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror $(INC) $(HAVE_STRLCPY) $(DEBUG)
+CFLAGS=-Wall -Wextra -Werror -std=gnu11 $(INC) $(HAVE_STRLCPY) $(DEBUG)
 
 #pour tester une libft protegée, on peut ajouter ce flag
 #CFLAGS+=-DTEST_PROTECTED
